@@ -1,5 +1,7 @@
 from __future__ import absolute_import
 from __future__ import division
+
+from random import choice
 import re
 import string
 import nltk
@@ -12,6 +14,20 @@ from pattern.vector import PORTER
 
 from . import settings as namebot_settings
 from . import normalization
+
+
+def reduplication_ablaut(words):
+    """
+    http://phrases.org.uk/meanings/reduplication.html
+    A technique to combine words and altering the vowels
+    e.g ch[i]t-ch[a]t, d[i]lly, d[a]lly
+    """
+
+    new_words = []
+    vowels = ['a', 'e', 'i', 'o', 'u']
+    for word in words:
+        print '%s %s ' % (word, re.sub(r'a|e|i|o|u', choice(vowels), word))
+    return new_words
 
 
 def affix_words(the_arr, affixType):
@@ -536,6 +552,7 @@ def generate_all_techniques(words):
     data['words']['make_name_from_latin_root'] = make_name_from_latin_root(words)
     data['words']['make_word_metaphor'] = make_word_metaphor(words)
     data['words']['make_phrase'] = make_phrase(words)
+    data['words']['reduplication_ablaut'] = reduplication_ablaut(words)
     data['words']['misspelling'] = make_misspelling(words)
     data['words']['descriptors'] = make_descriptors(
         get_descriptors(words))
