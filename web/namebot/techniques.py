@@ -2,9 +2,7 @@ from __future__ import absolute_import
 from __future__ import division
 import re
 import string
-
-from nltk import word_tokenize
-from nltk import pos_tag
+import nltk
 
 from pattern.en import split
 from pattern.en import pluralize
@@ -413,56 +411,32 @@ def make_phrase(the_arr):
     return
 
 
-def get_descriptors(name_list):
+def get_descriptors(words):
     """
-    Use NLTK to grab the word type and
-    then seperate it into an array for later usage
+    Use NLTK to first grab tokens by looping through words,
+    then tag part-of-speech (in isolation)
+    and provide a dictionary with a list of each type
+    for later retrieval and usage
     """
+
     descriptors = {}
-    descriptors['JJ'] = []
-    descriptors['NN'] = []
-    descriptors['VB'] = []
+    tokens = nltk.word_tokenize(' '.join(words))
+    parts = nltk.pos_tag(tokens)
 
-    tokens = nltk.word_tokenize(name_list)
-    pos = nltk.pos_tag(tokens)
-
-    # TODO FIME
     # TODO ADD freq. measurement to metrics
 
-    for tag in pos:
-        # items are in a tuple with POS second
-        # e.g. ('Aunt', 'NNP')
-        descriptors[tag][1] += 1
+    """
+    populate with an empty array for each type
+    so no KeyErrors will be thrown,
+    and no knowledge of NLTK classification
+    is required
+    """
+    for part in parts:
+        descriptors[part[1]] = []
 
-    # for val, item in enumerate(name_list):
-
-        # parsed = parse(
-        #     val,
-        #     tokenize=False,
-        #     tags=True,
-        #     chunks=False,
-        #     relations=False,
-        #     lemmata=False,
-        #     encoding='utf-8',
-        #     default='NN')
-        #     # light=False)
-
-        # if re.findall(r'/JJ', parsed):
-        #     b = parsed.split('/')
-        #     s = b[0].encode('utf-8')
-        #     descriptors['JJ'].append(s)
-
-        # elif re.findall(r'/VB|/VBP', parsed):
-        #     b = parsed.split('/')
-        #     s = b[0].encode('utf-8')
-        #     descriptors['VB'].append(s)
-
-        # elif re.findall(r'/NN', parsed):
-        #     b = parsed.split('/')
-        #     s = b[0].encode('utf-8')
-        #     descriptors['NN'].append(s)
-        # else:
-        #     continue
+    # Then, push the word into the matching type
+    for part in parts:
+        descriptors[part[1]].append(part[0])
 
     return descriptors
 
@@ -575,8 +549,8 @@ def generate_all_techniques(words):
     data['words']['split_up_descriptors'] = split_up_descriptors(words)
 
     # TODO: FIX
-    # data['words']['descriptors'] = make_descriptors(
-    #     get_descriptors(words))
+    data['words']['descriptors'] = make_descriptors(
+        get_descriptors(words))
 
     return super_scrub(data)
 
