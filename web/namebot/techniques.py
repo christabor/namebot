@@ -441,7 +441,7 @@ def get_descriptors(words):
     return descriptors
 
 
-def make_descriptors(the_arr):
+def make_descriptors(words):
     """
     Make descriptor names based off of a
     verb or adjective and noun combination.
@@ -451,54 +451,45 @@ def make_descriptors(the_arr):
         -Red Fin,
         -Cold Water (grill), etc...
 
-    - supports list AND dictionaries
+    Combines VBP/VB, with NN/NNS
+
+    ...could be optimized
     """
-    new_arr = []
-    if type(the_arr) is not list and type(the_arr) is dict:
-        for k,v in the_arr.iteritems():
-            for i, item in enumerate(v):
-                for j, items in enumerate(v):
-                    for x, items in enumerate(v):
-                        if v[i] is not v[j] or v[i] is not v[x]:
-                            new_arr.append(v[i]+" "+v[j])
-                            new_arr.append(v[i]+" "+v[x])
+    new_words = []
 
-                            #reverse
-                            new_arr.append(v[j]+" "+v[i])
-                            new_arr.append(v[x]+" "+v[i])
+    try:
+        for noun in words['NN']:
+            for verb in words['VBP']:
+                new_words.append('%s %s' % (noun, verb))
+                new_words.append('%s %s' % (verb, noun))
+    except KeyError:
+        pass
 
-    else:
-        for v in the_arr:
-            for i, item in enumerate(the_arr):
-                for j, item in enumerate(the_arr):
-                    for x, item in enumerate(the_arr):
-                        if i is not j or i is not the_arr[x]:
-                            new_arr.append(i+" "+j)
-                            new_arr.append(i+" "+the_arr[x])
+    try:
+        for noun in words['NNS']:
+            for verb in words['VB']:
+                new_words.append('%s %s' % (noun, verb))
+                new_words.append('%s %s' % (verb, noun))
+    except KeyError:
+        pass
 
-                            #reverse
-                            new_arr.append(j+" "+i)
-                            new_arr.append(the_arr[x]+" "+i)
+    try:
+        for noun in words['NNS']:
+            for verb in words['VBP']:
+                new_words.append('%s %s' % (noun, verb))
+                new_words.append('%s %s' % (verb, noun))
+    except KeyError:
+        pass
 
-    return new_arr
+    try:
+        for noun in words['NN']:
+            for verb in words['VB']:
+                new_words.append('%s %s' % (noun, verb))
+                new_words.append('%s %s' % (verb, noun))
+    except KeyError:
+        pass
 
-
-def split_up_descriptors(the_arr):
-    """
-    This function splits up each 2 word key
-    in the descriptor array's output
-    for further manipulation
-    (e.g. a second pass in the
-        Portmanteau techniques.)
-    """
-    new_arr = []
-
-    for i, item in enumerate(the_arr):
-        spl = item.split(' ')
-        for k in spl:
-            new_arr.append(k)
-
-    return new_arr
+    return new_words
 
 
 def super_scrub(data):
@@ -540,18 +531,12 @@ def generate_all_techniques(words):
     data['words']['name_obscured'] = make_name_obscured(words)
     data['words']['punctuator'] = make_punctuator(words)
     data['words']['name_abbreviation'] = make_name_abbreviation(words)
-    data['words']['portmanteau_consonant'] = make_portmanteau_consonant(words)
     data['words']['make_portmanteau_split'] = make_portmanteau_split(words)
     data['words']['make_name_from_latin_root'] = make_name_from_latin_root(words)
     data['words']['make_word_metaphor'] = make_word_metaphor(words)
     data['words']['make_phrase'] = make_phrase(words)
     data['words']['misspelling'] = make_misspelling(words)
-    data['words']['split_up_descriptors'] = split_up_descriptors(words)
-
-    # TODO: FIX
     data['words']['descriptors'] = make_descriptors(
         get_descriptors(words))
 
     return super_scrub(data)
-
-
