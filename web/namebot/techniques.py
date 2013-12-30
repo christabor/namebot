@@ -160,12 +160,14 @@ def make_name_abbreviation(the_arr):
     new_arr = []
     for word in the_arr:
         new_arr.append(
-            word[:1].upper() + word[:2].upper() + word[:3].upper() + word[:4].upper())
+            word[:1].upper() +
+            word[:2].upper() +
+            word[:3].upper() +
+            word[:4].upper())
     return new_arr
 
 
 def make_vowel(the_arr, vowel_type, vowel_index):
-    # TODO: FIXME
     new_arr = []
     for i in the_arr:
         for j in the_arr:
@@ -214,7 +216,6 @@ def make_portmanteau_default_vowel(the_arr):
     vowel_o_re = re.compile(r'o{1}')
     vowel_u_re = re.compile(r'u{1}')
 
-    # TODO FIXME
     make_vowel(the_arr, vowel_a_re, "a")
     make_vowel(the_arr, vowel_e_re, "e")
     make_vowel(the_arr, vowel_i_re, "i")
