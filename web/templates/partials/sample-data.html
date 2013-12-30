@@ -1,0 +1,11 @@
+<h3>Sample Data</h3>
+<p><strong>Data to the right</strong> was generated using a default set of values:</p>
+{% if seed_data %}
+<ul>
+	{% for value in seed_data %}
+	<li>{{ value|lower }}</li>
+	{% endfor %}
+</ul>
+{% else %}
+<p>None available.</p>
+{% endif %}

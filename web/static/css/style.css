@@ -1,0 +1,144 @@
+#header,
+#footer {
+	background-color: #111;
+}
+#header {
+	margin-bottom: 30px;
+}
+#footer {
+	margin-top: 30px;
+}
+:focus,
+:hover {
+	-webkit-transition: all 0.1s ease-in-out;
+	-moz-transition: all 0.1s ease-in-out;
+	-ms-transition: all 0.1s ease-in-out;
+	-o-transition: all 0.1s ease-in-out;
+	transition: all 0.1s ease-in-out;
+	color: white;
+}
+a,
+.btn,
+button,
+input[type="submit"],
+.label {
+	font-family: 'Exo', sans-serif;
+}
+a:active,
+.btn:active,
+button:active,
+input[type="submit"]:active {
+	position: relative;
+	top: 2px;
+}
+body {
+	background: #222 url(../img/dark_geometric.png);
+	font-family: 'Cardo', serif;
+	font-size: 16px;
+	color: #444;
+}
+.container-fluid,
+.row-fluid {
+	width: 95%;
+	margin-left: auto;
+	margin-right: auto;
+}
+.panel-body ul {
+	-moz-column-count:2;
+	-webkit-column-count:2;
+	column-count:2;
+}
+ul, li {
+	list-style-type: square;
+}
+h1,
+h2,
+h3,
+h4 {
+	text-shadow: 0 1px 1px #222;
+	font-family: 'Exo', sans-serif;
+	color: #dccf78;
+}
+h2 {
+	color: #999;
+	padding-bottom: 10px;
+}
+nav {
+	text-transform: uppercase;
+	font-family: 'Exo', sans-serif;
+}
+header,
+footer {
+	text-align: center;
+	padding: 20px;
+}
+footer p {
+	opacity: 0.4;
+}
+footer:hover p {
+	opacity: 1;
+}
+
+/* Containers */
+
+.navbar-default {
+	background-color: transparent;
+	border: none;
+	padding: 0;
+	margin: 0;
+}
+.well,
+.panel {
+	border-color: #444;
+	background: #333 url(../img/classy_fabric.png);
+	color: #ddd;
+}
+.panel {
+	background-color: #222;
+}
+.panel-default>.panel-heading {
+	background-color: #140605;
+	border-bottom: 2px solid black;
+	color: red;
+}
+.panel-default>.panel-heading:hover {
+	background-color: #250a08;
+}
+.well,
+.panel {
+	border-color: #444;
+	background-color: #333;
+	color: #ddd;
+	border-bottom: 4px solid #444;
+}
+.panel {
+	background: #222 url(../img/cartographer.png);
+}
+.chart-container {
+	border:1px solid #333;
+	min-height: 500px;
+}
+.chart-container p {
+	margin: 20px 2px;
+	display: block;
+}
+.chart-container .label {
+	padding: 8px;
+	font-size: 100%;
+	display: inline-block;
+	margin: 4px;
+	width: 80px;
+}
+
+/* Buttons, links */
+
+.btn.btn-primary {
+	background-color: red;
+	border: none;
+}
+.navbar-default .navbar-nav>li>a {
+	color: #ccc;
+}
+.navbar-default .navbar-nav>li>a:hover {
+	color: red;
+}

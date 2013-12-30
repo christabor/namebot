@@ -1,0 +1,25 @@
+{% extends 'index.html' %}
+{% block content %}
+
+<textarea name="json-data" id="json-data" cols="30" rows="10" style="display:none;">
+	{{ example_data.metrics|tojson }}
+</textarea>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-2">
+			<div class="well">
+				{% block extra_left_col %}
+				{% endblock %}
+				{% include 'partials/sample-data.html' %}
+			</div>
+		</div>
+		<div class="col-md-10">
+			<div class="well">
+				{% block right_col %}
+				{% endblock %}
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
