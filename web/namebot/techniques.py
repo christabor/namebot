@@ -166,16 +166,6 @@ def make_name_abbreviation(the_arr):
     return new_arr
 
 
-def make_portmanteau_consonant(the_arr):
-    # TODO ADDME
-    """
-    This works the same as others but takes
-    into account consonant edges,
-    keeping them rather than removing them.
-    """
-    return
-
-
 def make_vowel(the_arr, vowel_type, vowel_index):
     # TODO: FIXME
     new_arr = []
@@ -214,6 +204,10 @@ def make_portmanteau_default_vowel(the_arr):
     """
     Make a portmanteau based on vowel
     matches (ala Brad+Angelina = Brangelina)
+    Only matches for second to last letter
+    in first word and matching vowel in second word
+
+    TODO: More powerful, usable
     """
     new_arr = []
     vowel_a_re = re.compile(r'a{1}')
