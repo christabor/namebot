@@ -26,7 +26,8 @@ def reduplication_ablaut(words):
     new_words = []
     vowels = ['a', 'e', 'i', 'o', 'u']
     for word in words:
-        print '%s %s ' % (word, re.sub(r'a|e|i|o|u', choice(vowels), word))
+        new_words.append(
+            '%s %s ' % (word, re.sub(r'a|e|i|o|u', choice(vowels), word)))
     return new_words
 
 
