@@ -23,3 +23,15 @@ Some scoring algorithms, primarily for classifying pronunciation, such as Sounde
 ### Techniques
 The major chunk of work represented in this library. The many techniques I've created after researching hundreds of corporate names and naming agency techniques
 
+
+## How to setup server and test:
+
+1. Install PIP requirements:
+  cd web && pip install requirements.txt
+
+2. Run Flask:
+  flask flask-app.py
+
+3. Open browser!
+  (localhost:5000)
+
