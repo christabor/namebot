@@ -33,7 +33,7 @@ def example_scoring():
 def example_metrics():
     test = metrics.NameBotMetricUtilities()
     allnames = test.open_file(
-        '../Research/namebot-fortune-500-companies.html')
+        'Research/namebot-fortune-500-companies.html')
 
     results = {
         'names': allnames,

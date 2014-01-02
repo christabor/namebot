@@ -16,7 +16,7 @@ from . import settings as namebot_settings
 from . import normalization
 
 
-def reduplication_ablaut(words):
+def reduplication_ablaut(words, count=1):
     """
     http://phrases.org.uk/meanings/reduplication.html
     A technique to combine words and altering the vowels
@@ -27,7 +27,7 @@ def reduplication_ablaut(words):
     vowels = ['a', 'e', 'i', 'o', 'u']
     for word in words:
         new_words.append(
-            '%s %s ' % (word, re.sub(r'a|e|i|o|u', choice(vowels), word)))
+            '%s %s ' % (word, re.sub(r'a|e|i|o|u', choice(vowels), word, count=count)))
     return new_words
 
 
