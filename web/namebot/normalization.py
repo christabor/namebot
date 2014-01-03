@@ -7,7 +7,7 @@ import string
 import settings as namebot_settings
 
 
-def remove_odd_sounding_words(words, foo=False):
+def remove_odd_sounding_words(words):
     """
     after manipulating words through other techniques,
     remove random odd sounding word combinations
