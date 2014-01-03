@@ -7,28 +7,38 @@ import string
 import settings as namebot_settings
 
 
-def remove_odd_sounding_words(words):
+def remove_odd_sounding_words(words, foo=False):
     """
-    after manipulating words through other decorators,
+    after manipulating words through other techniques,
     remove random odd sounding word combinations
-    via regular expressions or simple replacement
+    via regular expressions
     """
-
-    # checks for the same consonant more than two times
-    triple_consonant = re.compile(r'^a|e|i|o|u|y{3,6}')
-    # bk, ck, dk, gk, etc...
-    odd_sounding_k = re.compile(r'\b[^aeiouys]k|zt|ksd|kd|zhr')
-    hard_to_pronounce = re.compile(r'\bzt|ksd|kd|zhr')
-    new_arr = []
+    cleaned = []
+    regexes = [
+        # checks for the same consonant more than two times
+        re.compile(r'^a|e|i|o|u|y{3,6}'),
+        # bk, ck, dk, gk, etc...
+        re.compile(r'\b[^aeiouys]k|zt|ksd|kd|zhr'),
+        # odd, hard to pronounce, weird
+        re.compile(r'\bzt|ksd|kd|zhr'),
+    ]
 
     if words is None:
-        return words
+        return
 
-    new_arr = [word for word in words if not re.match(triple_consonant, word) and not re.match(odd_sounding_k, word) and not re.match(hard_to_pronounce, word)]
-    return new_arr
+    # Loop through any number of
+    # regexes and add only if no matches exist
+    [cleaned.append(word) for word in words
+        if not any(
+            re.match(regex, word) for regex in regexes)]
+    return cleaned
 
 
 def stem_words(data):
+    """
+    Stem words to their base
+    linguistic stem to remove redundancy
+    """
     for val in data:
         val = stem(val, stemmer=PORTER)
     return data
@@ -61,16 +71,18 @@ def filter_words(words):
     new_arr = []
     for word in words:
         if not re.search(' ', word):
-            if len(word) <= namebot_settings.MAX_LENGTH and len(word) >= namebot_settings.MIN_LENGTH:
-                new_arr.append(word)
+            if len(word) <= namebot_settings.MAX_LENGTH and \
+                    len(word) >= namebot_settings.MIN_LENGTH:
+                        new_arr.append(word)
 
         elif re.search(' ', word):
             split = re.split(' ', word)
             split_join = []
             for chunks in split:
                 length = len(chunks)
-                if length <= namebot_settings.SPACED_MAX_LENGTH and length >= namebot_settings.MIN_LENGTH:
-                    split_join.append(chunks)
+                if length <= namebot_settings.SPACED_MAX_LENGTH and \
+                        length >= namebot_settings.MIN_LENGTH:
+                            split_join.append(chunks)
 
             new_arr.append(
                 ' '.join(split_join))
@@ -92,10 +104,11 @@ def clean_sort(words):
     A function for cleaning string arrays
     and prepping them for word techniques
     """
+    chars = '!"#$%\'()*+,./:;<=>?@[\\]^`{|}~01234567890'
     if words is not None:
         words = [word.strip().lower().translate(
             string.maketrans('', ''),
-            '!"#$%\'()*+,./:;<=>?@[\\]^`{|}~01234567890') for word in words if len(word) > 1]
+            chars) for word in words if len(word) > 1]
     return words
 
 
