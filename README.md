@@ -27,7 +27,7 @@ The major chunk of work represented in this library. The many techniques I've cr
 ## How to setup server and test:
 
 1. Install PIP requirements:
-  cd web && pip install requirements.txt
+  cd web && pip install -r requirements.txt
 
 2. Run Flask:
   flask flask-app.py
