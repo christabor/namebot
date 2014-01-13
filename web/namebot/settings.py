@@ -23,7 +23,7 @@ TEST_DATA = [
     'christmas', 'because', 'midnight',
     'sovereign', 'space', 'indeed', 'tiger']
 
-regex = {
+regexes = {
     'all_vowels': re.compile(r'a|e|i|o|u'),
     'vowels': re.compile(r'/[aeiou{1}]/'),
     'consonants': re.compile(r'/[qwrtypsdfghjklzxcvbnm{1}]/'),

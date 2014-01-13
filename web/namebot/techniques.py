@@ -209,7 +209,7 @@ def make_vowel(the_arr, vowel_type, vowel_index):
                     p2 = j[pos_j: len(j)]
                     len_p = len(p)
                     if len(p)+len(p2) > 2:
-                        if re.search(namebot_settings.regex['all_vowels'], p) or re.search(namebot_settings.regex['all_vowels'], p2):
+                        if re.search(namebot_settings.regexes['all_vowels'], p) or re.search(namebot_settings.regexes['all_vowels'], p2):
                             if p[-1] is p2[0]:
                                 new_arr.append(p[:-1]+p2)
                             else:

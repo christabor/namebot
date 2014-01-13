@@ -14,15 +14,6 @@ def remove_odd_sounding_words(words):
     via regular expressions
     """
     cleaned = []
-    regexes = [
-        # checks for the same consonant more than two times
-        re.compile(r'^a|e|i|o|u|y{3,6}'),
-        # bk, ck, dk, gk, etc...
-        re.compile(r'\b[^aeiouys]k|zt|ksd|kd|zhr'),
-        # odd, hard to pronounce, weird
-        re.compile(r'\bzt|ksd|kd|zhr'),
-    ]
-
     if words is None:
         return
 
@@ -30,7 +21,7 @@ def remove_odd_sounding_words(words):
     # regexes and add only if no matches exist
     [cleaned.append(word) for word in words
         if not any(
-            re.match(regex, word) for regex in regexes)]
+            re.match(regex, word) for regex in namebot_settings.regexes)]
     return cleaned
 
 
