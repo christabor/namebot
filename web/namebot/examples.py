@@ -7,10 +7,11 @@ from . import scoring
 from . import settings as namebot_settings
 
 
-def example_synsets():
-    # TODO: Make class based like metrics
+def example_synsets(words=None):
+    if not words:
+        return
     data = nlp.get_synsets(
-        words=namebot_settings.TEST_DATA,
+        words=words,
         use_definitions=True)
     return data
 
@@ -30,11 +31,11 @@ def example_scoring():
         namebot_settings.TEST_DATA)
 
 
-def example_metrics():
+def example_metrics(filename=None):
+    if not filename:
+        return
     test = metrics.NameBotMetricUtilities()
-    allnames = test.open_file(
-        '../Research/namebot-fortune-500-companies.html')
-
+    allnames = test.open_file(filename)
     results = {
         'names': allnames,
         'metrics': {}
@@ -58,14 +59,14 @@ def example_metrics():
     return results
 
 
-def generate_all_examples():
-    example_data = {}
+def generate_all_examples(filename=None, words=None):
     print '< ##=========##===========##=========## > '
     print '... -=|=- Running ALL the examples -=|=- ... '
     print '< ##=========##===========##=========## > '
 
-    example_data['synsets'] = example_synsets()
-    example_data['metrics'] = example_metrics()
+    example_data = {}
+    example_data['synsets'] = example_synsets(words=words)
+    example_data['metrics'] = example_metrics(filename=filename)
     example_data['techniques'] = example_techniques()
     example_data['scoring'] = example_scoring()
     return example_data

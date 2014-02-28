@@ -19,7 +19,9 @@ app.debug = True
 
 # Generate all types of
 # sample data for demoing and testing
-example_data = examples.generate_all_examples()
+example_data = examples.generate_all_examples(
+    filename=defaults.TEST_METRICS_FILE,
+    words=defaults.TEST_DATA)
 seed_data = defaults.TEST_DATA
 metrics = example_data['metrics']
 test_data = example_data['synsets']
@@ -62,6 +64,9 @@ def generate_name():
 
     return render_template(
         'generator.html',
+        techniques=techniques,
+        scoring=scoring,
+        example_data=example_data,
         seed_data=seed_data,
         form=form,
         names=['TEST'],)
