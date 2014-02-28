@@ -28,11 +28,9 @@ class NameBotMetricUtilities:
     def open_file(self, file_name):
         self.file_name = file_name
         items = []
-        files = open(file_name)
-        for newline in files:
-            items.append(newline)
-        files.close()
-
+        with open(file_name) as files:
+            for newline in files:
+                items.append(newline)
         self.total_words = len(items)
         return items
 
