@@ -14,6 +14,7 @@ import re
 MAX_LENGTH = 13
 MIN_LENGTH = 4
 SPACED_MAX_LENGTH = 22
+TEST_METRICS_FILE = '../Research/namebot-fortune-500-companies.html'
 TEST_DATA = [
     'chicken', 'flowers', 'computers',
     'anthropology', 'disaster', 'interest',
