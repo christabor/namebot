@@ -1,4 +1,3 @@
-# http://docs.python.org/release/2.5/whatsnew/pep-328.html
 from __future__ import absolute_import
 import itertools
 from nltk.corpus import wordnet
