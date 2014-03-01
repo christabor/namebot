@@ -84,7 +84,6 @@ def generate_name():
                 words=word_vals)
             return render_template(
                 template,
-                seed_data=defaults.TEST_DATA,
                 metrics=example_data['metrics'],
                 test_data=example_data['synsets'],
                 scoring=example_data['scoring'],

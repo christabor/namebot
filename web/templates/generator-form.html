@@ -11,6 +11,8 @@
 	<button class="btn btn-primary">Generate names</button>
 </form>
 {% else %}
+{% include 'partials/nltk-results.html' %}
+{% include 'partials/scoring-results.html' %}
 {% include 'partials/generated-names.html' %}
 {% endif %}
 {% endblock %}

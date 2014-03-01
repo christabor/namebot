@@ -1,0 +1,25 @@
+<h2>NLTK Results</h2>
+{% for key, type in test_data.words.iteritems() %}
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h4 class="panel-title">
+			<a data-toggle="collapse" data-parent="#accordion" href="#{{ key }}">
+				{{ key|replace('_', ' ')|capitalize }}
+			</a>
+		</h4>
+	</div>
+	<div id="{{ key }}" class="panel-collapse collapse in">
+		<div class="panel-body">
+			{% if type %}
+			<ul>
+				{% for word in type %}
+				<li>{{ word }}</li>
+				{% endfor %}
+			</ul>
+			{% else %}
+			<p>No results.</p>
+			{% endif %}
+		</div>
+	</div>
+</div>
+{% endfor %}
