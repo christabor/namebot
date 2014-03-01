@@ -7,4 +7,4 @@ class NameGeneratorForm(Form):
     field3 = TextField('maybe some common jargon for your field', [validators.Length(min=4, max=25)])
     field4 = TextField('more phrases or jargon', [validators.Length(min=4, max=25)])
     field5 = TextField('another word', [validators.Length(min=4, max=25)])
-    field5 = TextField('a final word', [validators.Length(min=4, max=25)])
+    field6 = TextField('a final word', [validators.Length(min=4, max=25)])
