@@ -24,13 +24,14 @@ def example_techniques(words=None):
 
 
 def example_scoring(words=None):
-    return scoring.generate_all_scoring(words)
+    test_scoring = scoring.NamebotScoring()
+    return test_scoring.generate_all_scoring(words)
 
 
 def example_metrics(filename=None):
     if not filename:
         return
-    test = metrics.NameBotMetricUtilities()
+    test = metrics.NameBotMetrics()
     allnames = test.open_file(filename)
     results = {
         'names': allnames,
