@@ -25,7 +25,9 @@ class NameBotMetricUtilities:
         self.data = []
         self.word_length = 0
 
-    def open_file(self, file_name):
+    def open_file(self, file_name=None):
+        if file_name is None:
+            return
         self.file_name = file_name
         items = []
         with open(file_name) as files:
@@ -191,7 +193,8 @@ class NameBotMetricUtilities:
                         charcount += 1
 
         summary = (
-            'Special character for names: %s Special characters in list: %s' % (
+            'Special character for names: '
+            '%s Special characters in list: %s' % (
                 charcount,
                 new_arr))
         return {
