@@ -62,7 +62,6 @@ def generator():
 
 @app.route('/generate', methods=['GET', 'POST'])
 def generate_name():
-    print request
     template = 'generator-form.html'
     if request.method == 'GET':
         form = web_forms.NameGeneratorForm()
