@@ -20,7 +20,7 @@ from pattern.web import sort, Bing
 """
 
 
-class NameBotMetricUtilities:
+class NameBotMetrics:
     def __init__(self):
         self.data = []
         self.word_length = 0
