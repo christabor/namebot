@@ -97,9 +97,12 @@ def clean_sort(words):
     """
     chars = '!"#$%\'()*+,./:;<=>?@[\\]^`{|}~01234567890'
     if words is not None:
-        words = [word.strip().lower().translate(
-            string.maketrans('', ''),
-            chars) for word in words if len(word) > 1]
+        try:
+            words = [word.strip().lower().translate(
+                string.maketrans('', ''),
+                chars) for word in words if len(word) > 1]
+        except TypeError:
+            pass
     return words
 
 
