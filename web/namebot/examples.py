@@ -4,7 +4,6 @@ from . import nlp
 from . import techniques
 from . import metrics
 from . import scoring
-from . import settings as namebot_settings
 
 
 def example_synsets(words=None):
@@ -20,15 +19,12 @@ def example_synset_categories():
     return nlp.print_all_synset_categories()
 
 
-def example_techniques():
-    # TODO: Make class based like metrics
-    return techniques.generate_all_techniques(
-        namebot_settings.TEST_DATA)
+def example_techniques(words=None):
+    return techniques.generate_all_techniques(words)
 
 
-def example_scoring():
-    return scoring.generate_all_scoring(
-        namebot_settings.TEST_DATA)
+def example_scoring(words=None):
+    return scoring.generate_all_scoring(words)
 
 
 def example_metrics(filename=None):
@@ -67,6 +63,6 @@ def generate_all_examples(filename=None, words=None):
     example_data = {}
     example_data['synsets'] = example_synsets(words=words)
     example_data['metrics'] = example_metrics(filename=filename)
-    example_data['techniques'] = example_techniques()
-    example_data['scoring'] = example_scoring()
+    example_data['techniques'] = example_techniques(words=words)
+    example_data['scoring'] = example_scoring(words=words)
     return example_data

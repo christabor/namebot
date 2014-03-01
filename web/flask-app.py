@@ -11,6 +11,8 @@ import namebot.settings as defaults
 import forms as web_forms
 from flask import Flask
 from flask import render_template
+from flask import request
+from flask import redirect
 
 
 app = Flask(__name__)
@@ -51,25 +53,45 @@ def generator():
     form = web_forms.NameGeneratorForm()
     return render_template(
         'generator.html',
-        techniques=techniques,
-        scoring=scoring,
-        example_data=example_data,
-        seed_data=seed_data,
-        form=form)
-
-
-@app.route('/name-generator/generate')
-def generate_name():
-    form = web_forms.NameGeneratorForm()
-
-    return render_template(
-        'generator.html',
-        techniques=techniques,
-        scoring=scoring,
-        example_data=example_data,
-        seed_data=seed_data,
         form=form,
-        names=['TEST'],)
+        techniques=techniques,
+        scoring=scoring,
+        example_data=example_data,
+        seed_data=seed_data)
+
+
+@app.route('/generate', methods=['GET', 'POST'])
+def generate_name():
+    print request
+    template = 'generator-form.html'
+    if request.method == 'GET':
+        form = web_forms.NameGeneratorForm()
+        return render_template(
+            template,
+            form=form)
+    else:
+        form = web_forms.NameGeneratorForm(request.form)
+        if form.validate():
+            word_vals = []
+            word_vals.append(form.field1.data)
+            word_vals.append(form.field2.data)
+            word_vals.append(form.field3.data)
+            word_vals.append(form.field4.data)
+            word_vals.append(form.field5.data)
+            word_vals.append(form.field6.data)
+            example_data = examples.generate_all_examples(
+                filename=None,
+                words=word_vals)
+            return render_template(
+                template,
+                seed_data=defaults.TEST_DATA,
+                metrics=example_data['metrics'],
+                test_data=example_data['synsets'],
+                scoring=example_data['scoring'],
+                techniques=example_data['techniques'],
+                names='TEST')
+        else:
+            return redirect(request.path)
 
 
 if __name__ == '__main__':
