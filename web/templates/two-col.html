@@ -2,7 +2,9 @@
 {% block content %}
 
 <textarea name="json-data" id="json-data" cols="30" rows="10" style="display:none;">
+	{% if example_data %}
 	{{ example_data.metrics|tojson }}
+	{% endif %}
 </textarea>
 
 <div class="container-fluid">

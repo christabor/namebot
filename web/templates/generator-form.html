@@ -1,0 +1,16 @@
+{% extends 'two-col.html' %}
+{% block right_col %}
+{% if form %}
+<h2>Name Generator</h2>
+<p>Enter some words to get started</p>
+<form action="{{ url_for('generate_name') }}" method="POST" role="form">
+	{% for field in form %}
+	<p>{{ field.label }} {{ field }}</p>
+	{% endfor %}
+	<hr>
+	<button class="btn btn-primary">Generate names</button>
+</form>
+{% else %}
+{% include 'partials/generated-names.html' %}
+{% endif %}
+{% endblock %}

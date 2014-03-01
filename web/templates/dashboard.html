@@ -11,58 +11,6 @@
 {% endblock %}
 
 {% block right_col %}
-<div class="panel-group" id="accordion">
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			<h4 class="panel-title">
-				<a data-toggle="collapse" data-parent="#accordion" href="#dataviz">
-					Name Metrics Visualized
-				</a>
-			</h4>
-		</div>
-		<div id="dataviz" class="panel-collapse collapse">
-			<div class="panel-body">
-				<div class="row">
-					<div class="col-md-12">
-						{% for key, name in metrics.metrics.iteritems() %}
-						<div class="row chart-container" id="chart-{{ key }}">
-							<div class="col-md-8">
-								<h4><small>Breakdown by</small> {{ key|replace('_', ' ')|capitalize }}</h4>
-								<canvas id="{{ key }}" height="400" width="550">
-									<p>Sorry, your browser doesn't support cool stuff.</p>
-								</canvas>
-							</div>
-							<div class="col-md-4 labels">
-							</div>
-						</div>
-						{% endfor %}
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			<h4 class="panel-title">
-				<a data-toggle="collapse" data-parent="#accordion" href="#dataplain">
-					Name Metrics Textualized
-				</a>
-			</h4>
-		</div>
-		<div id="dataplain" class="panel-collapse collapse">
-			<div class="panel-body">
-				<div class="row">
-					{% for key, name in metrics.metrics.iteritems() %}
-					<div class="col-md-6">
-						{% for key, val in name.iteritems() %}
-						<h4>{{ key|capitalize }}</h4>
-						<p>{{ val }}</p>
-						{% endfor %}
-					</div>
-					{% endfor %}
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+<h3>Welcome!</h3>
+<p>Take this library for a test drive by <a href="{{ url_for('generate_name') }}">adding your own words</a> or browsing the examples.</p>
 {% endblock %}

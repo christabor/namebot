@@ -1,0 +1,58 @@
+<div class="panel-group" id="accordion">
+	{% for key, technique in scoring.iteritems() %}
+	{% for key, word_list in technique.iteritems() %}
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h4 class="panel-title">
+				<a data-toggle="collapse" data-parent="#accordion" href="#{{ key }}">
+					{{ key|replace('_', ' ')|capitalize }}
+				</a>
+			</h4>
+		</div>
+		<div id="{{ key }}" class="panel-collapse collapse in">
+			<div class="panel-body">
+				{% if word_list %}
+				<ul>
+					{% for word in word_list %}
+					<li>{{ word }}</li>
+					{% endfor %}
+				</ul>
+				{% else %}
+				<p>No results.</p>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+	{% endfor %}
+	{% endfor %}
+</div>
+<h2>Generated results</h2>
+<div class="panel-group" id="accordion">
+	{% for key, technique in techniques.iteritems() %}
+	{% for key, word_list in technique.iteritems() %}
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h4 class="panel-title">
+				<a data-toggle="collapse" data-parent="#accordion" href="#{{ key }}">
+					{{ key|replace('_', ' ')|capitalize }}
+				</a>
+			</h4>
+		</div>
+		<div id="{{ key }}" class="panel-collapse collapse in">
+			<div class="panel-body">
+				{% if word_list %}
+				<ul>
+					{% for word in word_list %}
+					<li>{{ word }}</li>
+					{% endfor %}
+				</ul>
+				{% else %}
+				<p>No results.</p>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+	{% endfor %}
+	{% endfor %}
+</div>
+<hr>
