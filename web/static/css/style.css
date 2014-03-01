@@ -15,7 +15,9 @@
 	-ms-transition: all 0.1s ease-in-out;
 	-o-transition: all 0.1s ease-in-out;
 	transition: all 0.1s ease-in-out;
-	color: white;
+}
+hr {
+	border-color: rgba(255, 255, 255, 0.2);
 }
 a,
 .btn,
@@ -79,6 +81,15 @@ footer:hover p {
 	opacity: 1;
 }
 
+/* Forms */
+
+form input,
+form textarea {
+	width: 100%;
+	padding: 10px;
+	color: black;
+}
+
 /* Containers */
 
 .navbar-default {
@@ -135,6 +146,10 @@ footer:hover p {
 .btn.btn-primary {
 	background-color: red;
 	border: none;
+}
+.btn.btn-primary:hover {
+	background-color: #a50000;
+	color: white;
 }
 .navbar-default .navbar-nav>li>a {
 	color: #ccc;
