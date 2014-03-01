@@ -13,17 +13,22 @@
         <div class="collapse navbar-collapse" id="navbar-normal">
           <ul class="nav navbar-nav">
             <li>
-              <a href="/">Metrics</a>
+              <a href="{{ url_for('dashboard') }}">Metrics</a>
             </li>
             <li>
-              <a href="/name-generator">Name Generator</a>
+              <a href="{{ url_for('generator') }}">Name Generator</a>
             </li>
             <li>
-              <a href="/nltk-explorer">NLTK Explorer</a>
+              <a href="{{ url_for('nltk') }}">NLTK Explorer</a>
             </li>
           </ul>
-      </div>
-    </nav>
+          <ul class="nav navbar nav pull-right">
+            <li>
+              <a href="{{ url_for('generate_name') }}" class="btn btn-primary">Generate new names</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </div>
   </div>
-</div>
 </header>
