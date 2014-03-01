@@ -37,14 +37,12 @@ $(document).ready(function(){
         var id = $(this).find('canvas').attr('id');
         log(id);
         addNewPieChart(canvases[key], metrics.metrics[id], true, true);
-        return;
     }
 
     function populateCharts() {
         log(metrics.metrics);
         if(!canvases.length) return;
         $('.chart-container').each(addChart);
-        return;
     }
 
     function addNewPieChart(canvas, data, use_key, add_labels) {
@@ -60,7 +58,6 @@ $(document).ready(function(){
         if((!data.data && !data.summary) || !data.data) {
             container.parent().fadeTo(10, 0.4);
             container.remove();
-            return;
         }
 
         // for large datasets we'll turn it off
@@ -89,7 +86,6 @@ $(document).ready(function(){
                 label = '<span class="label" style="background-color:' + color + '">' + label_text + '</span>';
                 labels.push(label);
             }
-            return;
         });
 
         log(clean_data);
@@ -105,10 +101,7 @@ $(document).ready(function(){
 
         // add generated summary
         label_container.append('<p>Summary: ' + (data.summary || 'No summary.') + '</p>');
-
-        return;
     }
 
     populateCharts();
-    return;
 });
