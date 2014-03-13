@@ -189,7 +189,7 @@ def make_vowel(the_arr, vowel_type, vowel_index):
     for i in the_arr:
         for j in the_arr:
             if i is not j and re.search(vowel_type, i) and re.search(vowel_type, j):
-                # get the indexes and lengths to use in finding the ratio
+                # get the indices and lengths to use in finding the ratio
                 pos_i = i.index(vowel_index)
                 len_i = len(i)
                 pos_j = j.index(vowel_index)
