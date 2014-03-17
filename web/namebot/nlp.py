@@ -59,10 +59,10 @@ def get_synsets(words=None, use_definitions=False):
             pos=None)
 
         for synset in synsets:
-            results['words']['synset_original'] = []
-            results['words']['synset_original'].append(synset.lemma_names)
+            results['synset_original'] = []
+            results['synset_original'].append(synset.lemma_names)
             if use_definitions:
-                results['words']['synset_original'].append(
+                results['synset_original'].append(
                     synset.definition.split())
 
             """
@@ -70,53 +70,53 @@ def get_synsets(words=None, use_definitions=False):
             """
 
             if synset.hyponyms():
-                results['words']['hyponyms'] = []
+                results['hyponyms'] = []
                 for v in synset.hyponyms():
-                    results['words']['hyponyms'].append(v.lemma_names)
+                    results['hyponyms'].append(v.lemma_names)
                     if use_definitions:
-                        results['words']['hyponyms'].append(
+                        results['hyponyms'].append(
                             v.definition.split())
 
             if synset.instance_hyponyms():
-                results['words']['instance_hyponyms'] = []
+                results['instance_hyponyms'] = []
                 for v in synset.instance_hyponyms():
-                    results['words']['instance_hyponyms'].append(v.lemma_names)
+                    results['instance_hyponyms'].append(v.lemma_names)
                     if use_definitions:
-                        results['words']['instance_hyponyms'].append(
+                        results['instance_hyponyms'].append(
                             v.definition.split())
 
             if synset.member_meronyms():
-                results['words']['member_meronyms'] = []
+                results['member_meronyms'] = []
                 for v in synset.member_meronyms():
-                    results['words']['member_meronyms'].append(v.lemma_names)
+                    results['member_meronyms'].append(v.lemma_names)
                     if use_definitions:
-                        results['words']['member_meronyms'].append(
+                        results['member_meronyms'].append(
                             v.definition.split())
 
             if synset.substance_meronyms():
-                results['words']['substance_meronyms'] = []
+                results['substance_meronyms'] = []
                 for v in synset.substance_meronyms():
-                    results['words']['substance_meronyms'].append(
+                    results['substance_meronyms'].append(
                         v.lemma_names)
                     if use_definitions:
-                        results['words'].append(
+                        results.append(
                             v.definition.split())
 
             if synset.part_meronyms():
-                results['words']['part_meronyms'] = []
+                results['part_meronyms'] = []
                 for v in synset.part_meronyms():
-                    results['words']['part_meronyms'].append(v.lemma_names)
+                    results['part_meronyms'].append(v.lemma_names)
                     if use_definitions:
-                        results['words']['part_meronyms'].append(
+                        results['part_meronyms'].append(
                             v.definition.split())
 
             if synset.substance_holonyms():
-                results['words']['substance_holonyms'] = []
+                results['substance_holonyms'] = []
                 for v in synset.substance_holonyms():
-                    results['words']['substance_holonyms'].append(
+                    results['substance_holonyms'].append(
                         v.lemma_names)
                     if use_definitions:
-                        results['words']['substance_holonyms'].append(
+                        results['substance_holonyms'].append(
                             v.definition.split())
 
             """
@@ -124,36 +124,36 @@ def get_synsets(words=None, use_definitions=False):
             """
 
             if synset.member_holonyms():
-                results['words']['causes'] = []
+                results['causes'] = []
                 for v in synset.member_holonyms():
-                    results['words']['causes'].append(v.lemma_names)
+                    results['causes'].append(v.lemma_names)
                     if use_definitions:
-                        results['words']['causes'].append(
+                        results['causes'].append(
                             v.definition.split())
 
             if synset.part_holonyms():
-                results['words']['part_holonyms'] = []
+                results['part_holonyms'] = []
                 for v in synset.part_holonyms():
-                    results['words']['part_holonyms'].append(v.lemma_names)
+                    results['part_holonyms'].append(v.lemma_names)
                     if use_definitions:
-                        results['words']['part_holonyms'].append(
+                        results['part_holonyms'].append(
                             v.definition.split())
 
             if synset.instance_hypernyms():
-                results['words']['instance_hypernyms'] = []
+                results['instance_hypernyms'] = []
                 for v in synset.instance_hypernyms():
-                    results['words']['instance_hypernyms'].append(
+                    results['instance_hypernyms'].append(
                         v.lemma_names)
                     if use_definitions:
-                        results['words']['instance_hypernyms'].append(
+                        results['instance_hypernyms'].append(
                             v.definition.split())
 
             if synset.hypernyms():
-                results['words']['hypernyms'] = []
+                results['hypernyms'] = []
                 for v in synset.hypernyms():
-                    results['words']['hypernyms'].append(v.lemma_names)
+                    results['hypernyms'].append(v.lemma_names)
                     if use_definitions:
-                        results['words']['hypernyms'].append(
+                        results['hypernyms'].append(
                             v.definition.split())
 
             """
@@ -162,75 +162,75 @@ def get_synsets(words=None, use_definitions=False):
             """
 
             if synset.topic_domains():
-                results['words']['topic_domains'] = []
+                results['topic_domains'] = []
                 for v in synset.topic_domains():
-                    results['words']['topic_domains'].append(v.lemma_names)
+                    results['topic_domains'].append(v.lemma_names)
                     if use_definitions:
-                        results['words']['topic_domains'].append(
+                        results['topic_domains'].append(
                             v.definition.split())
 
             if synset.region_domains():
-                results['words']['region_domains'] = []
+                results['region_domains'] = []
                 for v in synset.region_domains():
-                    results['words']['region_domains'].append(v.lemma_names)
+                    results['region_domains'].append(v.lemma_names)
                     if use_definitions:
-                        results['words']['region_domains'].append(
+                        results['region_domains'].append(
                             v.definition.split())
 
             if synset.usage_domains():
-                results['words']['usage_domains'] = []
+                results['usage_domains'] = []
                 for v in synset.usage_domains():
-                    results['words']['usage_domains'].append(v.lemma_names)
+                    results['usage_domains'].append(v.lemma_names)
                     if use_definitions:
-                        results['words']['usage_domains'].append(
+                        results['usage_domains'].append(
                             v.definition.split())
 
             if synset.attributes():
-                results['words']['attributes'] = []
+                results['attributes'] = []
                 for v in synset.attributes():
-                    results['words']['attributes'].append(v.lemma_names)
+                    results['attributes'].append(v.lemma_names)
                     if use_definitions:
-                        results['words']['attributes'].append(
+                        results['attributes'].append(
                             v.definition.split())
 
             if synset.entailments():
-                results['words']['entailments'] = []
+                results['entailments'] = []
                 for v in synset.entailments():
-                    results['words']['entailments'].append(v.lemma_names)
+                    results['entailments'].append(v.lemma_names)
                     if use_definitions:
-                        results['words']['entailments'].append(
+                        results['entailments'].append(
                             v.definition.split())
 
             if synset.causes():
-                results['words']['causes'] = []
+                results['causes'] = []
                 for v in synset.causes():
-                    results['words']['causes'].append(v.lemma_names)
+                    results['causes'].append(v.lemma_names)
                     if use_definitions:
-                        results['words']['causes'].append(
+                        results['causes'].append(
                             v.definition.split())
 
             if synset.also_sees():
-                results['words']['also_sees'] = []
+                results['also_sees'] = []
                 for v in synset.also_sees():
-                    results['words']['also_sees'].append(v.lemma_names)
+                    results['also_sees'].append(v.lemma_names)
                     if use_definitions:
-                        results['words']['also_sees'].append(
+                        results['also_sees'].append(
                             v.definition.split())
 
             if synset.verb_groups():
-                results['words']['verb_groups'] = []
+                results['verb_groups'] = []
                 for v in synset.verb_groups():
-                    results['words']['verb_groups'].append(v.lemma_names)
+                    results['verb_groups'].append(v.lemma_names)
                     if use_definitions:
-                        results['words']['verb_groups'].append(
+                        results['verb_groups'].append(
                             v.definition.split())
 
             if synset.similar_tos():
-                results['words']['similar_tos'] = []
+                results['similar_tos'] = []
                 for v in synset.similar_tos():
-                    results['words']['similar_tos'].append(v.lemma_names)
+                    results['similar_tos'].append(v.lemma_names)
                     if use_definitions:
-                        results['words']['similar_tos'].append(
+                        results['similar_tos'].append(
                             v.definition.split())
 
     """
@@ -240,14 +240,14 @@ def get_synsets(words=None, use_definitions=False):
     4. filter, clean, stem, uniquify
     """
 
-    for nlp_type in results['words']:
-        results['words'][nlp_type] = sorted(
+    for nlp_type in results:
+        results[nlp_type] = sorted(
             normalization.uniquify(
                 normalization.clean_sort(
                     normalization.remove_stop_words(
                         normalization.stem_words(
                             normalization.remove_bad_words(
                                 list(itertools.chain(
-                                    *results['words'][nlp_type]))))))))
+                                    *results[nlp_type]))))))))
 
     return results
