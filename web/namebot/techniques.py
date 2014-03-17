@@ -3,17 +3,17 @@ from __future__ import division
 
 from random import choice
 import re
-import string
 import nltk
-
-from pattern.en import split
-from pattern.en import pluralize
-from pattern.vector import words
-from pattern.vector import stem
-from pattern.vector import PORTER
 
 from . import settings as namebot_settings
 from . import normalization
+
+
+___prefixes___ = namebot_settings.PREFIXES
+___suffixes___ = namebot_settings.SUFFIXES
+___alphabet___ = namebot_settings.ALPHABET
+___vowels___ = namebot_settings.VOWELS
+___regexes___ = namebot_settings.regexes
 
 
 def reduplication_ablaut(words, count=1):
@@ -24,14 +24,18 @@ def reduplication_ablaut(words, count=1):
     """
 
     new_words = []
-    vowels = ['a', 'e', 'i', 'o', 'u']
     for word in words:
         new_words.append(
-            '%s %s ' % (word, re.sub(r'a|e|i|o|u', choice(vowels), word, count=count)))
+            '{} {} '.format(
+                word,
+                re.sub(r'a|e|i|o|u',
+                       choice(___vowels___),
+                       word,
+                       count=count)))
     return new_words
 
 
-def affix_words(the_arr, affixType):
+def affix_words(the_arr, affix_type):
     """
     Do some type of affixing technique,
     such as prefixing or suffixing.
@@ -40,69 +44,68 @@ def affix_words(the_arr, affixType):
 
     TODO FINISH *-fixes from article
 
-    prefixes = ["ac","ad","af","ag","al","ap","as","at","an","ab","abs","acer","acid","acri","acu","aer","aero","ag","agi","ig","act","agri","agro","alb","albo","ali","allo","alter","alt","am","ami","amor","ambi","ambul","ana","ano","andr","andro","ang","anim","ann","annu","enni","ante","anti","apo","ap","aph","aqu","arch","aster","astr","auc","aug","aut","aud","audi","aur","aus","aug","auc","aut","auto","bar","be","belli","bene","bi","bine","bibl","bibli","biblio","bio","brev","cap","cas","ceiv","cept","capt","cid","cip","calor","capit","carn","cat","cata","cath","caus","caut","cause","cuse","cus","ceas","ced","cede","ceed","cess","cent","centr","centri","chrom","chron","cide","cis","cise","cit","civ","clam","claim","clin","clud","clus","co","cog","col","coll","con","com","cor","cogn","gnos","contr","contra","cord","cor","cardi","corp","cort","cosm","cour","cur","curr","curs","crat","cracy","cre","cresc","cret","crease","crea","cred","cru","crit","cur","curs","cura","cycl","cyclo","de","dec","deca","dign","dei","div","dem","demo","dent","dont","derm","di","dy","dia","dic","dict","dit","dis","dif","doc","doct","domin","don","dorm","dox","en","em","end","epi","equi","duc","duct","dura","dynam","dys","ec","eco","ecto","ev","et","ex","exter","extra","extro","fa","fess","fac","fact","fec","fect","fic","fas","fea","fall","fals","femto","fer","fic","feign","fain","fit","feat","fid","fide","feder","fig","fila","fili","fin","fix","flex","flect","flict","flu","fluc","fluv","flux","fuse","for","fore","forc","fort","form","fract","frag","frai","fuge","gam","gastro","gen","geo","germ","gest","giga","gin","gloss","glot","glu","glo","gor","grad","gress","gree","graph","gram","graf","grat","grav","greg","hale","heal","helio","hema","hemo","her","here","hes","hex","ses","sex","homo","hum","hydr","hydra","hydro","hyper","hypn","ignis","im","in","il","ir","infra","inter","intra","intro","jac","ject","join","junct","jug","just","juven","labor","lau","lav","lot","lut","lect","leg","lig","levi","lex","leag","leg","liber","lide","liter","loc","loco","log","logo","ology","loqu","luc","lum","lun","lus","lust","lude","macr","magn","main","mal","man","manu","mand","mania","mar","mari","mer","matri","medi","mega","mem","ment","meso","meta","meter","metr","micro","migra","mill","kilo","milli","min","mis","mit","miss","mob","mov","mot","mon","mono","mor","mort","morph","multi","nano","nasc","nat","gnant","nai","nat","nasc","neo","neur","nom","nym","nomen","nomin","non","nov","nox","noc","numer","ob","oc","of","op","oct","oligo","omni","onym","oper","ortho","over","pac","pair","pare","pan","para","pat","pass","path","pater","patr","path","pathy","ped","pod","pedo","pel","puls","pend","pens","pond","per","peri","phage","phan","phas","phen","fan","phant","fant","phe","phil","phon","phot","photo","pico","pict","plac","plais","pli","ply","plore","plu","plur","plus","pneuma","pod","poli","poly","pon","pos","pound","pop","port","post","pot","pre","pur","prin","prim","prime","pro","proto","psych","punct","pute","quat","quad","quip","quir","quis","quer","re","reg","recti","retro","ri","ridi","risi","rog","roga","rupt","sacr","sanc","secr","salv","salu","sanct","sat","satis","sci","scio","scope","scrib","se","sect","sec","sed","sess","sid","semi","sen","scen","sent","sens","sept","sequ","secu","sue","serv","sign","signi","simil","simul","sist","sta","stit","soci","sol","solus","solv","solu","solut","somn","soph","spec","spect","spi","spic","sper","sphere","spir","stand","stant","stab","stat","stan","sti","sta","st","stead","strain","strict","string","stige","stru","struct","stroy","stry","sub","suc","suf","sup","sur","sus","sume","sump","super","supra","syn","sym","tact","tang","tag","tig","ting","tain","ten","tent","tin","tect","teg","tele","tem","tempo","ten","tin","tain","tend","tent","tens","tera","term","terr","terra","test","the","theo","therm","thet","tire","tom","tor","tors","tort","tox","tract","tra","trai","treat","trans","tri","trib","turbo","typ","ultima","umber","un","uni","vac","vade","vale","vali","valu","veh","vect","ven","vent","ver","veri","verb","verv","vert","vers","vi","vic","vicis","vict","vinc","vid","vis","viv","vita","vivi","voc","voke","vol","volcan","volv","volt","vol","vor","with","zo"]
-    suffixes = ["age","able","ible","acy","cy","ade","al","ial","ical","an","ance","ence","ancy","ency","ent","ant","ent","ient","ar","ary","ard","art","ate","ation","cade","drome","ed","en","ence","ency","ier","er","or","erg","ery","es","ies","ess","est","iest","fold","ful","fy","ia","ian","an","iatry","ic","ics","ice","ify","ile","ing","ion","ish","ism","ist","ite","ity","ty","ive","ative","itive","ize","less","ly","ment","ness","or","ory","ous","eous","ose","ious","ship","ster","ure","ward","wise","y"]
     """
-
-    prefixes = ["ac","ad","af","ag","al","ap","as","at","an","ab","abs", "acu","aer","aero","ag","agi","ig","act","alb", "ali","allo","alt","am","ami","amor","ambi","ambul","ana","ano","andr","andro","ang","anim","ann","annu","enni","ante","anti","apo","ap","aph","aqu","arch","aster","astr","auc","aug","aut","aud","audi","aur","aus","aug","auc","aut","auto","bar","be","bene","bi","bine","bibl","bio","brev","cap","cas","ceiv","cept","capt","cid","cip","carn","cat","cata","cath","caus","caut","cause","cuse","cus","ceas","ced","cede","ceed","cess","cent","chron","cide","cis","cise","cit","civ","clam","claim","clin","clud","clus","co","cog","col","coll","con","com","cor","cogn","gnos","contr", "cord","cor","cardi","corp","cort","cosm","cour","cur","curr","curs","crat","cracy","cre","cret","crea","cred","cru","crit","cur","curs","cura","cycl","cyclo","de","dec","deca","dign","dei","div","dem","demo","dent","dont","derm","di","dy","dia","dic","dict","dit","dis","dif","doc","doct","domin","don","dorm","dox","en","em","end","epi","equi","duc","duct","dura","dynam","dys","ec","eco","ecto","ev","et","ex","exter","fa","fess","fac","fact","fec","fect","fic","fas","fea","fall","fals","femto","fer","fic","feign","fain","fit","feat","fid","fide","feder","fig","fila","fili","fin","fix","flex","flu","fluc","fluv","flux","fuse","for","fore","forc","fort","form","fract","frag","frai","fuge","gam","geo","germ","gest","giga","gin","gloss","glot","glu","glo","gor","grad","gress","gree","graph","gram","graf","grat","grav","greg","hale","heal","helio","hema","hemo","her","here","hes","hex","ses","hum","hydra","hydro","hyper","im","in","il","ir","jac","ject","join","junct","jug","just","lau","lav","lot","lut","lect","leg","lig","levi","lex","leag","leg","liber","lide","liter","loc","loco","log","logo","ology","loqu","luc","lum","lun","lus","lust","lude","macr","magn","main","mal","man","manu","mand","mania","mar","mari","mer","matri","medi","mega","mem","ment","meso","meta","meter","metr","micro","migra","mill","kilo","milli","min","mis","mit","miss","mob","mov","mot","mon","mono","mor","mort","morph","multi","nano","nasc","nat","gnant","nai","nat","nasc","neo","neur","nom","nym","nomen","nomin","non","nov","nox","noc","numer","ob","oc","of","op","oct","oligo","omni","onym","oper","over","pac","pair","pare","pan","para","pat","pass","path","pater","patr","path","pathy","ped","pod","pedo","pel","puls","pend","pens","pond","per","peri","phage","phan","phas","phen","fan","phant","fant","phe","phil","phon","phot","photo","pico","pict","plac","plais","pli","ply","plore","plu","plur","plus","pneuma","pod","poli","poly","pon","pos","pound","pop","port","post","pot","pre","pur","prin","prim","prime","pro","proto","psych","punct","pute","quat","quad","quip","quir","quis","quer","re","reg","recti","retro","ri","ridi","risi","rog","roga","rupt","sacr","sanc","secr","salv","salu","sanct","sat","satis","sci","scio","scope","scrib","se","sect","sec","sed","sess","sid","semi","sen","scen","sent","sens","sept","sequ","secu","sue","serv","sign","signi","simil","simul","sist","sta","stit","soci","sol","solus","solv","solu","solut","somn","soph","spec","spect","spi","spic","sper","sphere","spir","stand","stant","stab","stat","stan","sti","sta","st","stead","strain","strict","string","stige","stru","struct","stroy","stry","sub","suc","suf","sup","sur","sus","sume","sump","super","supra","syn","sym","tact","tang","tag","tig","ting","tain","ten","tent","tin","tect","teg","tele","tem","tempo","ten","tin","tain","tend","tent","tens","tera","term","terr","terra","test","the","theo","therm","thet","tire","tom","tor","tors","tort","tox","tract","tra","trai","treat","trans","tri","trib","turbo","typ","ultima","umber","un","uni","vac","vade","vale","vali","valu","veh","vect","ven","vent","ver","veri","verb","verv","vert","vers","vi","vic","vicis","vict","vinc","vid","vis","viv","vita","vivi","voc","voke","vol","volcan","volv","volt","vol","vor","with","zo"]
-    suffixes = ["age","able","ible","acy","cy","ade","al","ial","ical","an","ance","ence","ancy","ency","ent","ant","ent","ient","ar","ary","ard","art","ate","ation","cade","drome","ed","en","ence","ency","ier","er","or","erg","ery","es","ies","ess","est","iest","fold","ful","fy","ia","ian","an","iatry","ic","ics","ice","ify","ile","ing","ion","ish","ism","ist","ite","ity","ty","ive","ative","itive","ize","less","ly","ment","ness","or","ory","ous","eous","ose","ious","ship","ster","ure","ward","wise","y"]
-
     new_arr = []
     if len(the_arr):
 
-        if affixType is 'prefix':
+        if affix_type is 'prefix':
             for v in the_arr:
-                for v1 in prefixes:
+                for v1 in ___prefixes___:
                     if v1 is not None:
-                        if re.search(r'^/a|e|i|o|u', v[0]) or re.search(r'^/a|e|i|o|u', v1[0]):
-                            """
-                            if there's a vowel at the end of
-                            prefix but not at the beginning
-                            of the word (or vice versa)
-                            """
-                            if re.search(r'a|e|i|o|u', v1[-1:]) or re.search(r'^a|e|i|o|u', v[:1]):
-                                new_arr.append(v1+v)
+                        if re.search(
+                            ___regexes___['no_vowels'], v[0]) or re.search(
+                                ___regexes___['no_vowels'], v1[0]):
+                                    # if there's a vowel at the end of
+                                    # prefix but not at the beginning
+                                    # of the word (or vice versa)
+                                    if re.search(
+                                        r'a|e|i|o|u', v1[-1:]) or re.search(
+                                            r'^a|e|i|o|u', v[:1]):
+                                        new_arr.append('{}{}'.format(v1, v))
 
-        elif affixType is 'suffix':
+        elif affix_type is 'suffix':
             for v in the_arr:
-                for suffix in suffixes:
+                for suffix in ___suffixes___:
                     if suffix is not None:
-                        if re.search(r'^/a|e|i|o|u', v[0]) or re.search(r'^/a|e|i|o|u', suffix[0]):
-                            if suffix is "ify":
-                                if v[-1] is "e":
-                                    if v[-2] is not "i":
-                                        new_arr.append(v[:-2]+suffix)
-                                    else:
-                                        new_arr.append(v[:-1]+suffix)
-                                new_arr.append(v+suffix)
-                            else:
-                                new_arr.append(v+suffix)
+                        if re.search(___regexes___['all_vowels'], v[0]) or re.search(
+                                ___regexes___['all_vowels'], suffix[0]):
+                                if suffix is "ify":
+                                    if v[-1] is "e":
+                                        if v[-2] is not "i":
+                                            new_arr.append(v[:-2] + suffix)
+                                        else:
+                                            new_arr.append(v[:-1] + suffix)
+                                    new_arr.append(v + suffix)
+                                else:
+                                    new_arr.append(v + suffix)
 
-        elif affixType is 'duplifix':
+        elif affix_type is 'duplifix':
             """
             makes duplification
             (e.g: teeny weeny, etc...)
             """
-            alphabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
             for v in the_arr:
-                for letter in alphabet:
+                for letter in ___alphabet___:
                     # check if the first letter is
                     # NOT the same as the second letter in reduplication
                     if v[0] is not letter:
                         # check if the first word is
                         # NOT the same as the second word. (or letter)
-                        if v is not letter+v[1:]:
+                        if v is not letter + v[1:]:
                             if re.match('[aeiou]', v[1]):
                                 if re.match('[^aeiou]', letter):
-                                    new_arr.append(v+' '+letter+v[1:])
+                                    new_arr.append(
+                                        '{} {} {}'.format(
+                                            v, letter, v[1:]))
                             elif re.match('[^aeiou]', v[1]):
                                 if re.match('[aeiou]', letter):
-                                    new_arr.append(v+' '+letter+v[1:])
-
-        elif affixType is "infix":
+                                    new_arr.append(
+                                        '{} {} {}'.format(
+                                            v, letter, v[1:]))
+        elif affix_type is "infix":
             pass
 
-        elif affixType is "disfix":
+        elif affix_type is "disfix":
             pass
 
     return new_arr
@@ -204,16 +207,17 @@ def make_vowel(the_arr, vowel_type, vowel_index):
 
                 # decide which word should be the
                 # prefix and which should be suffix
-                if round(pos_i/len_i) > round(pos_j/len_j):
-                    p = i[0: pos_i+1]
+                if round(pos_i / len_i) > round(pos_j / len_j):
+                    p = i[0: pos_i + 1]
                     p2 = j[pos_j: len(j)]
-                    len_p = len(p)
-                    if len(p)+len(p2) > 2:
-                        if re.search(namebot_settings.regexes['all_vowels'], p) or re.search(namebot_settings.regexes['all_vowels'], p2):
-                            if p[-1] is p2[0]:
-                                new_arr.append(p[:-1]+p2)
-                            else:
-                                new_arr.append(p+p2)
+                    if len(p) + len(p2) > 2:
+                        if re.search(
+                            ___regexes___['all_vowels'], p) or re.search(
+                                ___regexes___['all_vowels'], p2):
+                                    if p[-1] is p2[0]:
+                                        new_arr.append(p[:-1] + p2)
+                                    else:
+                                        new_arr.append(p + p2)
     return new_arr
 
 
@@ -330,13 +334,13 @@ def make_misspelling(the_arr):
         new_arr.append(i.replace('ph', 'f'))
         new_arr.append(i.replace('kew', 'cue'))
         new_arr.append(i.replace('f', 'ph'))
-        new_arr.append(i.replace('o','ough'))
+        new_arr.append(i.replace('o', 'ough'))
 
         # # these seem to have
         # # sucked in practice
-        new_arr.append(i.replace('o','off'))
+        new_arr.append(i.replace('o', 'off'))
         new_arr.append(i.replace('ow', 'o'))
-        new_arr.append(i.replace('x','ecks'))
+        new_arr.append(i.replace('x', 'ecks'))
 
         new_arr.append(i.replace('za', 'xa'))
         new_arr.append(i.replace('xa', 'za'))
@@ -530,32 +534,30 @@ def generate_all_techniques(words):
     library in one place, and cleans them for use
     """
     data = {
-        'words': {},
+        'words': {
+            'alliterations': make_name_alliteration(words),
+            'alliterations': make_name_alliteration(words),
+            'portmanteau': make_portmanteau_default_vowel(words),
+            'vowels': make_vowelify(words),
+            'suffix': affix_words(words, 'suffix'),
+            'prefix': affix_words(words, 'prefix'),
+            'duplifix': affix_words(words, 'duplifix'),
+            'disfix': affix_words(words, 'disfix'),
+            'infix': affix_words(words, 'infix'),
+            'found_product_name': make_founder_product_name(
+                'Lindsey', 'Chris', 'Widgets'),
+            'cc_to_vc_swap': make_cc_to_vc_swap(words),
+            'name_obscured': make_name_obscured(words),
+            'punctuator': make_punctuator(words),
+            'name_abbreviation': make_name_abbreviation(words),
+            'make_portmanteau_split': make_portmanteau_split(words),
+            'latin_root': make_name_from_latin_root(words),
+            'make_word_metaphor': make_word_metaphor(words),
+            'make_phrase': make_phrase(words),
+            'reduplication_ablaut': reduplication_ablaut(words),
+            'misspelling': make_misspelling(words),
+            'descriptors': make_descriptors(
+                get_descriptors(words))
+        }
     }
-
-    data['words']['alliterations'] = make_name_alliteration(words)
-    data['words']['portmanteau'] = make_portmanteau_default_vowel(words)
-    data['words']['vowels'] = make_vowelify(words)
-
-    data['words']['suffix'] = affix_words(words, 'suffix')
-    data['words']['prefix'] = affix_words(words, 'prefix')
-    data['words']['duplifix'] = affix_words(words, 'duplifix')
-    data['words']['disfix'] = affix_words(words, 'disfix')
-    data['words']['infix'] = affix_words(words, 'infix')
-
-    data['words']['found_product_name'] = make_founder_product_name(
-        'Lindsey', 'Chris', 'Widgets')
-    data['words']['cc_to_vc_swap'] = make_cc_to_vc_swap(words)
-    data['words']['name_obscured'] = make_name_obscured(words)
-    data['words']['punctuator'] = make_punctuator(words)
-    data['words']['name_abbreviation'] = make_name_abbreviation(words)
-    data['words']['make_portmanteau_split'] = make_portmanteau_split(words)
-    data['words']['make_name_from_latin_root'] = make_name_from_latin_root(words)
-    data['words']['make_word_metaphor'] = make_word_metaphor(words)
-    data['words']['make_phrase'] = make_phrase(words)
-    data['words']['reduplication_ablaut'] = reduplication_ablaut(words)
-    data['words']['misspelling'] = make_misspelling(words)
-    data['words']['descriptors'] = make_descriptors(
-        get_descriptors(words))
-
     return super_scrub(data)
