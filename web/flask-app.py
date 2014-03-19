@@ -77,7 +77,8 @@ def generate_name():
             word_vals.append(form.field3.data)
             word_vals.append(form.field4.data)
             word_vals.append(form.field5.data)
-            word_vals.append(form.field6.data)
+            free_list = form.field6.data.split(' ')
+            word_vals = filter(None, word_vals + free_list)
             example_data = examples.generate_all_examples(
                 filename=None,
                 words=word_vals)
