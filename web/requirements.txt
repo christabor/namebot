@@ -3,7 +3,8 @@ Flask-WTF==0.9.4
 Fuzzy==1.0
 Jinja2==2.7.1
 MarkupSafe==0.18
-Pattern==2.3
+Numpy
+Pattern >= 2.3
 WTForms==1.0.5
 Werkzeug==0.9.4
 domainr==1.0.0
