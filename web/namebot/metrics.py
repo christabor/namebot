@@ -202,16 +202,19 @@ class NameBotMetrics:
         self.name_list = name_list
         new_arr = []
         for val in name_list:
-            val = parse(
-                val,
-                encoding='utf-8',
-                tokenize=False,
-                light=False,
-                tags=True,
-                chunks=False,
-                relations=False,
-                lemmata=False)
-            new_arr.append(val)
+            try:
+                val = parse(
+                    val,
+                    encoding='utf-8',
+                    tokenize=False,
+                    light=False,
+                    tags=True,
+                    chunks=False,
+                    relations=False,
+                    lemmata=False)
+                new_arr.append(val)
+            except IndexError:
+                continue
         return {
             'data': new_arr,
             'summary': None
