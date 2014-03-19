@@ -1,11 +1,7 @@
 from __future__ import division
 import re
 from pattern.en import parse
-from pattern.web import sort, Bing
-
-#from nltk.book import * # only for testing a book
-# good use: lwords = [w for w in v if len(w) > 15]
-# add w _as_ w (the key), in the obj, if some condition is met
+from pattern.web import sort
 
 
 """
@@ -284,13 +280,11 @@ class NameBotMetrics:
         self.name_list = name_list
         results = sort(
             terms=[],
-            context=sortcontext,  # Term used for sorting.
-            service=enginetype,   # GOOGLE, YAHOO, BING, ...
-            license=None,         # You should supply your own API license key
-                                  # for the given service.
-            strict=True,          # Wraps the query in quotes, i.e.'mac sweet'.
-            reverse=True,         # Reverses term and context: 'sweet mac' <=>
-                                  # 'mac sweet'.
+            context=sortcontext,   # Term used for sorting.
+            service=enginetype,    # GOOGLE, YAHOO, BING, ...
+            license=None,          # You should supply your own API license key
+            strict=True,           # Wraps query in quotes: 'mac sweet'.
+            reverse=True,          # Reverse: 'sweet mac' <=> 'mac sweet'.
             cached=True)
 
         for weight, term in results:
