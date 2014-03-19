@@ -157,3 +157,18 @@ form textarea {
 .navbar-default .navbar-nav>li>a:hover {
 	color: red;
 }
+
+/* Labels */
+
+.label {
+	display: block;
+	width: 100%;
+	background-color: transparent;
+	font-size: 110%;
+	margin: 1em 0;
+}
+.label-danger {
+	color: #ff0000;
+	border: 2px solid #ff0000;
+	text-shadow: 0 2px 2px black;
+}
