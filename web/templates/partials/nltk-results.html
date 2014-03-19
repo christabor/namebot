@@ -1,14 +1,16 @@
 <h2>NLTK Results</h2>
-{% for k, type in test_data.iteritems() %}
+{% for key, type in test_data.iteritems() %}
+{% set el = key|lower %}
+{% set title = type[0]|replace('_', ' ')|capitalize %}
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<h4 class="panel-title">
-			<a data-toggle="collapse" data-parent="#accordion" href="#{{ key }}">
-				{{ key|replace('_', ' ')|capitalize }}
+			<a data-toggle="collapse" data-parent="#accordion" href="#{{ el }}">
+				{{ title }}
 			</a>
 		</h4>
 	</div>
-	<div id="{{ key }}" class="panel-collapse collapse in">
+	<div id="{{ el }}" class="panel-collapse collapse in">
 		<div class="panel-body">
 			{% if type %}
 			<ul>
@@ -17,7 +19,7 @@
 				{% endfor %}
 			</ul>
 			{% else %}
-			<p>No results.</p>
+			<p class="bs-callout bs-callout-danger">No results.</p>
 			{% endif %}
 		</div>
 	</div>
