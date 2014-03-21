@@ -26,7 +26,7 @@ def spoonerism(words):
                 words[k + 1][1:])
         except IndexError:
             continue
-        print words
+        return words
 
 
 def reduplication_ablaut(words, count=1):
