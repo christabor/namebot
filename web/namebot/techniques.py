@@ -16,6 +16,19 @@ ___vowels___ = namebot_settings.VOWELS
 ___regexes___ = namebot_settings.regexes
 
 
+def spoonerism(words):
+    for k, word in enumerate(words):
+        try:
+            words[k] = '{}{} {}{}'.format(
+                words[k + 1][0],
+                words[k][1:],
+                words[k][0],
+                words[k + 1][1:])
+        except IndexError:
+            continue
+        print words
+
+
 def reduplication_ablaut(words, count=1):
     """
     http://phrases.org.uk/meanings/reduplication.html
