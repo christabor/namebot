@@ -21,7 +21,7 @@ TEST_DATA = [
     'rebel', 'cried', 'more', 'devil', 'hour',
     'space', 'flame', 'rabbit', 'neat',
     'christmas', 'because', 'midnight',
-    'sovereign', 'space', 'indeed', 'tiger']
+    'sovereign', 'indeed', 'tiger']
 
 regexes = {
     'no_vowels': re.compile(r'^/a|e|i|o|u'),
