@@ -51,7 +51,7 @@ def print_all_synset_categories():
 def get_synsets(words=None, use_definitions=False):
     """This is a brute force method of getting as many related words
     to a given set as possible. You are expected to filter or remove any
-    that are not relevant separately, if the resultant is too long.
+    that are not relevant separately, if the resultant set is too long.
     The scoring module provides tools to filter based on pronunciation,
     but you can write your own and extend the functionality."""
     results = {
