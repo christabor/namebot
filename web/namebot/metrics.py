@@ -162,21 +162,19 @@ class NameBotMetrics:
             'summary': None
         }
 
-    def get_special_chars(self, name_list):
-        new_arr = []
-        charcount = 0
-        chars = re.compile(r'\&|\!|\@|\.')
-        for val in name_list:
-            if re.findall(chars, val):
-                charcount += 1
-
-        summary = (
-            'Special character for names: '
-            '%s Special characters in list: %s' % (
-                charcount,
-                new_arr))
+    def get_special_chars(self, words):
+        data = []
+        words_matched = 0
+        chars = re.compile(r'[^a-z]', re.IGNORECASE)
+        for word in words:
+            if re.findall(chars, word):
+                data += re.findall(chars, word)
+                words_matched += 1
+        summary = '{} special characters were found in {} words.'.format(
+            len(data),
+            words_matched)
         return {
-            'data': new_arr,
+            'data': data,
             'summary': summary
         }
 
