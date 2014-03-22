@@ -17,10 +17,6 @@ from pattern.web import sort
 
 
 class NameBotMetrics:
-    def __init__(self):
-        self.data = []
-        self.word_length = 0
-
     def open_file(self, file_name=None):
         if file_name is None:
             return
@@ -37,7 +33,6 @@ class NameBotMetrics:
         Check for numbers spelled out
         e.g. One, Two, Three, Four
         """
-        self.name_list = name_list
         matches = []
         numbers = re.compile(
             r'\AOne |Two |Three |Four |Five |Six |Seven |Eight |Nine |Ten ')
@@ -53,7 +48,6 @@ class NameBotMetrics:
         }
 
     def name_length(self, name_list):
-        self.name_list = name_list
         names_length = []
         for val in name_list:
             names_length.append(len(val))
@@ -66,7 +60,6 @@ class NameBotMetrics:
         }
 
     def name_vowel_count(self, name_list):
-        self.name_list = name_list
         num_count = {}
         num_count['a'] = 0
         num_count['e'] = 0
@@ -91,9 +84,7 @@ class NameBotMetrics:
             }
 
     def name_starts_with_vowel(self, name_list):
-        self.name_list = name_list
         vowelcount = 0
-
         vowels = re.compile(r'\A[aeiou]')
         for name in name_list:
             if re.match(vowels, name):
@@ -109,7 +100,7 @@ class NameBotMetrics:
     def get_search_results(self, name_list):
         # TODO FIXME
         # values = []
-        # self.name_list = name_list
+        #
         # for name in name_list:
         #     engine = Bing(
         #         license=None)
@@ -141,7 +132,6 @@ class NameBotMetrics:
         Look for and count the
         digits in names, e.g. 7-11, 3M, etc...
         """
-        self.name_list = name_list
         new_arr = []
         digits = re.compile(r'[0-9]+')
         for name in name_list:
@@ -158,9 +148,7 @@ class NameBotMetrics:
         Add the frequency of first letters
         e.g. [C]at, [C]law, c = 2
         """
-        self.name_list = name_list
         letters = {}
-
         # populate keys
         for name in name_list:
             letters[name[0]] = 0
@@ -175,7 +163,6 @@ class NameBotMetrics:
         }
 
     def get_special_chars(self, name_list):
-        self.name_list = name_list
         new_arr = []
         charcount = 0
         chars = re.compile(r'\&|\!|\@|\.')
@@ -194,7 +181,6 @@ class NameBotMetrics:
         }
 
     def get_word_types(self, name_list):
-        self.name_list = name_list
         new_arr = []
         for val in name_list:
             try:
@@ -216,7 +202,6 @@ class NameBotMetrics:
         }
 
     def get_name_spaces(self, name_list):
-        self.name_list = name_list
         num_arr = []
         spaces = r'\s'
         for val in name_list:
@@ -229,7 +214,6 @@ class NameBotMetrics:
         }
 
     def get_consonant_repeat_frequency(self, name_list):
-        self.name_list = name_list
         count = 0
         cons = re.compile(r'[^aeiou]{6}')
         for val in name_list:
@@ -241,7 +225,6 @@ class NameBotMetrics:
         }
 
     def get_consonant_duplicate_repeat_frequency(self, name_list):
-        self.name_list = name_list
         count = 0
         cons_dup = re.compile(r'[^a]{3}[^e]{3}[^i]{3}[^o]{3}[^u]{3}')
         for name in name_list:
@@ -253,7 +236,6 @@ class NameBotMetrics:
         }
 
     def get_vowel_repeat_frequency(self, name_list):
-        self.name_list = name_list
         count = 0
         cons_vowel = re.compile(r'[aeiou]{3}')
         for val in name_list:
@@ -265,7 +247,6 @@ class NameBotMetrics:
         }
 
     def get_adjective_verb_or_noun(self, name_list):
-        self.name_list = name_list
         # TODO ADD
         return {
             'data': None,
@@ -279,7 +260,6 @@ class NameBotMetrics:
         http://www.clips.ua.ac.be/pages/pattern-web#sort
         """
         results_list = []
-        self.name_list = name_list
         results = sort(
             terms=[],
             context=sortcontext,   # Term used for sorting.
@@ -303,7 +283,6 @@ class NameBotMetrics:
         the number of results, and
         what they are (if applicable)
         """
-        self.name_list = name_list
         return {
             'data': None,
             'summary': None
@@ -315,7 +294,6 @@ class NameBotMetrics:
         perhap hook into other domain
         name generators, sites..?
         """
-        self.name_list = name_list
         return {
             'data': None,
             'summary': None
@@ -328,7 +306,6 @@ class NameBotMetrics:
 
         http://www.clips.ua.ac.be/pages/pattern-web#DOM
         """
-        self.name_list = name_list
         return {
             'data': None,
             'summary': None
@@ -342,7 +319,6 @@ class NameBotMetrics:
         google results and others.
         """
         results = []
-        self.name_list = name_list
         for name in name_list:
             results = self.get_search_result_count(name_list)
             domains = self.check_domain_searches(name_list)
