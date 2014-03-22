@@ -8,4 +8,4 @@ class NameGeneratorForm(Form):
     field4 = TextField('more phrases or jargon', [validators.Length(min=4, max=25)])
     field5 = TextField('another word', [validators.Length(min=4, max=25)])
     field6 = TextField('a final word', [validators.Length(min=4, max=25)])
-    textarea = TextAreaField('Or just make a list...')
+    textarea = TextAreaField('And add more if you\'d like...')
