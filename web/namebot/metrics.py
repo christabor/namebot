@@ -40,7 +40,7 @@ class NameBotMetrics:
             if re.findall(numbers, word):
                 matches.append(word)
 
-        summary = 'Of %s words %s matched' % (
+        summary = 'Of {} words {} matched'.format(
             self.total_words, len(matches))
         return {
             'data': matches,
@@ -51,9 +51,9 @@ class NameBotMetrics:
         names_length = []
         for val in name_list:
             names_length.append(len(val))
-        summary = (
-            "Of %s words, the average length of company names is... %s " %
-            (self.total_words, round(sum(names_length) / len(names_length))))
+        summary = 'Of {} words, the average length of names is...{}'.format(
+            self.total_words,
+            round(sum(names_length) / len(names_length)))
         return {
             'data': names_length,
             'summary': summary
@@ -89,9 +89,10 @@ class NameBotMetrics:
         for name in name_list:
             if re.match(vowels, name):
                 vowelcount += 1
-
-        summary = 'Of %s words, %s or %s%s are vowels as the first letter.' % (
-            len(name_list), vowelcount, len(name_list) % vowelcount, '%')
+        summary = 'Of {} words, {} or {}% are vowels as the first letter.'.format(
+            len(name_list),
+            vowelcount,
+            vowelcount % len(name_list))
         return {
             'data': None,
             'summary': summary
@@ -114,7 +115,7 @@ class NameBotMetrics:
         #         cached=False,)
         #     values.append(name, len(searches))
 
-        # summary = 'VAL: %s SEARCHES: %s %s' % (
+        # summary = 'VAL: {} SEARCHES: {} {}'.format(
         #     name,
         #     len(searches),
         #     searches)
