@@ -17,16 +17,57 @@ ___regexes___ = namebot_settings.regexes
 
 
 def spoonerism(words):
+    "First: [f]oo [b]ar => boo far"
+    new_words = []
     for k, word in enumerate(words):
         try:
-            words[k] = '{}{} {}{}'.format(
-                words[k + 1][0],
-                words[k][1:],
-                words[k][0],
-                words[k + 1][1:])
+            new_words.append('{}{} {}{}'.format(
+                words[k + 1][0],  # 2nd word, 1st letter
+                word[1:],  # 1st word, 2nd letter to end
+                word[0],  # 1st word, 1st letter
+                words[k + 1][1:]))  # 2nd word, 2nd letter to end
         except IndexError:
             continue
-        return words
+    return new_words
+
+
+def kniferism(words):
+    "Mid: f[o]o b[a]r => fao bor"
+    new_words = []
+    for k, word in enumerate(words):
+        try:
+            middle_second = int(len(words[k + 1]) / 2)
+            middle_first = int(len(word) / 2)
+            new_words.append('{}{}{} {}{}{}'.format(
+                word[:middle_first],
+                words[k + 1][middle_second],
+                word[middle_first + 1:],
+                words[k + 1][:middle_second],
+                word[middle_first],
+                words[k + 1][middle_second + 1:]))
+        except IndexError:
+            continue
+    return new_words
+
+
+def forkerism(words):
+    "Last: fo[o] ba[r] => for bao"
+    new_words = []
+    for k, word in enumerate(words):
+        try:
+            s_word = words[k + 1]
+            s_word_len = len(s_word)
+            f_word_len = len(word)
+            f_w_last_letter = word[f_word_len - 1]
+            s_w_last_letter = words[k + 1][s_word_len - 1]
+            new_words.append('{}{} {}{}'.format(
+                word[:f_word_len - 1],  # 1st word, 1st letter to last - 1
+                s_w_last_letter,  # 2nd word, last letter
+                s_word[:s_word_len - 1],  # 2nd word, 1st letter to last - 1
+                f_w_last_letter))  # 1st word, last letter
+        except IndexError:
+            continue
+    return new_words
 
 
 def reduplication_ablaut(words, count=1):
@@ -39,7 +80,7 @@ def reduplication_ablaut(words, count=1):
     new_words = []
     for word in words:
         new_words.append(
-            '{} {} '.format(
+            '{} {}'.format(
                 word,
                 re.sub(r'a|e|i|o|u',
                        choice(___vowels___),
@@ -557,7 +598,7 @@ def generate_all_techniques(words):
             'duplifix': affix_words(words, 'duplifix'),
             'disfix': affix_words(words, 'disfix'),
             'infix': affix_words(words, 'infix'),
-            'found_product_name': make_founder_product_name(
+            'founder_product_name': make_founder_product_name(
                 'Lindsey', 'Chris', 'Widgets'),
             'cc_to_vc_swap': make_cc_to_vc_swap(words),
             'name_obscured': make_name_obscured(words),
@@ -567,6 +608,9 @@ def generate_all_techniques(words):
             'latin_root': make_name_from_latin_root(words),
             'make_word_metaphor': make_word_metaphor(words),
             'make_phrase': make_phrase(words),
+            'forkerism': forkerism(words),
+            'kniferism': kniferism(words),
+            'spoonerism': spoonerism(words),
             'reduplication_ablaut': reduplication_ablaut(words),
             'misspelling': make_misspelling(words),
             'descriptors': make_descriptors(
