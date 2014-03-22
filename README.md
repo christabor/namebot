@@ -2,7 +2,7 @@
 A company/product name generating tool written in Python. Powers parts of Automotron.com
 
 ## Notes:
-This project is ongoing, but feel free to contribute! There is still plenty of work to be done, but the basics are all there.
+This project is ongoing, but feel free to contribute! There's much more to add, but it's a full-fledged suite of tools that can help you get started generating ideas and names.
 
 ## Modules: 
 ### Examples
