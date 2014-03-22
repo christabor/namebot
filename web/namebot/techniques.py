@@ -146,15 +146,15 @@ def affix_words(the_arr, affix_type):
                         # check if the first word is
                         # NOT the same as the second word. (or letter)
                         if v is not letter + v[1:]:
-                            if re.match('[aeiou]', v[1]):
-                                if re.match('[^aeiou]', letter):
+                            if re.match(___regexes___['all_vowels'], v[1]):
+                                if re.match(___regexes___['no_vowels'], letter):
                                     new_arr.append(
-                                        '{} {} {}'.format(
+                                        '{} {}{}'.format(
                                             v, letter, v[1:]))
-                            elif re.match('[^aeiou]', v[1]):
-                                if re.match('[aeiou]', letter):
+                            elif re.match(___regexes___['no_vowels'], v[1]):
+                                if re.match(___regexes___['all_vowels'], letter):
                                     new_arr.append(
-                                        '{} {} {}'.format(
+                                        '{} {}{}'.format(
                                             v, letter, v[1:]))
         elif affix_type is "infix":
             pass
