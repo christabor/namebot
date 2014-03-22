@@ -19,6 +19,12 @@
 hr {
 	border-color: rgba(255, 255, 255, 0.2);
 }
+a {
+	color: #63FFBD;
+}
+a:hover {
+	color: #adffde;
+}
 a,
 .btn,
 button,
@@ -49,6 +55,13 @@ body {
 	-moz-column-count:2;
 	-webkit-column-count:2;
 	column-count:2;
+}
+.subdued {
+	opacity: 0.5;
+	font-size: 70%;
+}
+.subdued:hover {
+	opacity: 1;
 }
 ul, li {
 	list-style-type: square;

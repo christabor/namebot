@@ -39,6 +39,14 @@ def dashboard():
         metrics=metrics)
 
 
+@app.route('/visualization')
+def visualization():
+    return render_template(
+        'visualization.html',
+        example_data=example_data,
+        metrics=metrics)
+
+
 @app.route('/nltk-explorer')
 def nltk():
     return render_template(

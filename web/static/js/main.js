@@ -59,11 +59,14 @@ $(document).ready(function(){
             container.parent().fadeTo(10, 0.4);
             container.remove();
         }
-
-        // for large datasets we'll turn it off
-        // (for now)
-        if(data.data.length > 100) return;
-
+        try {
+            // for large datasets we'll turn it off
+            // (for now)
+            if(data.data.length > 100) return;
+        }
+        catch(e) {
+            return;
+        }
         clean_data = [];
 
         // build chart data
@@ -89,7 +92,10 @@ $(document).ready(function(){
         });
 
         log(clean_data);
-        log([{'value': 40, 'color': randomColorHex()}, {'value': 20, 'color': randomColorHex()}, {'value': 40, 'color': randomColorHex()}]);
+        log([{'value': 40,
+            'color': randomColorHex()},
+            {'value': 20, 'color': randomColorHex()},
+            {'value': 40, 'color': randomColorHex()}]);
 
         // add labels if specified
 

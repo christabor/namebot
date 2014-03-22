@@ -53,11 +53,12 @@
 			<div class="panel-body">
 				<div class="row">
 					{% for key, name in metrics.metrics.iteritems() %}
-					<div class="col-md-6">
-						{% for key, val in name.iteritems() %}
-						<h4>{{ key|capitalize }}</h4>
-						<p>{{ val }}</p>
+					<div class="col-md-12">
+						{% for title, summary in name.iteritems() %}
+						<h4>{{ title|capitalize }}</h4>
+						<p class="{% if title == 'data' %}subdued{% endif %}">{{ summary }}</p>
 						{% endfor %}
+						<hr>
 					</div>
 					{% endfor %}
 				</div>

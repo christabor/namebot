@@ -28,11 +28,14 @@ def example_scoring(words=None):
     return test_scoring.generate_all_scoring(words)
 
 
-def example_metrics(filename=None):
-    if not filename:
+def example_metrics(filename=None, words=None):
+    if not filename or not words:
         return
     test = metrics.NameBotMetrics()
-    allnames = test.open_file(filename)
+    if filename:
+        allnames = test.open_file(filename)
+    else:
+        allnames = words
     results = {
         'names': allnames,
         'metrics': {
@@ -63,7 +66,7 @@ def generate_all_examples(filename=None, words=None):
 
     example_data = {
         'synsets': example_synsets(words=words),
-        'metrics': example_metrics(filename=filename),
+        'metrics': example_metrics(filename=filename, words=words),
         'techniques': example_techniques(words=words),
         'scoring': example_scoring(words=words)
     }
