@@ -169,9 +169,11 @@ def make_founder_product_name(founder1, founder2, product):
     """
     get the name of two people
     forming a company and combine it
-
     """
-    return founder1[0].upper() + ' & ' + founder2[0].upper() + ' ' + product
+    return '{} & {} {}'.format(
+        founder1[0].upper(),
+        founder2[0].upper(),
+        product)
 
 
 def make_name_obscured(the_arr):
