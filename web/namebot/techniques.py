@@ -89,46 +89,51 @@ def reduplication_ablaut(words, count=1):
     return new_words
 
 
-def affix_words(the_arr, affix_type):
+def affix_words(words, affix_type):
     """
     Do some type of affixing technique,
     such as prefixing or suffixing.
-
-    MASTER LIST:
-
     TODO FINISH *-fixes from article
-
     """
     new_arr = []
-    if len(the_arr):
-
+    if len(words):
         if affix_type is 'prefix':
-            for v in the_arr:
+            for v in words:
                 for v1 in ___prefixes___:
                     if v1 is not None:
-                        if re.search(
-                            ___regexes___['no_vowels'], v[0]) or re.search(
-                                ___regexes___['no_vowels'], v1[0]):
+                        first_prefix_no_vowel = re.search(
+                            ___regexes___['no_vowels'], v[0])
+                        second_prefix_no_vowel = re.search(
+                            ___regexes___['no_vowels'], v1[0])
+                        if first_prefix_no_vowel or second_prefix_no_vowel:
                                     # if there's a vowel at the end of
                                     # prefix but not at the beginning
                                     # of the word (or vice versa)
-                                    if re.search(
-                                        r'a|e|i|o|u', v1[-1:]) or re.search(
-                                            r'^a|e|i|o|u', v[:1]):
+                                    vowel_beginning = re.search(
+                                        r'a|e|i|o|u', v1[-1:])
+                                    vowel_end = re.search(
+                                        r'^a|e|i|o|u', v[:1])
+                                    if vowel_beginning or vowel_end:
                                         new_arr.append('{}{}'.format(v1, v))
 
         elif affix_type is 'suffix':
-            for v in the_arr:
+            for v in words:
                 for suffix in ___suffixes___:
                     if suffix is not None:
-                        if re.search(___regexes___['all_vowels'], v[0]) or re.search(
-                                ___regexes___['all_vowels'], suffix[0]):
+                        prefix_start_vowel = re.search(
+                            ___regexes___['all_vowels'], v[0])
+                        suffix_start_vowel = re.search(
+                            ___regexes___['all_vowels'], suffix[0])
+                        if prefix_start_vowel or suffix_start_vowel:
                                 if suffix is "ify":
                                     if v[-1] is "e":
                                         if v[-2] is not "i":
-                                            new_arr.append(v[:-2] + suffix)
+                                            new_arr.append('{}{}'.format(
+                                                v[:-2], suffix))
                                         else:
-                                            new_arr.append(v[:-1] + suffix)
+                                            new_arr.append(
+                                                '{}{}'.format(
+                                                    v[:-1], suffix))
                                     new_arr.append(v + suffix)
                                 else:
                                     new_arr.append(v + suffix)
@@ -138,24 +143,32 @@ def affix_words(the_arr, affix_type):
             makes duplification
             (e.g: teeny weeny, etc...)
             """
-            for v in the_arr:
+            for v in words:
                 for letter in ___alphabet___:
+                    vowel_first = re.match(
+                        ___regexes___['all_vowels'], v[1])
+                    no_vowel_letter = re.match(
+                        ___regexes___['no_vowels'], letter)
+                    no_vowel_first = re.match(
+                        ___regexes___['no_vowels'], v[1])
+                    vowel_letter = re.match(
+                        ___regexes___['all_vowels'], letter)
                     # check if the first letter is
                     # NOT the same as the second letter in reduplication
                     if v[0] is not letter:
                         # check if the first word is
                         # NOT the same as the second word. (or letter)
                         if v is not letter + v[1:]:
-                            if re.match(___regexes___['all_vowels'], v[1]):
-                                if re.match(___regexes___['no_vowels'], letter):
-                                    new_arr.append(
-                                        '{} {}{}'.format(
-                                            v, letter, v[1:]))
-                            elif re.match(___regexes___['no_vowels'], v[1]):
-                                if re.match(___regexes___['all_vowels'], letter):
-                                    new_arr.append(
-                                        '{} {}{}'.format(
-                                            v, letter, v[1:]))
+                            if vowel_first:
+                                if no_vowel_letter:
+                                    new_arr.append('{} {}{}'.format(
+                                        v, letter,
+                                        v[1:]))
+                            elif no_vowel_first:
+                                if vowel_letter:
+                                    new_arr.append('{} {}{}'.format(
+                                        v, letter,
+                                        v[1:]))
         elif affix_type is "infix":
             pass
 
@@ -169,6 +182,7 @@ def make_founder_product_name(founder1, founder2, product):
     """
     get the name of two people
     forming a company and combine it
+    TODO: 1, 0, infinite
     """
     return '{} & {} {}'.format(
         founder1[0].upper(),
@@ -176,7 +190,7 @@ def make_founder_product_name(founder1, founder2, product):
         product)
 
 
-def make_name_obscured(the_arr):
+def make_name_obscured(words):
     """
     Takes a name and makes it obscure,
     ala Bebo, Ning, Bix, Jajah, Kiko.
@@ -227,14 +241,14 @@ def make_name_alliteration(word_array):
     return new_arr
 
 
-def make_name_abbreviation(the_arr):
+def make_name_abbreviation(words):
     """
     this function will make some kind of
     interesting company acronym
     eg: BASF, AT&T, A&W
     """
     new_arr = []
-    for word in the_arr:
+    for word in words:
         new_arr.append(
             word[:1].upper() +
             word[:2].upper() +
@@ -243,11 +257,13 @@ def make_name_abbreviation(the_arr):
     return new_arr
 
 
-def make_vowel(the_arr, vowel_type, vowel_index):
+def make_vowel(words, vowel_type, vowel_index):
     new_arr = []
-    for i in the_arr:
-        for j in the_arr:
-            if i is not j and re.search(vowel_type, i) and re.search(vowel_type, j):
+    for i in words:
+        for j in words:
+            is_match_i = re.search(vowel_type, i)
+            is_match_j = re.search(vowel_type, j)
+            if i is not j and is_match_i and is_match_j:
                 # get the indices and lengths to use in finding the ratio
                 pos_i = i.index(vowel_index)
                 len_i = len(i)
@@ -277,7 +293,7 @@ def make_vowel(the_arr, vowel_type, vowel_index):
     return new_arr
 
 
-def make_portmanteau_default_vowel(the_arr):
+def make_portmanteau_default_vowel(words):
     """
     Make a portmanteau based on vowel
     matches (ala Brad+Angelina = Brangelina)
@@ -293,15 +309,15 @@ def make_portmanteau_default_vowel(the_arr):
     vowel_o_re = re.compile(r'o{1}')
     vowel_u_re = re.compile(r'u{1}')
 
-    make_vowel(the_arr, vowel_a_re, "a")
-    make_vowel(the_arr, vowel_e_re, "e")
-    make_vowel(the_arr, vowel_i_re, "i")
-    make_vowel(the_arr, vowel_o_re, "o")
-    make_vowel(the_arr, vowel_u_re, "u")
+    make_vowel(words, vowel_a_re, "a")
+    make_vowel(words, vowel_e_re, "e")
+    make_vowel(words, vowel_i_re, "i")
+    make_vowel(words, vowel_o_re, "o")
+    make_vowel(words, vowel_u_re, "u")
     return new_arr
 
 
-def make_portmanteau_split(the_arr):
+def make_portmanteau_split(words):
     """
     nikon = [ni]pp[on] go[k]aku
     make words similar to nikon,
@@ -312,30 +328,26 @@ def make_portmanteau_split(the_arr):
     then all C in the second word.
     """
     new_arr = []
-    for i in the_arr:
-        for j in the_arr:
+    for i in words:
+        for j in words:
                 if i is not j:
                     l1 = re.search(r'[^aeiou{1}]+[aeiou{1}]', i)
                     l2 = re.search(r'[aeiou{1}]+[^aeiou{1}]$', j)
                     if i is not None and l1 and l2:
-
                         # third letter used for
                         # consonant middle splits only
                         l3 = re.split(r'[aeiou{1}]', i)
                         l1 = l1.group(0)
                         l2 = l2.group(0)
-
-                        # l3 = uniquify(l3)
                         if len(l3) is not 0:
                             if l3 is not None:
                                 for v in l3:
                                     new_arr.append(l1 + v + l2)
                             else:
-                                new_arr.append(l1 + "t" + l2)
-                                new_arr.append(l1 + "s" + l2)
-                                new_arr.append(l1 + "z" + l2)
-                                new_arr.append(l1 + "x" + l2)
-
+                                new_arr.append('{}{}{}'.format(l1, 't', l2))
+                                new_arr.append('{}{}{}'.format(l1, 's', l2))
+                                new_arr.append('{}{}{}'.format(l1, 'z', l2))
+                                new_arr.append('{}{}{}'.format(l1, 'x', l2))
     return new_arr
 
 
@@ -347,12 +359,12 @@ def make_punctuator(words):
     """
     new_arr = []
     for word in words:
-        if re.match(r'[aeiou]', word) and len(word) > 4:
+        vowels = re.compile(r'[aeiou]')
+        if re.match(vowels, word) and len(word) > 4:
             spl = re.split(
                 '([?=aeiou])',
                 word,
                 maxsplit=2)
-
             j1 = '-'.join(spl[1:])
             j2 = '.'.join(spl[1:])
             new_arr.append(j1)
@@ -366,13 +378,14 @@ def make_vowelify(words):
     if second to last letter is a vowel.
     """
     new_arr = []
+    vowels = re.compile(r'[aeiou]')
     for word in words:
-        if re.search(r'[aeiou]', word[:-2]):
+        if re.search(vowels, word[:-2]):
             new_arr.append(word[:-1])
     return new_arr
 
 
-def make_misspelling(the_arr):
+def make_misspelling(words):
     """
     This is used as the primary "misspelling"
     technique, through a few different techniques
@@ -385,7 +398,7 @@ def make_misspelling(the_arr):
     """
 
     new_arr = []
-    for i in the_arr:
+    for i in words:
         new_arr.append(i.replace('ics', 'ix'))
         new_arr.append(i.replace('ph', 'f'))
         new_arr.append(i.replace('kew', 'cue'))
@@ -469,7 +482,7 @@ def make_name_from_latin_root(name_list):
     return new_arr
 
 
-def make_word_metaphor(the_arr):
+def make_word_metaphor(words):
     # TODO ADDME
     """
     Make a metaphor based
@@ -479,7 +492,7 @@ def make_word_metaphor(the_arr):
     return new_arr
 
 
-def make_phrase(the_arr):
+def make_phrase(words):
     # TODO ADDME
     """
     WIP (e.g.
@@ -534,39 +547,34 @@ def make_descriptors(words):
     ...could be optimized
     """
     new_words = []
-
     try:
         for noun in words['NN']:
             for verb in words['VBP']:
-                new_words.append('%s %s' % (noun, verb))
-                new_words.append('%s %s' % (verb, noun))
+                new_words.append('{} {}'.format(noun, verb))
+                new_words.append('{} {}'.format(verb, noun))
     except KeyError:
         pass
-
     try:
         for noun in words['NNS']:
             for verb in words['VB']:
-                new_words.append('%s %s' % (noun, verb))
-                new_words.append('%s %s' % (verb, noun))
+                new_words.append('{} {}'.format(noun, verb))
+                new_words.append('{} {}'.format(verb, noun))
     except KeyError:
         pass
-
     try:
         for noun in words['NNS']:
             for verb in words['VBP']:
-                new_words.append('%s %s' % (noun, verb))
-                new_words.append('%s %s' % (verb, noun))
+                new_words.append('{} {}'.format(noun, verb))
+                new_words.append('{} {}'.format(verb, noun))
     except KeyError:
         pass
-
     try:
         for noun in words['NN']:
             for verb in words['VB']:
-                new_words.append('%s %s' % (noun, verb))
-                new_words.append('%s %s' % (verb, noun))
+                new_words.append('{} {}'.format(noun, verb))
+                new_words.append('{} {}'.format(verb, noun))
     except KeyError:
         pass
-
     return new_words
 
 
