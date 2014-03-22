@@ -24,8 +24,8 @@ TEST_DATA = [
     'sovereign', 'indeed', 'tiger']
 
 regexes = {
-    'no_vowels': re.compile(r'^/a|e|i|o|u'),
-    'all_vowels': re.compile(r'a|e|i|o|u'),
-    'vowels': re.compile(r'/[aeiou{1}]/'),
-    'consonants': re.compile(r'/[qwrtypsdfghjklzxcvbnm{1}]/'),
+    'no_vowels': re.compile(r'^/a|e|i|o|u', re.IGNORECASE),
+    'all_vowels': re.compile(r'a|e|i|o|u', re.IGNORECASE),
+    'vowels': re.compile(r'[a-zA-Z][a|e|i|o|u]', re.IGNORECASE),
+    'consonants': re.compile(r'[a-zA-Z][^a|e|i|o|u]', re.IGNORECASE),
 }
