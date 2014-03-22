@@ -27,7 +27,8 @@
 						{% for key, name in metrics.metrics.iteritems() %}
 						<div class="row chart-container" id="chart-{{ key }}">
 							<div class="col-md-8">
-								<h4><small>Breakdown by</small> {{ key|replace('_', ' ')|capitalize }}</h4>
+								{% set metric_title = key|replace('_', ' ')|capitalize  %}
+								<h4><small>Breakdown by</small> {{ metric_title }}</h4>
 								<canvas id="{{ key }}" height="400" width="550">
 									<p>Sorry, your browser doesn't support cool stuff.</p>
 								</canvas>
@@ -53,9 +54,11 @@
 			<div class="panel-body">
 				<div class="row">
 					{% for key, name in metrics.metrics.iteritems() %}
+					{% set metric_title = key|replace('_', ' ')|capitalize %}
 					<div class="col-md-12">
 						{% for title, summary in name.iteritems() %}
-						<h4>{{ title|capitalize }}</h4>
+						<h4>{{ metric_title }}</h4>
+						<p><strong>{{ title|capitalize }}</strong></p>
 						<p class="{% if title == 'data' %}subdued{% endif %}">{{ summary }}</p>
 						{% endfor %}
 						<hr>
