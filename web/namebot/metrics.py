@@ -94,12 +94,10 @@ class NameBotMetrics:
         self.name_list = name_list
         vowelcount = 0
 
+        vowels = re.compile(r'\A[aeiou]')
         for name in name_list:
-            if re.match(
-                r'\A[aeiou]',
-                name,
-                    flags=re.IGNORECASE):
-                        vowelcount += 1
+            if re.match(vowels, name):
+                vowelcount += 1
 
         summary = 'Of %s words, %s or %s%s are vowels as the first letter.' % (
             len(name_list), vowelcount, len(name_list) % vowelcount, '%')
@@ -145,11 +143,10 @@ class NameBotMetrics:
         """
         self.name_list = name_list
         new_arr = []
+        digits = re.compile(r'[0-9]+')
         for name in name_list:
-            if re.findall(r'[0-9]+', name):
-                # content = str((name, len(name)))
-                # new_arr.append(content)
-                matches = re.findall(r'[0-9]+', name)
+            if re.findall(digits, name):
+                matches = re.findall(digits, name)
                 new_arr.append(matches)
         return {
             'data': new_arr,
@@ -181,12 +178,10 @@ class NameBotMetrics:
         self.name_list = name_list
         new_arr = []
         charcount = 0
+        chars = re.compile(r'\&|\!|\@|\.')
         for val in name_list:
-            if re.findall(
-                r'\&|\!|\@|\.',
-                val,
-                    flags=re.IGNORECASE):
-                        charcount += 1
+            if re.findall(chars, val):
+                charcount += 1
 
         summary = (
             'Special character for names: '
@@ -223,8 +218,9 @@ class NameBotMetrics:
     def get_name_spaces(self, name_list):
         self.name_list = name_list
         num_arr = []
+        spaces = r'\s'
         for val in name_list:
-            if re.match(r'', val):
+            if re.match(spaces, val):
                 splits = val.split()
                 num_arr.append(len(splits))
         return {
@@ -235,8 +231,9 @@ class NameBotMetrics:
     def get_consonant_repeat_frequency(self, name_list):
         self.name_list = name_list
         count = 0
+        cons = re.compile(r'[^aeiou]{6}')
         for val in name_list:
-            if re.match(r'[^aeiou]{6}', val):
+            if re.match(cons, val):
                 count += 1
         return {
             'data': count,
@@ -246,8 +243,9 @@ class NameBotMetrics:
     def get_consonant_duplicate_repeat_frequency(self, name_list):
         self.name_list = name_list
         count = 0
+        cons_dup = re.compile(r'[^a]{3}[^e]{3}[^i]{3}[^o]{3}[^u]{3}')
         for name in name_list:
-            if re.match(r'[^a]{3}[^e]{3}[^i]{3}[^o]{3}[^u]{3}', name):
+            if re.match(cons_dup, name):
                 count += 1
         return {
             'data': count,
@@ -257,8 +255,9 @@ class NameBotMetrics:
     def get_vowel_repeat_frequency(self, name_list):
         self.name_list = name_list
         count = 0
+        cons_vowel = re.compile(r'[aeiou]{3}')
         for val in name_list:
-            if re.match(r'[aeiou]{3}', val):
+            if re.match(cons_vowel, val):
                 count += 1
         return {
             'data': count,
