@@ -25,7 +25,6 @@ class NameBotMetrics:
         with open(file_name) as files:
             for newline in files:
                 items.append(newline)
-        self.total_words = len(items)
         return items
 
     def get_named_numbers(self, name_list):
@@ -39,9 +38,8 @@ class NameBotMetrics:
         for word in name_list:
             if re.findall(numbers, word):
                 matches.append(word)
-
         summary = 'Of {} words {} matched'.format(
-            self.total_words, len(matches))
+            len(name_list), len(matches))
         return {
             'data': matches,
             'summary': summary
@@ -52,7 +50,7 @@ class NameBotMetrics:
         for val in name_list:
             names_length.append(len(val))
         summary = 'Of {} words, the average length of names is...{}'.format(
-            self.total_words,
+            len(name_list),
             round(sum(names_length) / len(names_length)))
         return {
             'data': names_length,

@@ -7,5 +7,7 @@
 	{% endfor %}
 </ul>
 {% else %}
-<p>None available (generate your own).</p>
+<p>None available
+	<a href="{{ url_for('generate_name') }}">(generate some).</a>
+</p>
 {% endif %}

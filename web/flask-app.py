@@ -22,7 +22,7 @@ app.debug = True
 # Generate all types of
 # sample data for demoing and testing
 example_data = examples.generate_all_examples(
-    filename=defaults.TEST_METRICS_FILE,
+    filename=None,
     words=defaults.TEST_DATA)
 seed_data = defaults.TEST_DATA
 metrics = example_data['metrics']

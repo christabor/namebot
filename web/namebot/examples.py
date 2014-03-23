@@ -29,8 +29,8 @@ def example_scoring(words=None):
 
 
 def example_metrics(filename=None, words=None):
-    if not filename or not words:
-        return
+    if not filename and not words:
+        return None
     test = metrics.NameBotMetrics()
     if filename:
         allnames = test.open_file(filename)

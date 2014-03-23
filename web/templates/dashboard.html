@@ -1,15 +1,4 @@
 {% extends 'two-col.html' %}
-
-{% block extra_left_col %}
-<h3>Sample companies</h3>
-<p>Names taken from fortune 500 companies.</p>
-<ul>
-	{% for name in metrics.names %}
-	<li>{{ name }}</li>
-	{% endfor %}
-</ul>
-{% endblock %}
-
 {% block right_col %}
 <h3>Welcome!</h3>
 <p>Take this library for a test drive by <a href="{{ url_for('generate_name') }}">adding your own words</a> or browsing the examples.</p>
