@@ -10,12 +10,17 @@
 				</a>
 			</h4>
 		</div>
-		<div id="{{ key }}" class="panel-collapse collapse in">
+		<div id="{{ key }}" class="panel-collapse collapse">
 			<div class="panel-body">
 				{% if word_list %}
 				<ul>
 					{% for word in word_list %}
-					<li>{{ word }}</li>
+					<li>
+						{{ word }}
+						<span class="external">
+							<a href="https://google.com/search?q={{ word }}" target="_blank">&rarr;</a>
+						</span>
+					</li>
 					{% endfor %}
 				</ul>
 				{% else %}
