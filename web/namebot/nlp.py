@@ -255,4 +255,5 @@ def get_synsets(words=None, use_definitions=False):
                                 list(itertools.chain(
                                     *results[nlp_type]))))))))
 
+    print results
     return results
