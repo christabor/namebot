@@ -16,7 +16,7 @@
 			{% if type %}
 			<ul>
 				{% for word in type %}
-				<li>{{ word }}</li>
+				<li>{{ word|replace('_', ' ') }}</li>
 				{% endfor %}
 			</ul>
 			{% else %}
