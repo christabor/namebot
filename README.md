@@ -23,6 +23,9 @@ Some scoring algorithms, primarily for classifying pronunciation, such as Sounde
 ### Techniques
 The major chunk of work represented in this library. The many techniques I've created after researching hundreds of corporate names and naming agency techniques
 
+### Strainer
+Similar to normalization, but for filtering based on rules, like length, count, etc... good for mapping 1:1 with UI inputs or just calling from the functions directly.
+
 
 ## How to setup server and test:
 
