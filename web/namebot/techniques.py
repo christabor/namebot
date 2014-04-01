@@ -79,13 +79,15 @@ def reduplication_ablaut(words, count=1):
 
     new_words = []
     for word in words:
-        new_words.append(
-            '{} {}'.format(
-                word,
-                re.sub(r'a|e|i|o|u',
-                       choice(___vowels___),
-                       word,
-                       count=count)))
+        second = re.sub(
+            r'a|e|i|o|u',
+            choice(___vowels___),
+            word,
+            count=count)
+        # Only append if the
+        # first and second are different.
+        if word != second:
+            new_words.append('{} {}'.format(word, second))
     return new_words
 
 
