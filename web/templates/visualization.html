@@ -11,6 +11,11 @@
 {% endblock %}
 
 {% block right_col %}
+<textarea name="json-data" id="json-data" cols="30" rows="10" style="display:none;">
+	{% if metrics %}
+	{{ metrics|tojson }}
+	{% endif %}
+</textarea>
 <div class="panel-group" id="accordion">
 	<div class="panel panel-default">
 		<div class="panel-heading">
