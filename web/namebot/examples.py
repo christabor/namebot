@@ -10,8 +10,7 @@ def generate_all_examples(filename=None, words=None):
     print '< ##=========##===========##=========## > '
     print '... -=|=- Running ALL the examples -=|=- ... '
     print '< ##=========##===========##=========## > '
-
-    example_data = {
+    return {
         'synset_categories': nlp.print_all_synset_categories(),
         'synsets': nlp.get_synsets(
             words=words,
@@ -22,4 +21,3 @@ def generate_all_examples(filename=None, words=None):
         'techniques': techniques.generate_all_techniques(words),
         'scoring': scoring.generate_all_scoring(words)
     }
-    return example_data
