@@ -5,8 +5,12 @@ if app_settings.CACHE_ENABLED:
     from werkzeug.contrib.cache import SimpleCache
     cache = SimpleCache()
 
-import namebot.examples as examples
-import namebot.settings as defaults
+from namebot import nlp
+from namebot import techniques
+from namebot import metrics
+from namebot import scoring
+from namebot import examples as examples
+from namebot import settings as defaults
 
 import forms as web_forms
 from flask import Flask
@@ -19,53 +23,50 @@ app = Flask(__name__)
 app.debug = True
 
 
-# Generate all types of
-# sample data for demoing and testing
-example_data = examples.generate_all_examples(
-    filename=None,
-    words=defaults.TEST_DATA)
-seed_data = defaults.TEST_DATA
-metrics = example_data['metrics']
-test_data = example_data['synsets']
-scoring = example_data['scoring']
-techniques = example_data['techniques']
+# Redefine for shorter name
+get_data = examples.generate_all_examples
 
 
 @app.route('/')
 def dashboard():
-    return render_template(
-        'dashboard.html',
-        example_data=example_data,
-        metrics=metrics)
+    return render_template('dashboard.html')
 
 
 @app.route('/visualization')
 def visualization():
     return render_template(
         'visualization.html',
-        example_data=example_data,
-        metrics=metrics)
+        metrics=metrics.generate_all_metrics(
+            filename=None,
+            words=defaults.TEST_DATA))
 
 
 @app.route('/nltk-explorer')
 def nltk():
+    example = get_data(
+        filename=None,
+        words=defaults.TEST_DATA)
+    print example
     return render_template(
         'nltk-explorer.html',
-        seed_data=seed_data,
-        example_data=example_data,
-        test_data=test_data)
+        seed_data=defaults.TEST_DATA,
+        example_data=example['synsets'],
+        test_data=defaults.TEST_DATA)
 
 
 @app.route('/name-generator')
 def generator():
+    example = get_data(
+        filename=None,
+        words=defaults.TEST_DATA)
     form = web_forms.NameGeneratorForm()
     return render_template(
         'generator.html',
         form=form,
-        techniques=techniques,
-        scoring=scoring,
-        example_data=example_data,
-        seed_data=seed_data)
+        techniques=techniques.generate_all_techniques(defaults.TEST_DATA),
+        scoring=scoring.generate_all_scoring(defaults.TEST_DATA),
+        example_data=example['synsets'],
+        seed_data=defaults.TEST_DATA)
 
 
 @app.route('/generate', methods=['GET', 'POST'])
@@ -77,6 +78,7 @@ def generate_name():
             template,
             form=form)
     else:
+        print request.POST
         form = web_forms.NameGeneratorForm(request.form)
         if form.validate():
             word_vals = []
@@ -87,19 +89,14 @@ def generate_name():
             word_vals.append(form.field5.data)
             free_list = form.field6.data.split(' ')
             word_vals = filter(None, word_vals + free_list)
-            example_data = examples.generate_all_examples(
-                filename=None,
-                words=word_vals)
             return render_template(
                 template,
-                metrics=example_data['metrics'],
-                test_data=example_data['synsets'],
-                scoring=example_data['scoring'],
-                techniques=example_data['techniques'],
+                scoring=scoring.generate_all_scoring(word_vals),
+                techniques=techniques.generate_all_techniques(word_vals),
                 names='TEST')
         else:
             return redirect(request.path)
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
