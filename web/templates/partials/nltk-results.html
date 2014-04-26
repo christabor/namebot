@@ -1,6 +1,6 @@
 <h2>NLTK Results</h2>
-{% if test_data %}
-{% for key, type in test_data.iteritems() %}
+{% if example_data %}
+{% for key, type in example_data.iteritems() %}
 {% set el = key|lower %}
 {% set title = el|replace('_', ' ')|capitalize %}
 <div class="panel panel-default">

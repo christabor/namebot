@@ -5,7 +5,6 @@ if app_settings.CACHE_ENABLED:
     from werkzeug.contrib.cache import SimpleCache
     cache = SimpleCache()
 
-from namebot import nlp
 from namebot import techniques
 from namebot import metrics
 from namebot import scoring
@@ -46,7 +45,6 @@ def nltk():
     example = get_data(
         filename=None,
         words=defaults.TEST_DATA)
-    print example
     return render_template(
         'nltk-explorer.html',
         seed_data=defaults.TEST_DATA,
@@ -78,7 +76,6 @@ def generate_name():
             template,
             form=form)
     else:
-        print request.POST
         form = web_forms.NameGeneratorForm(request.form)
         if form.validate():
             word_vals = []
