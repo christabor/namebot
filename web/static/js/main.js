@@ -51,6 +51,11 @@ var namebot = (function(){
         .domain([0, d3.max(letter_freq)])
         .range([1, height - PADDING]);
 
+        /*
+            Letter frequency chart
+
+         */
+
         // first letter frequency
         var $fl = getSVG('flf', dims, '#chart-first_letter_freq');
         $fl.selectAll('rect')
@@ -84,8 +89,46 @@ var namebot = (function(){
         .attr('text-anchor', 'middle')
         .text(function(d){return d;})
         .attr('x', function(d, i){return i * 20 + bar_width / 2;})
-        .attr('y', function(d){return chart_scale(d) - bar_width / 2;})
+        .attr('y', 0)
         .attr('fill', 'orange');
+
+        /*
+            Letter length
+
+         */
+
+        var length_data = data.metrics.length.data;
+
+        var color_scale_l = d3.scale.linear()
+        .domain([0, d3.max(length_data)])
+        .range(['gray', 'orange']);
+
+        var chart_scale_l = d3.scale.linear()
+        .domain([0, d3.max(length_data)])
+        .range([1, height - PADDING]);
+
+        var $length = getSVG('length', dims, '#chart-length');
+        $length.selectAll('.length-bars')
+        .data(data.metrics.length.data)
+        .enter()
+        .append('rect')
+        .attr('width', bar_width)
+        .attr('x', function(d, i){return i * 20;})
+        .attr('y', 10)
+        .attr('fill', function(d){return color_scale_l(d);})
+        .attr('height', function(d){return chart_scale_l(d);});
+
+        // letter frequency count
+        $length.selectAll('.length-labels')
+        .data(data.metrics.length.data)
+        .enter()
+        .append('text')
+        .attr('font-size', 10)
+        .attr('text-anchor', 'middle')
+        .text(function(d){return d;})
+        .attr('x', function(d, i){return i * 20 + bar_width / 2;})
+        .attr('y', function(d){return chart_scale_l(d) + bar_width * 2.2;})
+        .attr('fill', function(d){return color_scale_l(d);});
     }
 
     return {
