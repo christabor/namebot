@@ -1,113 +1,97 @@
-$(document).ready(function(){
+function log(foo) {
+    return console.log(foo);
+}
+
+function randomColorHex() {
+    // Creds: http://www.paulirish.com/2009/random-hex-color-code-snippets/
+    var color = Math.floor(Math.random()*16777215).toString(16);
+    return '#' + color;
+}
+
+function rando(max) {
+    return Math.floor(Math.random() * max);
+}
+
+function randomColor(max) {
+    // return a random color,
+    // in rgba format
+    if(isNaN(max)) {
+        max = 255;
+    }
+    return 'rgb(' + rando(max) + ',' + rando(max) + ',' + rando(max) + ')';
+}
+
+function getSVG(id, dims, container) {
+    // Courtesy of ... christabor.github.io/etude/
+    return d3.select(container || '#svg-container')
+    .append('svg').attr('id', id)
+    .attr('width', dims.w || dims.width)
+    .attr('height', dims.h || dims.height);
+}
+
+var namebot = (function(){
     var json_val   = $('#json-data').html();
-    var metrics    = $.parseJSON(json_val);
-    var chart_opts = {
-        percentageInnerCutout: 30,
-        animation: false,
-        segmentShowStroke: false,
-        animateScale: false,
-        scaleShowLabels: false
+    var data    = $.parseJSON(json_val);
+    var height = 200;
+    var width = 500;
+    var dims = {'width': width, 'height': height};
+    var PADDING = 20;
+
+    function init() {
+
+        var bar_width = 10;
+        var letter_freq = d3.values(data.metrics.first_letter_freq.data);
+        var letter_freq_letters = d3.keys(data.metrics.first_letter_freq.data);
+
+        var color_scale = d3.scale.linear()
+        .domain([0, d3.max(letter_freq)])
+        .range(['gray', 'orange']);
+
+        var chart_scale = d3.scale.linear()
+        .domain([0, d3.max(letter_freq)])
+        .range([1, height - PADDING]);
+
+        // first letter frequency
+        var $fl = getSVG('flf', dims, '#chart-first_letter_freq');
+        $fl.selectAll('rect')
+        .data(letter_freq)
+        .enter()
+        .append('rect')
+        .attr('width', bar_width)
+        .attr('x', function(d, i){return i * 20;})
+        .attr('y', 10)
+        .attr('fill', function(d){return color_scale(d);})
+        .attr('height', function(d){return chart_scale(d);});
+
+        // letter frequency count
+        $fl.selectAll('.label')
+        .data(letter_freq)
+        .enter()
+        .append('text')
+        .attr('font-size', 10)
+        .attr('text-anchor', 'middle')
+        .text(function(d){return d;})
+        .attr('x', function(d, i){return i * 20 + bar_width / 2;})
+        .attr('y', function(d){return chart_scale(d) + bar_width * 2.2;})
+        .attr('fill', function(d){return color_scale(d);});
+
+        // letters
+        $fl.selectAll('.frequencies')
+        .data(letter_freq_letters)
+        .enter()
+        .append('text')
+        .attr('font-size', 10)
+        .attr('text-anchor', 'middle')
+        .text(function(d){return d;})
+        .attr('x', function(d, i){return i * 20 + bar_width / 2;})
+        .attr('y', function(d){return chart_scale(d) - bar_width / 2;})
+        .attr('fill', 'orange');
+    }
+
+    return {
+        'init': init
     };
-    var canvases   = document.querySelectorAll('canvas');
 
-    function log(foo) {
-        return console.log(foo);
-    }
+})();
 
-    function randomColorHex() {
-        // Creds: http://www.paulirish.com/2009/random-hex-color-code-snippets/
-        var color = Math.floor(Math.random()*16777215).toString(16);
-        return '#' + color;
-    }
-
-    function rando(max) {
-        return Math.floor(Math.random() * max);
-    }
-
-    function randomColor(max) {
-        // return a random color,
-        // in rgba format
-        if(isNaN(max)) {
-            max = 255;
-        }
-        return 'rgb(' + rando(max) + ',' + rando(max) + ',' + rando(max) + ')';
-    }
-
-    function addChart(key, value) {
-        var id = $(this).find('canvas').attr('id');
-        log(id);
-        addNewPieChart(canvases[key], metrics.metrics[id], true, true);
-    }
-
-    function populateCharts() {
-        log(metrics.metrics);
-        if(!canvases.length) return;
-        $('.chart-container').each(addChart);
-    }
-
-    function addNewPieChart(canvas, data, use_key, add_labels) {
-        var container = $('#' + canvas.id);
-        var sections;
-        var clean_data;
-        var chart;
-        var labels = [];
-        var label_container = $('#chart-' + canvas.id).find('.labels');
-        log(label_container);
-
-        // remove if no data (_always_ expected to be null)
-        if((!data.data && !data.summary) || !data.data) {
-            container.parent().fadeTo(10, 0.4);
-            container.remove();
-        }
-        try {
-            // for large datasets we'll turn it off
-            // (for now)
-            if(data.data.length > 100) return;
-        }
-        catch(e) {
-            return;
-        }
-        clean_data = [];
-
-        // build chart data
-        $.each(data.data, function(k, section){
-            var label;
-            var color = randomColor(200);
-            var label_text;
-
-            // build value/color map
-            // per chart.js specifications
-            // (k + ': ' + section),
-            clean_data.push({
-                value: section,
-                color: color
-            });
-
-            // add custom labels if necessary
-            if(add_labels) {
-                label_text = (use_key ? k + ': ' + section : section);
-                label = '<span class="label" style="background-color:' + color + '">' + label_text + '</span>';
-                labels.push(label);
-            }
-        });
-
-        log(clean_data);
-        log([{'value': 40,
-            'color': randomColorHex()},
-            {'value': 20, 'color': randomColorHex()},
-            {'value': 40, 'color': randomColorHex()}]);
-
-        // add labels if specified
-
-        label_container.html('<p>Labels: </p>' + labels.join(''));
-
-        // init chart
-        chart = new Chart(canvas.getContext('2d'))
-        .Doughnut(clean_data, chart_opts);
-
-        // add generated summary
-        label_container.append('<p>Summary: ' + (data.summary || 'No summary.') + '</p>');
-    }
-
-    populateCharts();
-});
+$(document).ready(namebot.init);
