@@ -140,7 +140,6 @@ form textarea {
 }
 .chart-container {
 	border:1px solid #333;
-	min-height: 500px;
 }
 .chart-container p {
 	margin: 20px 2px;
@@ -184,4 +183,12 @@ form textarea {
 	color: #ff0000;
 	border: 2px solid #ff0000;
 	text-shadow: 0 2px 2px black;
+}
+
+/* D3 / svg / charts */
+
+svg {
+	font-family: 'Exo', serif;
+	padding: 1em;
+	margin: 1em;
 }
