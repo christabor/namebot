@@ -1,3 +1,3 @@
 tests:
-	cd web/namebot
-	nosetests
+	echo 'Running Namebot tests...'
+	nosetests web/namebot/tests/

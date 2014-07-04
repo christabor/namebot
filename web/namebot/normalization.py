@@ -14,9 +14,8 @@ def remove_odd_sounding_words(words):
     via regular expressions
     """
     cleaned = []
-    if words is None:
-        return
-
+    if words is None or len(words) == 0:
+        return words
     # Loop through any number of
     # regexes and add only if no matches exist
     [cleaned.append(word) for word in words
@@ -30,9 +29,11 @@ def stem_words(data):
     Stem words to their base
     linguistic stem to remove redundancy
     """
+    new = []
     for val in data:
         val = stem(val, stemmer=PORTER)
-    return data
+        new.append(val)
+    return new
 
 
 def remove_stop_words(data):
@@ -95,7 +96,9 @@ def clean_sort(words):
     A function for cleaning string arrays
     and prepping them for word techniques
     """
-    chars = '!"#$%\'()*+,./:;<=>?@[\\]^`{|}~01234567890'
+    if isinstance(words, basestring):
+        return words
+    chars = '!"#$%\'()*+,._/:;<=>?@[\\]^`{|}~01234567890'
     if words is not None:
         try:
             words = [word.strip().lower().translate(
@@ -104,27 +107,3 @@ def clean_sort(words):
         except TypeError:
             pass
     return words
-
-
-def combine_words(arr, custom):
-    """
-    a function to combine two words by
-    an offset of 1
-    (using array increment as offset)
-
-    "custom" functions as a separator
-    to use for different styles
-    """
-    new_arr = []
-    try:
-        for i in arr:
-            for j in arr:
-                if i is not j and j is not i:
-                    if arr[i][-1] is not arr[j][-1]:
-                        new_arr.append(i + custom + j)
-                        new_arr.append(j + custom + i)
-
-    except IndexError:
-        pass
-
-    return new_arr
