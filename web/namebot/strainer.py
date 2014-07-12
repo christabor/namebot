@@ -15,15 +15,15 @@ filtered = [word for word in words if
 def filter_length(word,
                   min_length=namebot_settings.MIN_LENGTH,
                   max_length=namebot_settings.MAX_LENGTH):
-    return len(word) > min_length and len(word) < max_length
+    return len(word) >= min_length and len(word) <= max_length
 
 
 def filter_startswith(word, beginning=None):
-    return not word.startswith(beginning)
+    return word.lower().startswith(beginning)
 
 
 def filter_endswith(word, ending=None):
-    return not word.endswith(ending)
+    return word.lower().endswith(ending)
 
 
 def filter_metaphone(word):
