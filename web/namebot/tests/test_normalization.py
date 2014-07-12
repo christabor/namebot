@@ -10,7 +10,6 @@ class removeOddWordTestCase(unittest.TestCase):
         original_count = len(original)
         updated = norm.remove_odd_sounding_words(original)
         new_count = len(updated)
-        print updated
         self.assertEqual(new_count, original_count - 2)
 
     def test_no_remove_odd_sounding_words(self):
