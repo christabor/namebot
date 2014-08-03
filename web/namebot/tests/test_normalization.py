@@ -2,7 +2,7 @@ import unittest
 from namebot import normalization as norm
 
 
-class removeOddWordTestCase(unittest.TestCase):
+class RemoveOddWordTestCase(unittest.TestCase):
     def test_remove_odd_sounding_words(self):
         """Test four nonsense inputs that should get
         captured by the regexes."""
@@ -34,7 +34,7 @@ class removeOddWordTestCase(unittest.TestCase):
         self.assertEqual(original, updated)
 
 
-class stemWordsTestCase(unittest.TestCase):
+class StemWordsTestCase(unittest.TestCase):
     def test_stem_words(self):
         """Tests stemmer is working"""
         words = ['running', 'jumping']
@@ -48,7 +48,7 @@ class stemWordsTestCase(unittest.TestCase):
         self.assertEqual(words, stemmed)
 
 
-class removeBadWordsTestCase(unittest.TestCase):
+class RemoveBadWordsTestCase(unittest.TestCase):
     def test_stem_words(self):
         """Tests bad words are getting filtered out."""
         bad_words = ['fuck', 'pussy', 'cunt']
@@ -59,7 +59,7 @@ class removeBadWordsTestCase(unittest.TestCase):
             self.assertFalse(bad_word in cleaned)
 
 
-class removeStopWords(unittest.TestCase):
+class RemoveStopWordsTestCase(unittest.TestCase):
     def test_filter_long_words(self):
         """Test that no stop words were kept"""
         stop_words = ['the', 'is', 'are', 'am', 'but']
@@ -67,7 +67,7 @@ class removeStopWords(unittest.TestCase):
         self.assertEqual(len(filtered), 0)
 
 
-class filterWordsTestCase(unittest.TestCase):
+class FilterWordsTestCase(unittest.TestCase):
     def test_filter_long_words(self):
         """Tests that very long words are filtered out"""
         long_words = ['areallyverylongword', 'anextrareallyverylongword']
@@ -77,14 +77,14 @@ class filterWordsTestCase(unittest.TestCase):
             self.assertFalse(long_word in filtered)
 
 
-class uniquifyTestCase(unittest.TestCase):
+class UniquifyTestCase(unittest.TestCase):
     def test_uniquify(self):
         words = ['cool', 'neat', 'cool', 'cool', 'neat']
         updated = norm.uniquify(words)
         self.assertEqual(len(updated), 2)
 
 
-class cleanSortTestCase(unittest.TestCase):
+class CleanSortTestCase(unittest.TestCase):
     def test_clean_sort(self):
         words = ['!@foobar!#', 'ba3z!@#33_', 'bam!333____#33']
         cleaned = norm.clean_sort(words)

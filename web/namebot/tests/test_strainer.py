@@ -2,7 +2,7 @@ import unittest
 from namebot import strainer as strain
 
 
-class filterLengthTestCase(unittest.TestCase):
+class FilterLengthTestCase(unittest.TestCase):
 
     @classmethod
     def setUpClass(self):
@@ -32,7 +32,7 @@ class filterLengthTestCase(unittest.TestCase):
         self.assertEqual(len(strained), 6)
 
 
-class filterStartsEndsWith(unittest.TestCase):
+class FilterStartsEndsWithTestCase(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.words = ['banana', 'baseball', 'brain',
@@ -51,19 +51,19 @@ class filterStartsEndsWith(unittest.TestCase):
         self.assertEqual(len(strained), 2)
 
 
-class filterMetaphone(unittest.TestCase):
+class FilterMetaphoneTestCase(unittest.TestCase):
     def test_bad_pronunciation(self):
         # TODO
         pass
 
 
-class filterSoundex(unittest.TestCase):
+class FilterSoundexTestCase(unittest.TestCase):
     def test_soundex(self):
         # TODO
         pass
 
 
-class filterNysiis(unittest.TestCase):
+class FilterNysiisTestCase(unittest.TestCase):
     def test_nysiis(self):
         # TODO
         pass
