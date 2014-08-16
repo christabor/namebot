@@ -484,6 +484,29 @@ def make_name_from_latin_root(name_list):
     return new_arr
 
 
+def pig_latinize(word, postfix='ay'):
+    """Generates standard pig latin style,
+    with customizeable postfix argument"""
+    # Common postfixes: ['ay', 'yay', 'way']
+
+    if not type(postfix) is str:
+        raise TypeError('Must use a string for postfix.')
+
+    piggified = None
+
+    vowel_re = re.compile(r'(a|e|i|o|u)')
+    first_letter = word[0:1]
+
+    # clean up non letters
+    word = word.replace(r'[^a-zA-Z]', '')
+
+    if vowel_re.match(first_letter):
+        piggified = word + 'way'
+    else:
+        piggified = ''.join([word[1: len(word)], first_letter, postfix])
+    return piggified
+
+
 def make_word_metaphor(words):
     # TODO ADDME
     """
