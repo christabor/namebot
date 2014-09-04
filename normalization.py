@@ -13,14 +13,19 @@ def remove_odd_sounding_words(words):
     remove random odd sounding word combinations
     via regular expressions
     """
+    odd_regexes = [
+        re.compile(r'^a|e|i|o|u|y{3,6}'),
+        # bk, ck, dk, gk, etc...
+        re.compile(r'\b[^aeiouys]k|zt|ksd|kd|zhr'),
+        re.compile(r'\bzt|ksd|kd|zhr')
+    ]
     cleaned = []
     if words is None or len(words) == 0:
         return words
     # Loop through any number of
     # regexes and add only if no matches exist
-    [cleaned.append(word) for word in words
-        if not any(
-            re.match(regex, word) for regex in namebot_settings.regexes)]
+    [cleaned.append(word) for word in words if not any(
+        re.match(regex, word) for regex in odd_regexes)]
     return cleaned
 
 

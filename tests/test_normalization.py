@@ -6,7 +6,7 @@ class RemoveOddWordTestCase(unittest.TestCase):
     def test_remove_odd_sounding_words(self):
         """Test four nonsense inputs that should get
         captured by the regexes."""
-        original = ['vvvrrrmmnt', 'aaaeee', 'flower', 'rabbit']
+        original = ['bking', 'aaaeee', 'flower', 'rabbit']
         original_count = len(original)
         updated = norm.remove_odd_sounding_words(original)
         new_count = len(updated)
