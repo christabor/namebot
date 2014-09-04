@@ -1,7 +1,2 @@
-install:
-    make dependencies
-
 test:
-    make tests
-
-all: install test
+    make
