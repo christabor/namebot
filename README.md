@@ -6,7 +6,7 @@ A company/product name generating tool written in Python. Powers parts of Automo
 ## Notes:
 This project is ongoing, but feel free to contribute! There's much more to add, but it's a full-fledged suite of tools that can help you get started generating ideas and names.
 
-## Modules: 
+## Modules:
 ### Examples
 Some pregenerated examples for testing. This should be used for marshalling data into the views.
 
@@ -31,17 +31,16 @@ Similar to normalization, but for filtering based on rules, like length, count, 
 
 ## How to setup server and test:
 
-1. Install PIP requirements:
-  cd web && pip install -r requirements.txt
+Check out https://github.com/Automotron/namebot-flask to see an example app
+and configuration setup to use namebot and generate results with test data.
 
-2. Run Flask:
-  flask flask-app.py
+## Library Dependencies
+*Fuzzy==1.0
+*Numpy
+*Pattern >= 2.3
+*nltk==2.0.4
 
-3. Open browser!
-  (localhost:5000)   
-
-
-----     
+----
 
 #### Support the development, if you want :)
 <div class="donate-button">
