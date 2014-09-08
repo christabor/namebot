@@ -22,8 +22,9 @@ compiled source #
 # Packages #
 #############
 *.egg
-
+namebot.egg-info/
 # Dependencies #
+dist/
 ################
 /.sass-cache
 .sass-cache

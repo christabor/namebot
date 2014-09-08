@@ -31,8 +31,8 @@ setup(
     setup_requires=[
         'setuptools>=0.8',
     ],
-    # tests_require=[
-    #     'nose',
-    # ],
-    # test_suite='tests'
+    tests_require=[
+        'nose',
+    ],
+    test_suite='tests'
 )
