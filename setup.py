@@ -1,3 +1,4 @@
+import os
 try:
     from setuptools import setup, find_packages
 except ImportError:
@@ -9,7 +10,8 @@ PACKAGE = 'namebot'
 
 
 def _get_requires(filepath):
-    with open(filepath) as reqs:
+    path = '{}/{}'.format(os.path.abspath(os.path.dirname(__file__)), filepath)
+    with open(path) as reqs:
         return [req for req in reqs.read().split('\n') if req]
 
 keywords = ['namebot', 'name generator', 'nlp', 'natural language processing']
@@ -28,7 +30,7 @@ setup(
     keywords=keywords,
     license='Apache License 2.0',
     packages=find_packages(exclude=["tests", "tests.*"]),
-    install_requires=_get_requires('namebot/requirements.txt'),
+    install_requires=_get_requires('requirements.txt'),
     setup_requires=[
         'setuptools>=0.8',
     ],
