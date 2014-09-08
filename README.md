@@ -1,4 +1,5 @@
-<img src="https://travis-ci.org/Automotron/namebot.svg?branch=master" alt="build status">
+[![Build Status](https://travis-ci.org/Automotron/namebot.svg?branch=master)](https://travis-ci.org/Automotron/namebot)
+
 
 # Namebot
 A company/product name generating tool written in Python. Powers parts of Automotron.com
