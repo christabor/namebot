@@ -19,6 +19,9 @@ compiled source #
 *.rar
 *.tar
 *.zip
+# Packages #
+#############
+*.egg
 
 # Dependencies #
 ################

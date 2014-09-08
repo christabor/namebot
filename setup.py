@@ -1,8 +1,15 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 from setuptools import setup
+from ez_setup import use_setuptools
+use_setuptools()
+
 
 PACKAGE = 'namebot'
+
+
+def _get_requires():
+    with open('namebot/requirements.txt') as reqs:
+        return [req for req in reqs.read().split('\n') if req]
+
 
 _description = ('A company/product name generating tool written in Python.'
                 'Uses NLTK and diverse wordplay techniques for'
@@ -14,10 +21,12 @@ setup(
     author='Chris Tabor',
     author_email='dxdstudio@gmail.com',
     maintainer='Chris Tabor',
-    maintainer_email='dxdstudio@gmail.com',
+    maintainer_email='dtestsxdstudio@gmail.com',
     url='https://github.com/automotron/namebot',
     keywords=['namebot', 'name generator', 'nlp'],
     license='MIT',
+    packages=['namebot', 'namebot.tests'],
+    install_requires=_get_requires(),
     setup_requires=[
         'setuptools>=0.8',
     ],

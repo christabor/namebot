@@ -1,5 +1,5 @@
 import unittest
-from namebot import strainer as strain
+from namebot.namebot  import strainer as strain
 
 
 class FilterLengthTestCase(unittest.TestCase):

@@ -1,5 +1,5 @@
 import unittest
-from namebot import normalization as norm
+from namebot.namebot  import normalization as norm
 
 
 class RemoveOddWordTestCase(unittest.TestCase):

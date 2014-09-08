@@ -1,5 +1,5 @@
 import unittest
-from namebot import techniques
+from namebot.namebot import techniques
 
 
 class SpoonerismTestCase(unittest.TestCase):

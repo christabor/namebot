@@ -1,3 +1,3 @@
 all:
 	echo 'Running Namebot tests...'
-	nosetests tests
+	nosetests namebot/tests
