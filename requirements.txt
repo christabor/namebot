@@ -1,0 +1,5 @@
+Fuzzy==1.0
+Numpy
+Pattern >= 2.3
+nltk==2.0.4
+nose
