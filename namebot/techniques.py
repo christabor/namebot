@@ -388,6 +388,18 @@ def make_punctuator(words, replace):
     return hyphens + periods
 
 
+def make_punctuator_vowels(words):
+    """Helper function that combines all
+    possible combinations for vowels"""
+    new_words = []
+    new_words += make_punctuator(words, 'a')
+    new_words += make_punctuator(words, 'e')
+    new_words += make_punctuator(words, 'i')
+    new_words += make_punctuator(words, 'o')
+    new_words += make_punctuator(words, 'u')
+    return new_words
+
+
 def make_vowelify(words):
     """Chop off consonant ala nautica
     if second to last letter is a vowel.
@@ -644,7 +656,7 @@ def generate_all_techniques(words):
                 'Lindsey', 'Chris', 'Widgets'),
             'cc_to_vc_swap': make_cc_to_vc_swap(words),
             'name_obscured': make_name_obscured(words),
-            'punctuator': make_punctuator(words),
+            'punctuator': make_punctuator_vowels(words),
             'name_abbreviation': make_name_abbreviation(words),
             'make_portmanteau_split': make_portmanteau_split(words),
             'latin_root': make_name_from_latin_root(words),

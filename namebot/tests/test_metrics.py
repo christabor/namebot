@@ -1,5 +1,5 @@
 import unittest
-from namebot.namebot  import metrics
+from namebot import metrics
 
 
 class PrepFileTestCase(unittest.TestCase):
