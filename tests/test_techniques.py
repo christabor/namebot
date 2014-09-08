@@ -79,7 +79,6 @@ class AffixWordsTestCase(unittest.TestCase):
 
     def test_duplifix(self):
         res = techniques.affix_words(self.words, 'duplifix')
-        print res, '< ------- RES'
         self.assertEqual(res[:3], [])
 
     def test_infix(self):
