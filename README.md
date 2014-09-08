@@ -1,6 +1,5 @@
 [![Build Status](https://travis-ci.org/Automotron/namebot.svg?branch=master)](https://travis-ci.org/Automotron/namebot)
 
-
 # Namebot
 A company/product name generating tool written in Python. Powers parts of Automotron.com
 
@@ -29,18 +28,13 @@ The major chunk of work represented in this library. The many techniques I've cr
 ### Strainer
 Similar to normalization, but for filtering based on rules, like length, count, etc... good for mapping 1:1 with UI inputs or just calling from the functions directly.
 
-
 ## How to setup server and test:
 
 Check out https://github.com/Automotron/namebot-flask to see an example app
 and configuration setup to use namebot and generate results with test data.
 
 ## Library Dependencies
-*Fuzzy==1.0
-*Numpy
-*Pattern >= 2.3
-*nltk==2.0.4
-*Nose (tests)
+See `requirements.txt` for details.
 
 ## Tests
 
