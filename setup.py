@@ -20,7 +20,7 @@ description = ('A company/product name generating tool written in Python.'
                'sophisticated word generation and ideation')
 setup(
     name='namebot',
-    version='0.0.2',
+    version='0.0.3',
     description=description,
     author='Chris Tabor',
     author_email='dxdstudio@gmail.com',

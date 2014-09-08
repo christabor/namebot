@@ -16,10 +16,7 @@ from pattern.web import sort
 """
 
 
-def prep_file(file_name=None):
-    if file_name is None:
-        return
-    file_name = file_name
+def prep_file(file_name):
     items = []
     with open(file_name) as files:
         for newline in files:
@@ -27,31 +24,30 @@ def prep_file(file_name=None):
     return items
 
 
-def get_named_numbers(name_list):
+def get_named_numbers_1_10(words):
     """
     Check for numbers spelled out
     e.g. One, Two, Three, Four
     """
     matches = []
     numbers = re.compile(
-        r'\AOne |Two |Three |Four |Five |Six |Seven |Eight |Nine |Ten ')
-    for word in name_list:
+        r'\Aone |two |three |four |five |six |seven |eight |nine |ten',
+        re.IGNORECASE)
+    for word in words:
         if re.findall(numbers, word):
             matches.append(word)
-    summary = 'Of {} words {} matched'.format(
-        len(name_list), len(matches))
     return {
         'data': matches,
-        'summary': summary
+        'summary': 'Of {} words, {} matched'.format(len(words), len(matches))
     }
 
 
-def name_length(name_list):
+def name_length(words):
     names_length = []
-    for val in name_list:
+    for val in words:
         names_length.append(len(val))
     summary = 'Of {} words, the average length of names is...{}'.format(
-        len(name_list),
+        len(words),
         round(sum(names_length) / len(names_length)))
     return {
         'data': names_length,
@@ -59,22 +55,15 @@ def name_length(name_list):
     }
 
 
-def name_vowel_count(name_list):
-    num_count = {}
-    num_count['a'] = 0
-    num_count['e'] = 0
-    num_count['i'] = 0
-    num_count['o'] = 0
-    num_count['u'] = 0
-
+def name_vowel_count(words):
+    num_count = {'a': 0, 'e': 0, 'i': 0, 'o': 0, 'u': 0}
     try:
-        for word in name_list:
+        for word in words:
             num_count['a'] += word.count('a')
             num_count['e'] += word.count('e')
             num_count['i'] += word.count('i')
             num_count['o'] += word.count('o')
             num_count['u'] += word.count('u')
-
     except AttributeError:
         pass
     finally:
@@ -84,27 +73,26 @@ def name_vowel_count(name_list):
         }
 
 
-def name_starts_with_vowel(name_list):
+def name_starts_with_vowel(words):
     vowelcount = 0
     vowels = re.compile(r'\A[aeiou]')
-    for name in name_list:
+    for name in words:
         if re.match(vowels, name):
             vowelcount += 1
     summary = 'Of {} words, {} or {}% are vowels as the first letter.'.format(
-        len(name_list),
-        vowelcount,
-        vowelcount % len(name_list))
+        len(words), vowelcount,
+        round(float(vowelcount) / len(words) * 100))
     return {
         'data': None,
         'summary': summary
     }
 
 
-def get_search_results(name_list):
-    # TODO FIXME
+def get_search_results(words):
+    # TODO ADDME
     # values = []
     #
-    # for name in name_list:
+    # for name in words:
     #     engine = Bing(
     #         license=None)
     #     searches = engine.search(
@@ -131,35 +119,39 @@ def get_search_results(name_list):
     }
 
 
-def get_digits_frequency(name_list):
+def get_digits_frequency(words):
     """
     Look for and count the
     digits in names, e.g. 7-11, 3M, etc...
     """
-    new_arr = []
+    new_words = []
+    count = 0
     digits = re.compile(r'[0-9]+')
-    for name in name_list:
+    for name in words:
         if re.findall(digits, name):
+            count += 1
             matches = re.findall(digits, name)
-            new_arr.append(matches)
+            new_words += matches
     return {
-        'data': new_arr,
-        'summary': None
+        'data': new_words,
+        'summary': ('Of {} words, {} have numbers in them, '
+                    'with a total of {} numbers found.').format(
+                        len(words), count, len(new_words))
     }
 
 
-def get_first_letter_frequency(name_list):
+def get_first_letter_frequency(words):
     """
     Add the frequency of first letters
     e.g. [C]at, [C]law, c = 2
     """
     letters = {}
     # populate keys
-    for name in name_list:
+    for name in words:
         letters[name[0]] = 0
 
     # add counts
-    for name in name_list:
+    for name in words:
         letters[name[0]] += 1
 
     return {
@@ -169,25 +161,22 @@ def get_first_letter_frequency(name_list):
 
 
 def get_special_chars(words):
+    """Finds occurrences of special characters"""
     data = []
-    words_matched = 0
     chars = re.compile(r'[^a-z]', re.IGNORECASE)
     for word in words:
         if re.findall(chars, word):
             data += re.findall(chars, word)
-            words_matched += 1
-    summary = '{} special characters were found in {} words.'.format(
-        len(data),
-        words_matched)
     return {
         'data': data,
-        'summary': summary
+        'summary': ('{} occurrences of special characters were'
+                    ' found in {} words.').format(len(data), len(words))
     }
 
 
-def get_word_types(name_list):
+def get_word_types(words):
     new_arr = []
-    for val in name_list:
+    for val in words:
         try:
             val = parse(
                 val,
@@ -207,23 +196,20 @@ def get_word_types(name_list):
     }
 
 
-def get_name_spaces(name_list):
-    num_arr = []
-    spaces = r'\s'
-    for val in name_list:
-        if re.match(spaces, val):
-            splits = val.split()
-            num_arr.append(len(splits))
+def get_name_spaces(words):
+    """Checks number of spaces for a given set of words"""
+    results = [{'word': word, 'spaces': len(word.split(r' '))}
+               for word in words]
     return {
-        'data': num_arr,
+        'data': results,
         'summary': None
     }
 
 
-def get_consonant_repeat_frequency(name_list):
+def get_consonant_repeat_frequency(words):
     count = 0
-    cons = re.compile(r'[^aeiou]{6}')
-    for val in name_list:
+    cons = re.compile(r'[^a|e|i|o|u{6}]')
+    for val in words:
         if re.match(cons, val):
             count += 1
     return {
@@ -232,10 +218,10 @@ def get_consonant_repeat_frequency(name_list):
     }
 
 
-def get_consonant_duplicate_repeat_frequency(name_list):
+def get_consonant_duplicate_repeat_frequency(words):
     count = 0
-    cons_dup = re.compile(r'[^a]{3}[^e]{3}[^i]{3}[^o]{3}[^u]{3}')
-    for name in name_list:
+    cons_dup = re.compile(r'[^a|e|i|o|u]{1,}')
+    for name in words:
         if re.match(cons_dup, name):
             count += 1
     return {
@@ -244,10 +230,10 @@ def get_consonant_duplicate_repeat_frequency(name_list):
     }
 
 
-def get_vowel_repeat_frequency(name_list):
+def get_vowel_repeat_frequency(words):
     count = 0
-    cons_vowel = re.compile(r'[aeiou]{3}')
-    for val in name_list:
+    cons_vowel = re.compile(r'[aeiou{3}]')
+    for val in words:
         if re.match(cons_vowel, val):
             count += 1
     return {
@@ -256,17 +242,18 @@ def get_vowel_repeat_frequency(name_list):
     }
 
 
-def get_adjective_verb_or_noun(name_list):
-    # TODO ADD
+def get_adjective_verb_or_noun(words):
+    # TODO
     return {
         'data': None,
         'summary': None
     }
 
 
-def get_keyword_relevancy_map(name_list, n_list, terms, sortcontext,
+def get_keyword_relevancy_map(words, n_list, terms, sortcontext,
                               enginetype='BING',
                               license=None):
+    # TODO
     """
     http://www.clips.ua.ac.be/pages/pattern-web#sort
     """
@@ -289,7 +276,8 @@ def get_keyword_relevancy_map(name_list, n_list, terms, sortcontext,
     }
 
 
-def check_trademark_registration(name_list):
+def check_trademark_registration(words):
+    # TODO
     """
     search the USTM office and return
     the number of results, and
@@ -301,7 +289,8 @@ def check_trademark_registration(name_list):
     }
 
 
-def check_domain_searches(name_list):
+def check_domain_searches(words):
+    # TODO
     """
     check domains for each name...
     perhap hook into other domain
@@ -313,7 +302,8 @@ def check_domain_searches(name_list):
     }
 
 
-def get_search_result_count(name_list):
+def get_search_result_count(words):
+    # TODO
     """
     check google results and return
     a number of results (number)
@@ -326,7 +316,7 @@ def get_search_result_count(name_list):
     }
 
 
-def get_word_ranking(name_list):
+def get_word_ranking(words):
     """
     use google results and get a quality of
     ranking based on other metrics such as
@@ -334,9 +324,9 @@ def get_word_ranking(name_list):
     google results and others.
     """
     results = []
-    for name in name_list:
-        results = get_search_result_count(name_list)
-        domains = check_domain_searches(name_list)
+    for name in words:
+        results = get_search_result_count(words)
+        domains = check_domain_searches(words)
         results.append(results / domains)
     return
     return {
@@ -366,7 +356,7 @@ def generate_all_metrics(filename=None, words=None):
             'vowel_repeat_freq': get_vowel_repeat_frequency(allnames),
             'special_characters': get_special_chars(allnames),
             'search_results': get_search_results(allnames),
-            'name_numbers': get_named_numbers(allnames),
+            'name_numbers': get_named_numbers_1_10(allnames),
             'adj_verb_noun': get_adjective_verb_or_noun(allnames),
             'first_letter_freq': get_first_letter_frequency(allnames),
             'word_types': get_word_types(allnames)
