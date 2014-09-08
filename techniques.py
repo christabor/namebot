@@ -15,10 +15,22 @@ ___alphabet___ = namebot_settings.ALPHABET
 ___vowels___ = namebot_settings.VOWELS
 ___regexes___ = namebot_settings.regexes
 
+"""
+Unless otherwise noted, all techniques operate
+on a list of words and return a list of modified words.
+"""
+
+
+class InsufficientWordsError(Exception):
+    def __init__(self, msg):
+        self.msg = msg
+
 
 def spoonerism(words):
     "First: [f]oo [b]ar => boo far"
     new_words = []
+    if len(words) < 2:
+        raise InsufficientWordsError('Need more than one word to combine')
     for k, word in enumerate(words):
         try:
             new_words.append('{}{} {}{}'.format(
@@ -33,6 +45,8 @@ def spoonerism(words):
 
 def kniferism(words):
     "Mid: f[o]o b[a]r => fao bor"
+    if len(words) < 2:
+        raise InsufficientWordsError('Need more than one word to combine')
     new_words = []
     for k, word in enumerate(words):
         try:
@@ -52,6 +66,8 @@ def kniferism(words):
 
 def forkerism(words):
     "Last: fo[o] ba[r] => for bao"
+    if len(words) < 2:
+        raise InsufficientWordsError('Need more than one word to combine')
     new_words = []
     for k, word in enumerate(words):
         try:
@@ -70,22 +86,19 @@ def forkerism(words):
     return new_words
 
 
-def reduplication_ablaut(words, count=1):
+def reduplication_ablaut(words, count=1, random=True, vowel='e'):
     """
     http://phrases.org.uk/meanings/reduplication.html
     A technique to combine words and altering the vowels
     e.g ch[i]t-ch[a]t, d[i]lly, d[a]lly
     """
-
+    if len(words) < 2:
+        raise InsufficientWordsError('Need more than one word to combine')
     new_words = []
+    substitution = choice(___vowels___) if random else vowel
     for word in words:
-        second = re.sub(
-            r'a|e|i|o|u',
-            choice(___vowels___),
-            word,
-            count=count)
-        # Only append if the
-        # first and second are different.
+        second = re.sub(r'a|e|i|o|u', substitution, word, count=count)
+        # Only append if the first and second are different.
         if word != second:
             new_words.append('{} {}'.format(word, second))
     return new_words
@@ -248,18 +261,26 @@ def make_name_abbreviation(words):
     this function will make some kind of
     interesting company acronym
     eg: BASF, AT&T, A&W
+    Returns a single string of the new word combined.
     """
-    new_arr = []
-    for word in words:
-        new_arr.append(
-            word[:1].upper() +
-            word[:2].upper() +
-            word[:3].upper() +
-            word[:4].upper())
-    return new_arr
+    return ''.join([word[:1].upper() for word in words])
 
 
 def make_vowel(words, vowel_type, vowel_index):
+    """Primary for all Portmanteau generators, that creates
+    the portmanteau based on :vowel_index, and :vowel_type.
+
+    The algorithm works as following:
+
+    It looks for the first occurrence of a specified vowel in the first word,
+    then gets the matching occurrence (if any) of the second word,
+    then determines which should be first or second position, based on
+    the ratio of letters (for each word) divided by the position of the vowel
+    in question (e.g. c[a]t (2/3) vs. cr[a]te (3/5)).
+
+    The higher number is ordered first, and the two words are then fused
+    together by the single matching vowel.
+    """
     new_arr = []
     for i in words:
         for j in words:
@@ -272,14 +293,14 @@ def make_vowel(words, vowel_type, vowel_index):
                 pos_j = j.index(vowel_index)
                 len_j = len(j)
 
-                # if starting index is 0,
+                # If starting index is 0,
                 # add 1 to it so we're not dividing by zero
                 if pos_i is 0:
                     pos_i = 1
                 elif pos_j is 0:
                     pos_j = 1
 
-                # decide which word should be the
+                # Decide which word should be the
                 # prefix and which should be suffix
                 if round(pos_i / len_i) > round(pos_j / len_j):
                     p = i[0: pos_i + 1]
@@ -300,9 +321,11 @@ def make_portmanteau_default_vowel(words):
     Make a portmanteau based on vowel
     matches (ala Brad+Angelina = Brangelina)
     Only matches for second to last letter
-    in first word and matching vowel in second word
+    in first word and matching vowel in second word.
 
-    TODO: More powerful, usable
+    This defers to the make_vowel function for all the internal
+    magic, but is a helper in that it provides all types of vowel
+    combinations in one function.
     """
     new_arr = []
     vowel_a_re = re.compile(r'a{1}')
@@ -311,11 +334,11 @@ def make_portmanteau_default_vowel(words):
     vowel_o_re = re.compile(r'o{1}')
     vowel_u_re = re.compile(r'u{1}')
 
-    make_vowel(words, vowel_a_re, "a")
-    make_vowel(words, vowel_e_re, "e")
-    make_vowel(words, vowel_i_re, "i")
-    make_vowel(words, vowel_o_re, "o")
-    make_vowel(words, vowel_u_re, "u")
+    new_arr += make_vowel(words, vowel_a_re, "a")
+    new_arr += make_vowel(words, vowel_e_re, "e")
+    new_arr += make_vowel(words, vowel_i_re, "i")
+    new_arr += make_vowel(words, vowel_o_re, "o")
+    new_arr += make_vowel(words, vowel_u_re, "u")
     return new_arr
 
 
@@ -333,18 +356,17 @@ def make_portmanteau_split(words):
     for i in words:
         for j in words:
                 if i is not j:
-                    l1 = re.search(r'[^aeiou{1}]+[aeiou{1}]', i)
-                    l2 = re.search(r'[aeiou{1}]+[^aeiou{1}]$', j)
-                    if i is not None and l1 and l2:
-                        # third letter used for
+                    l1 = re.search(r'[^a|e|i|o|u{1}]+[a|e|i|o|u{1}]', i)
+                    l2 = re.search(r'[a|e|i|o|u{1}]+[^a|e|i|o|u{1}]$', j)
+                    if i and l1 and l2:
+                        # Third letter used for
                         # consonant middle splits only
-                        l3 = re.split(r'[aeiou{1}]', i)
+                        l3 = re.split(r'[a|e|i|o|u{1}]', i)
                         l1 = l1.group(0)
                         l2 = l2.group(0)
-                        if len(l3) is not 0:
-                            if l3 is not None:
-                                for v in l3:
-                                    new_arr.append(l1 + v + l2)
+                        if l3 and len(l3) > 0:
+                            for v in l3:
+                                new_arr.append(l1 + v + l2)
                             else:
                                 new_arr.append('{}{}{}'.format(l1, 't', l2))
                                 new_arr.append('{}{}{}'.format(l1, 's', l2))
@@ -353,36 +375,26 @@ def make_portmanteau_split(words):
     return new_arr
 
 
-def make_punctuator(words):
+def make_punctuator(words, replace):
+    """Put some hyphens or dots, or a given punctutation via :replace
+    in the word, but only around vowels ala "del.ic.ious"
     """
-    put some random punctation like
-    hyphens etc in there, only around vowels
-    (ala del.ic.ious and others)
-    """
-    new_arr = []
-    for word in words:
-        vowels = re.compile(r'[aeiou]')
-        if re.match(vowels, word) and len(word) > 4:
-            spl = re.split(
-                '([?=aeiou])',
-                word,
-                maxsplit=2)
-            j1 = '-'.join(spl[1:])
-            j2 = '.'.join(spl[1:])
-            new_arr.append(j1)
-            new_arr.append(j2)
-    return new_arr
+    def _replace(words, replace, replace_type='.'):
+        return [word.replace(
+            replace, replace + replace_type) for word in words]
+
+    hyphens = _replace(words, replace, replace_type='-')
+    periods = _replace(words, replace)
+    return hyphens + periods
 
 
 def make_vowelify(words):
-    """
-    chop off consonant ala nautica
+    """Chop off consonant ala nautica
     if second to last letter is a vowel.
     """
     new_arr = []
-    vowels = re.compile(r'[aeiou]')
     for word in words:
-        if re.search(vowels, word[:-2]):
+        if re.search(___regexes___['all_vowels'], word[:-2]):
             new_arr.append(word[:-1])
     return new_arr
 
@@ -395,80 +407,80 @@ def make_misspelling(words):
 
     Brute force all combinations,
     then use double metaphone to remove odd ones.
-    ...find a better way to do this TODO
+    ...find a better way to do this
+    TODO
 
     """
-
     new_arr = []
-    for i in words:
-        new_arr.append(i.replace('ics', 'ix'))
-        new_arr.append(i.replace('ph', 'f'))
-        new_arr.append(i.replace('kew', 'cue'))
-        new_arr.append(i.replace('f', 'ph'))
-        new_arr.append(i.replace('o', 'ough'))
+    for word in words:
+        new_arr.append(word.replace('ics', 'ix'))
+        new_arr.append(word.replace('ph', 'f'))
+        new_arr.append(word.replace('kew', 'cue'))
+        new_arr.append(word.replace('f', 'ph'))
+        new_arr.append(word.replace('o', 'ough'))
 
         # # these seem to have
         # # sucked in practice
-        new_arr.append(i.replace('o', 'off'))
-        new_arr.append(i.replace('ow', 'o'))
-        new_arr.append(i.replace('x', 'ecks'))
+        new_arr.append(word.replace('o', 'off'))
+        new_arr.append(word.replace('ow', 'o'))
+        new_arr.append(word.replace('x', 'ecks'))
 
-        new_arr.append(i.replace('za', 'xa'))
-        new_arr.append(i.replace('xa', 'za'))
-        new_arr.append(i.replace('ze', 'xe'))
-        new_arr.append(i.replace('xe', 'ze'))
-        new_arr.append(i.replace('zi', 'xi'))
-        new_arr.append(i.replace('xi', 'zi'))
-        new_arr.append(i.replace('zo', 'xo'))
-        new_arr.append(i.replace('xo', 'zo'))
-        new_arr.append(i.replace('zu', 'xu'))
-        new_arr.append(i.replace('xu', 'zu'))
+        new_arr.append(word.replace('za', 'xa'))
+        new_arr.append(word.replace('xa', 'za'))
+        new_arr.append(word.replace('ze', 'xe'))
+        new_arr.append(word.replace('xe', 'ze'))
+        new_arr.append(word.replace('zi', 'xi'))
+        new_arr.append(word.replace('xi', 'zi'))
+        new_arr.append(word.replace('zo', 'xo'))
+        new_arr.append(word.replace('xo', 'zo'))
+        new_arr.append(word.replace('zu', 'xu'))
+        new_arr.append(word.replace('xu', 'zu'))
 
         # number based
-        new_arr.append(i.replace('one', '1'))
-        new_arr.append(i.replace('1', 'one'))
-        new_arr.append(i.replace('two', '2'))
-        new_arr.append(i.replace('2', 'two'))
-        new_arr.append(i.replace('three', '3'))
-        new_arr.append(i.replace('3', 'three'))
-        new_arr.append(i.replace('four', '4'))
-        new_arr.append(i.replace('4', 'four'))
-        new_arr.append(i.replace('five', '5'))
-        new_arr.append(i.replace('5', 'five'))
-        new_arr.append(i.replace('six', '6'))
-        new_arr.append(i.replace('6', 'six'))
-        new_arr.append(i.replace('seven', '7'))
-        new_arr.append(i.replace('7', 'seven'))
-        new_arr.append(i.replace('eight', '8'))
-        new_arr.append(i.replace('8', 'eight'))
-        new_arr.append(i.replace('nine', '9'))
-        new_arr.append(i.replace('9', 'nine'))
-        new_arr.append(i.replace('ten', '10'))
-        new_arr.append(i.replace('10', 'ten'))
+        new_arr.append(word.replace('one', '1'))
+        new_arr.append(word.replace('1', 'one'))
+        new_arr.append(word.replace('two', '2'))
+        new_arr.append(word.replace('2', 'two'))
+        new_arr.append(word.replace('three', '3'))
+        new_arr.append(word.replace('3', 'three'))
+        new_arr.append(word.replace('four', '4'))
+        new_arr.append(word.replace('4', 'four'))
+        new_arr.append(word.replace('five', '5'))
+        new_arr.append(word.replace('5', 'five'))
+        new_arr.append(word.replace('six', '6'))
+        new_arr.append(word.replace('6', 'six'))
+        new_arr.append(word.replace('seven', '7'))
+        new_arr.append(word.replace('7', 'seven'))
+        new_arr.append(word.replace('eight', '8'))
+        new_arr.append(word.replace('8', 'eight'))
+        new_arr.append(word.replace('nine', '9'))
+        new_arr.append(word.replace('9', 'nine'))
+        new_arr.append(word.replace('ten', '10'))
+        new_arr.append(word.replace('10', 'ten'))
 
-        new_arr.append(i.replace('ecks', 'x'))
-        new_arr.append(i.replace('spir', 'speer'))
-        new_arr.append(i.replace('speer', 'spir'))
-        new_arr.append(i.replace('x', 'ex'))
-        new_arr.append(i.replace('on', 'awn'))
-        new_arr.append(i.replace('ow', 'owoo'))
-        new_arr.append(i.replace('awn', 'on'))
-        new_arr.append(i.replace('awf', 'off'))
-        new_arr.append(i.replace('s', 'z'))
-        new_arr.append(i.replace('ce', 'ze'))
-        new_arr.append(i.replace('ss', 'zz'))
-        new_arr.append(i.replace('ku', 'koo'))
-        new_arr.append(i.replace('trate', 'trait'))
-        new_arr.append(i.replace('trait', 'trate'))
-        new_arr.append(i.replace('ance', 'anz'))
-        new_arr.append(i.replace('il', 'yll'))
-        new_arr.append(i.replace('ice', 'ize'))
-        new_arr.append(i.replace('chr', 'kr'))
+        new_arr.append(word.replace('ecks', 'x'))
+        new_arr.append(word.replace('spir', 'speer'))
+        new_arr.append(word.replace('speer', 'spir'))
+        new_arr.append(word.replace('x', 'ex'))
+        new_arr.append(word.replace('on', 'awn'))
+        new_arr.append(word.replace('ow', 'owoo'))
+        new_arr.append(word.replace('awn', 'on'))
+        new_arr.append(word.replace('awf', 'off'))
+        new_arr.append(word.replace('s', 'z'))
+        new_arr.append(word.replace('ce', 'ze'))
+        new_arr.append(word.replace('ss', 'zz'))
+        new_arr.append(word.replace('ku', 'koo'))
+        new_arr.append(word.replace('trate', 'trait'))
+        new_arr.append(word.replace('trait', 'trate'))
+        new_arr.append(word.replace('ance', 'anz'))
+        new_arr.append(word.replace('il', 'yll'))
+        new_arr.append(word.replace('ice', 'ize'))
+        new_arr.append(word.replace('chr', 'kr'))
 
         # These should only be at end of word!
-        new_arr.append(i.replace('er', 'r'))
-        new_arr.append(i.replace('lee', 'ly'))
-    return new_arr
+        new_arr.append(word.replace('er', 'r'))
+        new_arr.append(word.replace('lee', 'ly'))
+    return normalization.uniquify(new_arr)
 
 
 def make_name_from_latin_root(name_list):
@@ -476,19 +488,15 @@ def make_name_from_latin_root(name_list):
     """
     This will take a latin word that is returned
     from a seperate lookup function and tweak it
-    for misspelling specifc to latin roots.
+    for misspelling specific to latin roots.
     """
-    new_arr = []
-    # for i, item in enumerate(name_list):
-    #     print name_list[i]
-    return new_arr
+    return
 
 
 def pig_latinize(word, postfix='ay'):
     """Generates standard pig latin style,
     with customizeable postfix argument"""
     # Common postfixes: ['ay', 'yay', 'way']
-
     if not type(postfix) is str:
         raise TypeError('Must use a string for postfix.')
 
@@ -513,8 +521,7 @@ def make_word_metaphor(words):
     Make a metaphor based
     on some words...?
     """
-    new_arr = []
-    return new_arr
+    return
 
 
 def make_phrase(words):
@@ -607,7 +614,7 @@ def super_scrub(data):
     """
     Runs words through a comprehensive
     list of filtering functions
-
+    Expects a dictionary with key "words"
     """
     for technique in data['words']:
         data['words'][technique] = normalization.uniquify(

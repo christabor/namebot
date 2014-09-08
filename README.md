@@ -39,6 +39,11 @@ and configuration setup to use namebot and generate results with test data.
 *Numpy
 *Pattern >= 2.3
 *nltk==2.0.4
+*Nose (tests)
+
+## Tests
+
+Tests are available in the `tests/` folder. They are not super comprehensive, but there is coverage. Test runner is provided by nose and can be run via `make`.
 
 ----
 
