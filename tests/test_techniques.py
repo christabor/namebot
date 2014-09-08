@@ -78,8 +78,8 @@ class AffixWordsTestCase(unittest.TestCase):
         self.assertEqual(res[:3], ['shopage', 'shopable', 'shopible'])
 
     def test_duplifix(self):
-        res = techniques.affix_words(self.words, 'duplifix')
-        self.assertEqual(res[:3], [])
+        # TODO
+        pass
 
     def test_infix(self):
         # TODO
