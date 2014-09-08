@@ -21,7 +21,7 @@ setup(
     author='Chris Tabor',
     author_email='dxdstudio@gmail.com',
     maintainer='Chris Tabor',
-    maintainer_email='dtestsxdstudio@gmail.com',
+    maintainer_email='dxdstudio@gmail.com',
     url='https://github.com/automotron/namebot',
     keywords=['namebot', 'name generator', 'nlp'],
     license='MIT',
