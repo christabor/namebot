@@ -17,7 +17,6 @@ setup(
     maintainer_email='dxdstudio@gmail.com',
     url='https://github.com/automotron/namebot',
     keywords=['namebot', 'name generator', 'nlp'],
-    packages=['namebot'],
     license='MIT',
     setup_requires=[
         'setuptools>=0.8',
