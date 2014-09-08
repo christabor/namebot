@@ -27,12 +27,12 @@ setup(
     license='MIT',
     packages=find_packages(),
     # install_requires=_get_requires('namebot/requirements.txt'),
-    install_requires=['setuptools'],
+    install_requires=['namebot'],
     setup_requires=[
         'setuptools>=0.8',
     ],
-    tests_require=[
-        'nose',
-    ],
-    test_suite='tests'
+    # tests_require=[
+    #     'nose',
+    # ],
+    # test_suite='tests'
 )
