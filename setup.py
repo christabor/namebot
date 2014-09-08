@@ -1,6 +1,8 @@
-from setuptools import setup, find_packages
-from ez_setup import use_setuptools
-use_setuptools()
+try:
+    from setuptools import setup, find_packages
+except ImportError:
+    from ez_setup import use_setuptools
+    use_setuptools()
 
 
 PACKAGE = 'namebot'
@@ -24,15 +26,26 @@ setup(
     maintainer_email='dxdstudio@gmail.com',
     url='https://github.com/automotron/namebot',
     keywords=keywords,
-    license='MIT',
-    packages=find_packages(),
-    # install_requires=_get_requires('namebot/requirements.txt'),
-    install_requires=['namebot'],
+    license='Apache License 2.0',
+    packages=find_packages(exclude=["tests", "tests.*"]),
+    install_requires=_get_requires('namebot/requirements.txt'),
     setup_requires=[
         'setuptools>=0.8',
     ],
     tests_require=[
         'nose',
     ],
-    test_suite='tests'
+    test_suite='tests',
+    classifiers=[
+        'License :: OSI Approved :: Apache Software License',
+        'Development Status :: 4 - Beta',
+        'Intended Audience :: Developers',
+        'Natural Language :: English',
+        'Operating System :: OS Independent',
+        'Topic :: Text Processing',
+        'Topic :: Text Processing :: Filters',
+        'Topic :: Text Processing :: General',
+        'Topic :: Text Processing :: Indexing',
+        'Topic :: Utilities',
+    ]
 )
