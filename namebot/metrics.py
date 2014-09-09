@@ -361,8 +361,6 @@ def categorize_word_type(words):
         else:
             # Phrases are not
             categories['phrase'] = 50
-            if not pos_tag(word):
-                categories['misspelled'] = 25
         # If word cannot be tagged,
         # it's very likely fake_obscure
         if pos_tag([word])[0][1] == '-NONE-':
