@@ -40,6 +40,10 @@ See `requirements.txt` for details.
 
 Tests are available in the `tests/` folder. They are not super comprehensive, but there is coverage. Test runner is provided by nose and can be run via `make`.
 
+## Versioning
+
+Versioning style follows the semantic versioning convention. For more info, see http://semver.org/
+
 ----
 
 #### Support the development, if you want :)
