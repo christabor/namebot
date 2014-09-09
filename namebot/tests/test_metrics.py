@@ -156,6 +156,13 @@ class GetSearchResultCountTestCase(unittest.TestCase):
         pass
 
 
+class CategorizeWordType(unittest.TestCase):
+    # TODO
+
+    def test_basic(self):
+        pass
+
+
 class GetWordRankingTestCase(unittest.TestCase):
     # TODO
 
