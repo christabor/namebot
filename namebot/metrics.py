@@ -2,7 +2,7 @@ from __future__ import division
 import re
 from pattern.en import parse
 from pattern.web import sort
-
+from nltk import pos_tag
 
 """
     Conventions used in this utility:
@@ -317,18 +317,22 @@ def get_search_result_count(words):
 
 
 def categorize_word_type(words):
-    # TODO
     """Gets the common naming strategy 'category' of a name,
     based on precedence. Categories are derived from
     http://www.thenameinspector.com/10-name-types/,
     so it is important to note there is no agreed upon standard,
     meaning it is ultimately a little arbitrary.
 
+    Since it is a bit challenging to actually determine its type,
+    we give a weighting for each word based on a few known metrics.
+    This can be updated in the future so that weightings are binary
+    (e.g. 0.0 and 100.0), giving traditional False/True.
+
     Categories ====
 
     1. Real Words
-    1a. Misspelled words
-    1b. Foreign words
+     1a. Misspelled words
+     1b. Foreign words
     2. Compounds
     3. Phrases
     4. Blends
@@ -336,10 +340,39 @@ def categorize_word_type(words):
     6. Affixed
     7. Fake/obscure
     8. Puns
-    9. People’s names
+    9. People's names
     10. Initials and Acronyms
     """
-    return
+    new_words = []
+
+    def _get_distribution(word):
+        # TODO:
+        # misspelled, foreign, tweaked, affixed, fake_obscure,
+        # initials_acronym, blend, puns, person, compound
+        """Returns the likely distribution for all categories,
+        given a single word."""
+        categories = {'real': 0, 'misspelled': 0, 'foreign': 0, 'compound': 0,
+                      'phrase': 0, 'blend': 0, 'tweaked': 0, 'affixed': 0,
+                      'fake_obscure': 0, 'puns': 0, 'person': 0,
+                      'initials_acronym': 0}
+        if len(word.split(' ')) == 1:
+            # Real words are single
+            categories['real'] = 50
+        else:
+            # Phrases are not
+            categories['phrase'] = 50
+            if not pos_tag(word):
+                categories['misspelled'] = 25
+        # If word cannot be tagged,
+        # it's very likely fake_obscure
+        if pos_tag([word])[0][1] == '-NONE-':
+            categories['real'] = 0
+            categories['fake_obscure'] = 75
+        return categories
+
+    for word in words:
+        new_words.append([word, _get_distribution(word)])
+    return new_words
 
 
 def get_word_ranking(words):
