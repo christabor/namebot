@@ -316,6 +316,32 @@ def get_search_result_count(words):
     }
 
 
+def categorize_word_type(words):
+    # TODO
+    """Gets the common naming strategy 'category' of a name,
+    based on precedence. Categories are derived from
+    http://www.thenameinspector.com/10-name-types/,
+    so it is important to note there is no agreed upon standard,
+    meaning it is ultimately a little arbitrary.
+
+    Categories ====
+
+    1. Real Words
+    1a. Misspelled words
+    1b. Foreign words
+    2. Compounds
+    3. Phrases
+    4. Blends
+    5. Tweaked
+    6. Affixed
+    7. Fake/obscure
+    8. Puns
+    9. People’s names
+    10. Initials and Acronyms
+    """
+    return
+
+
 def get_word_ranking(words):
     """
     use google results and get a quality of
