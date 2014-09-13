@@ -113,77 +113,79 @@ def affix_words(words, affix_type):
     new_arr = []
     if len(words):
         if affix_type is 'prefix':
-            for v in words:
-                for v1 in ___prefixes___:
-                    if v1 is not None:
-                        first_prefix_no_vowel = re.search(
-                            ___regexes___['no_vowels'], v[0])
-                        second_prefix_no_vowel = re.search(
-                            ___regexes___['no_vowels'], v1[0])
-                        if first_prefix_no_vowel or second_prefix_no_vowel:
-                                    # if there's a vowel at the end of
-                                    # prefix but not at the beginning
-                                    # of the word (or vice versa)
-                                    vowel_beginning = re.search(
-                                        r'a|e|i|o|u', v1[-1:])
-                                    vowel_end = re.search(
-                                        r'^a|e|i|o|u', v[:1])
-                                    if vowel_beginning or vowel_end:
-                                        new_arr.append('{}{}'.format(v1, v))
+            for word in words:
+                if not word:
+                    continue
+                for prefix in ___prefixes___:
+                    first_prefix_no_vowel = re.search(
+                        ___regexes___['no_vowels'], word[0])
+                    second_prefix_no_vowel = re.search(
+                        ___regexes___['no_vowels'], prefix[0])
+                    if first_prefix_no_vowel or second_prefix_no_vowel:
+                                # if there's a vowel at the end of
+                                # prefix but not at the beginning
+                                # of the word (or vice versa)
+                                vowel_beginning = re.search(
+                                    r'a|e|i|o|u', prefix[-1:])
+                                vowel_end = re.search(
+                                    r'^a|e|i|o|u', word[:1])
+                                if vowel_beginning or vowel_end:
+                                    new_arr.append('{}{}'.format(prefix, word))
 
         elif affix_type is 'suffix':
-            for v in words:
+            for word in words:
+                if not word:
+                    continue
                 for suffix in ___suffixes___:
-                    if suffix is not None:
-                        prefix_start_vowel = re.search(
-                            ___regexes___['all_vowels'], v[0])
-                        suffix_start_vowel = re.search(
-                            ___regexes___['all_vowels'], suffix[0])
-                        if prefix_start_vowel or suffix_start_vowel:
-                                if suffix is "ify":
-                                    if v[-1] is "e":
-                                        if v[-2] is not "i":
-                                            new_arr.append('{}{}'.format(
-                                                v[:-2], suffix))
-                                        else:
-                                            new_arr.append(
-                                                '{}{}'.format(
-                                                    v[:-1], suffix))
-                                    new_arr.append(v + suffix)
-                                else:
-                                    new_arr.append(v + suffix)
+                    prefix_start_vowel = re.search(
+                        ___regexes___['all_vowels'], word[0])
+                    suffix_start_vowel = re.search(
+                        ___regexes___['all_vowels'], suffix[0])
+                    if prefix_start_vowel or suffix_start_vowel:
+                            if suffix is "ify":
+                                if word[-1] is "e":
+                                    if word[-2] is not "i":
+                                        new_arr.append('{}{}'.format(
+                                            word[:-2], suffix))
+                                    else:
+                                        new_arr.append(
+                                            '{}{}'.format(
+                                                word[:-1], suffix))
+                                new_arr.append(word + suffix)
+                            else:
+                                new_arr.append(word + suffix)
 
         elif affix_type is 'duplifix':
             """
             makes duplification
             (e.g: teeny weeny, etc...)
             """
-            for v in words:
+            for word in words:
+                if not word:
+                    continue
                 for letter in ___alphabet___:
                     vowel_first = re.match(
-                        ___regexes___['all_vowels'], v[1])
+                        ___regexes___['all_vowels'], word[1])
                     no_vowel_letter = re.match(
                         ___regexes___['no_vowels'], letter)
                     no_vowel_first = re.match(
-                        ___regexes___['no_vowels'], v[1])
+                        ___regexes___['no_vowels'], word[1])
                     vowel_letter = re.match(
                         ___regexes___['all_vowels'], letter)
                     # check if the first letter is
                     # NOT the same as the second letter in reduplication
-                    if v[0] is not letter:
+                    if word[0] is not letter:
                         # check if the first word is
                         # NOT the same as the second word. (or letter)
-                        if v is not letter + v[1:]:
+                        if word is not letter + word[1:]:
                             if vowel_first:
                                 if no_vowel_letter:
                                     new_arr.append('{} {}{}'.format(
-                                        v, letter,
-                                        v[1:]))
+                                        word, letter, word[1:]))
                             elif no_vowel_first:
                                 if vowel_letter:
                                     new_arr.append('{} {}{}'.format(
-                                        v, letter,
-                                        v[1:]))
+                                        word, letter, word[1:]))
         elif affix_type is "infix":
             pass
 
