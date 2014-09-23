@@ -235,7 +235,7 @@ def make_cc_to_vc_swap(arr):
     return
 
 
-def make_name_alliteration(word_array):
+def make_name_alliteration(word_array, divider=' '):
     new_arr = []
     """
     java jacket
@@ -253,8 +253,7 @@ def make_name_alliteration(word_array):
     for word1 in word_array:
         for word2 in word_array:
             if word1[:1] is word2[:1] and word1 is not word2:
-                new_arr.append(word1 + ' ' + word2)
-
+                new_arr.append(word1 + divider + word2)
     return new_arr
 
 

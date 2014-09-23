@@ -127,6 +127,15 @@ class MakeNameAlliterationTestCase(unittest.TestCase):
         self.assertEqual(
             techniques.make_name_alliteration(original), updated)
 
+    def test_divider(self):
+        original = ['content', 'applesauce', 'candor', 'character']
+        updated = ['candor & character', 'candor & content',
+                   'character & candor', 'character & content',
+                   'content & candor', 'content & character']
+        self.assertEqual(
+            techniques.make_name_alliteration(
+                original, divider=' & '), updated)
+
 
 class MakeNameAbbreviationTestCase(unittest.TestCase):
 
