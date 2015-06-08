@@ -173,7 +173,6 @@ class MakemakePortmanteauSplitTestCase(unittest.TestCase):
 
 
 class MakePunctuatorTestCase(unittest.TestCase):
-    # TODO
 
     def test_simple(self):
         self.assertEqual(
@@ -190,14 +189,15 @@ class MakeVowelifyTestCase(unittest.TestCase):
 
 
 class MakemisspellingTestCase(unittest.TestCase):
-    # TODO
+
     def setUp(self):
-        self.words = ['shop', 'effects']
+        self.words = ['effects', 'phonics', 'glee', 'cron', 'chrono']
+        self.expected = ['phonix', 'ephphects', 'gly', 'crawn', 'krono']
 
     def test_simple(self):
-        self.assertEqual(
-            techniques.make_misspelling(self.words)[:6],
-            ['shop', 'zhop', 'shoffp', 'ephphects', 'effects', 'shoughp'])
+        res = techniques.make_misspelling(self.words)
+        for word in self.expected:
+            assert word in res
 
 
 class MakeNameFromLatinRootTestCase(unittest.TestCase):

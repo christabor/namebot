@@ -424,75 +424,74 @@ def make_misspelling(words):
     TODO
 
     """
+    token_groups = (
+        ('ics', 'ix'),
+        ('ph', 'f'),
+        ('kew', 'cue'),
+        ('f', 'ph'),
+        ('o', 'ough'),
+        # these seem to have
+        # sucked in practice
+        ('o', 'off'),
+        ('ow', 'o'),
+        ('x', 'ecks'),
+        ('za', 'xa'),
+        ('xa', 'za'),
+        ('ze', 'xe'),
+        ('xe', 'ze'),
+        ('zi', 'xi'),
+        ('xi', 'zi'),
+        ('zo', 'xo'),
+        ('xo', 'zo'),
+        ('zu', 'xu'),
+        ('xu', 'zu'),
+        # number based
+        ('one', '1'),
+        ('1', 'one'),
+        ('two', '2'),
+        ('2', 'two'),
+        ('three', '3'),
+        ('3', 'three'),
+        ('four', '4'),
+        ('4', 'four'),
+        ('five', '5'),
+        ('5', 'five'),
+        ('six', '6'),
+        ('6', 'six'),
+        ('seven', '7'),
+        ('7', 'seven'),
+        ('eight', '8'),
+        ('8', 'eight'),
+        ('nine', '9'),
+        ('9', 'nine'),
+        ('ten', '10'),
+        ('10', 'ten'),
+        ('ecks', 'x'),
+        ('spir', 'speer'),
+        ('speer', 'spir'),
+        ('x', 'ex'),
+        ('on', 'awn'),
+        ('ow', 'owoo'),
+        ('awn', 'on'),
+        ('awf', 'off'),
+        ('s', 'z'),
+        ('ce', 'ze'),
+        ('ss', 'zz'),
+        ('ku', 'koo'),
+        ('trate', 'trait'),
+        ('trait', 'trate'),
+        ('ance', 'anz'),
+        ('il', 'yll'),
+        ('ice', 'ize'),
+        ('chr', 'kr'),
+        # These should only be at end of word!
+        ('er', 'r'),
+        ('lee', 'ly'),
+    )
     new_arr = []
     for word in words:
-        new_arr.append(word.replace('ics', 'ix'))
-        new_arr.append(word.replace('ph', 'f'))
-        new_arr.append(word.replace('kew', 'cue'))
-        new_arr.append(word.replace('f', 'ph'))
-        new_arr.append(word.replace('o', 'ough'))
-
-        # # these seem to have
-        # # sucked in practice
-        new_arr.append(word.replace('o', 'off'))
-        new_arr.append(word.replace('ow', 'o'))
-        new_arr.append(word.replace('x', 'ecks'))
-
-        new_arr.append(word.replace('za', 'xa'))
-        new_arr.append(word.replace('xa', 'za'))
-        new_arr.append(word.replace('ze', 'xe'))
-        new_arr.append(word.replace('xe', 'ze'))
-        new_arr.append(word.replace('zi', 'xi'))
-        new_arr.append(word.replace('xi', 'zi'))
-        new_arr.append(word.replace('zo', 'xo'))
-        new_arr.append(word.replace('xo', 'zo'))
-        new_arr.append(word.replace('zu', 'xu'))
-        new_arr.append(word.replace('xu', 'zu'))
-
-        # number based
-        new_arr.append(word.replace('one', '1'))
-        new_arr.append(word.replace('1', 'one'))
-        new_arr.append(word.replace('two', '2'))
-        new_arr.append(word.replace('2', 'two'))
-        new_arr.append(word.replace('three', '3'))
-        new_arr.append(word.replace('3', 'three'))
-        new_arr.append(word.replace('four', '4'))
-        new_arr.append(word.replace('4', 'four'))
-        new_arr.append(word.replace('five', '5'))
-        new_arr.append(word.replace('5', 'five'))
-        new_arr.append(word.replace('six', '6'))
-        new_arr.append(word.replace('6', 'six'))
-        new_arr.append(word.replace('seven', '7'))
-        new_arr.append(word.replace('7', 'seven'))
-        new_arr.append(word.replace('eight', '8'))
-        new_arr.append(word.replace('8', 'eight'))
-        new_arr.append(word.replace('nine', '9'))
-        new_arr.append(word.replace('9', 'nine'))
-        new_arr.append(word.replace('ten', '10'))
-        new_arr.append(word.replace('10', 'ten'))
-
-        new_arr.append(word.replace('ecks', 'x'))
-        new_arr.append(word.replace('spir', 'speer'))
-        new_arr.append(word.replace('speer', 'spir'))
-        new_arr.append(word.replace('x', 'ex'))
-        new_arr.append(word.replace('on', 'awn'))
-        new_arr.append(word.replace('ow', 'owoo'))
-        new_arr.append(word.replace('awn', 'on'))
-        new_arr.append(word.replace('awf', 'off'))
-        new_arr.append(word.replace('s', 'z'))
-        new_arr.append(word.replace('ce', 'ze'))
-        new_arr.append(word.replace('ss', 'zz'))
-        new_arr.append(word.replace('ku', 'koo'))
-        new_arr.append(word.replace('trate', 'trait'))
-        new_arr.append(word.replace('trait', 'trate'))
-        new_arr.append(word.replace('ance', 'anz'))
-        new_arr.append(word.replace('il', 'yll'))
-        new_arr.append(word.replace('ice', 'ize'))
-        new_arr.append(word.replace('chr', 'kr'))
-
-        # These should only be at end of word!
-        new_arr.append(word.replace('er', 'r'))
-        new_arr.append(word.replace('lee', 'ly'))
+        for tokens in token_groups:
+            new_arr.append(word.replace(*tokens))
     return normalization.uniquify(new_arr)
 
 
@@ -592,34 +591,21 @@ def make_descriptors(words):
     ...could be optimized
     """
     new_words = []
-    try:
-        for noun in words['NN']:
-            for verb in words['VBP']:
-                new_words.append('{} {}'.format(noun, verb))
-                new_words.append('{} {}'.format(verb, noun))
-    except KeyError:
-        pass
-    try:
-        for noun in words['NNS']:
-            for verb in words['VB']:
-                new_words.append('{} {}'.format(noun, verb))
-                new_words.append('{} {}'.format(verb, noun))
-    except KeyError:
-        pass
-    try:
-        for noun in words['NNS']:
-            for verb in words['VBP']:
-                new_words.append('{} {}'.format(noun, verb))
-                new_words.append('{} {}'.format(verb, noun))
-    except KeyError:
-        pass
-    try:
-        for noun in words['NN']:
-            for verb in words['VB']:
-                new_words.append('{} {}'.format(noun, verb))
-                new_words.append('{} {}'.format(verb, noun))
-    except KeyError:
-        pass
+
+    def _helper(nouns, verbs):
+        words = []
+        try:
+            for noun in nouns:
+                for verb in verbs:
+                    words.append('{} {}'.format(noun, verb))
+                    words.append('{} {}'.format(verb, noun))
+        except KeyError:
+            pass
+        return words
+
+    new_words += _helper(words['NN'], words['VBP'])
+    new_words += _helper(words['NNS'], words['VBP'])
+    new_words += _helper(words['NN'], words['VB'])
     return new_words
 
 
