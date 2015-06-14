@@ -46,10 +46,12 @@ Versioning style follows the semantic versioning convention. For more info, see 
 
 ----
 
-#### Support the development, if you want :)
+### Support / donations
 <div class="donate-button">
     <a class="donate-button-link" href="#">
         <img src="http://ef3ae845b6eed6ec4024-8a0a46e5f1a5cc9854958bc3503f0f88.r40.cf1.rackcdn.com/donate_64.png" alt="Donate Ƀitcoin" />
     </a>
     <div class="bitcoin-address">Ƀitcoin address: <code>1G5MdiPHCnPJUKXW1SJwWmUTDVjG1aG7xj</code></div>
 </div>
+
+![Donation badge](https://img.shields.io/gratipay/christabor.svg)
