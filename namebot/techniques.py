@@ -536,6 +536,16 @@ def make_word_metaphor(words):
     return
 
 
+def acronym_lastname(description, lastname):
+    """Inspiration: ALFA Romeo"""
+    desc = ''.join([word[0].upper() for word in normalization.remove_stop_words(
+        description.split(' '))])
+    return '{} {}'.format(desc, lastname)
+
+
+print(acronym_lastname('We make cool products.', 'Tabor'))
+
+
 def make_phrase(words):
     # TODO ADDME
     """

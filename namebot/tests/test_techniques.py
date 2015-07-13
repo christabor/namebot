@@ -225,6 +225,19 @@ class PigLatinTestCase(unittest.TestCase):
             techniques.pig_latinize('rad', postfix=1223)
 
 
+class AcronymLastnameTestCase(unittest.TestCase):
+
+    def test_simple(self):
+        desc = 'Amazingly cool product'
+        self.assertEqual(
+            'ACP McDonald', techniques.acronym_lastname(desc, 'McDonald'))
+
+    def test_simple_nostopwords(self):
+        desc = 'A cool product'
+        self.assertEqual(
+            'CP McDonald', techniques.acronym_lastname(desc, 'McDonald'))
+
+
 class MakeWordMetaphorTestCase(unittest.TestCase):
     # TODO
 
