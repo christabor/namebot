@@ -1,4 +1,6 @@
 [![Build Status](https://travis-ci.org/Automotron/namebot.svg?branch=master)](https://travis-ci.org/Automotron/namebot)
+[![PyPI version](https://badge.fury.io/py/namebot.svg)](http://badge.fury.io/py/namebot)
+![Donation badge](https://img.shields.io/gratipay/christabor.svg)
 
 # Namebot
 A company/product name generating tool written in Python. Powers parts of Automotron.com
