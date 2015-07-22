@@ -36,7 +36,7 @@ Check out https://github.com/Automotron/namebot-flask to see an example app
 and configuration setup to use namebot and generate results with test data.
 
 ## Library Dependencies
-See `requirements.txt` for details.
+See [requirements.txt](requirements.txt) and [Makefile](Makefile) for details.
 
 ## Tests
 
