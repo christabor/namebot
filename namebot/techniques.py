@@ -594,6 +594,31 @@ def get_descriptors(words):
     return descriptors
 
 
+def _add_pos_subtypes(nouns, verbs):
+    words = []
+    try:
+        for noun in nouns:
+            for verb in verbs:
+                words.append('{} {}'.format(noun, verb))
+                words.append('{} {}'.format(verb, noun))
+    except KeyError:
+        pass
+    return words
+
+
+def _check_pos_subtypes(key, words):
+    new_words = []
+    types = words.keys()
+    if 'NNP' in types:
+        if 'VBP' in types:
+            new_words += _add_pos_subtypes(words['NNP'], words['VBP'])
+        if 'VB' in types:
+            new_words += _add_pos_subtypes(words['NNP'], words['VB'])
+        if 'RB' in types:
+            new_words += _add_pos_subtypes(words['NNP'], words['RB'])
+    return new_words
+
+
 def make_descriptors(words):
     """
     Make descriptor names based off of a
@@ -604,27 +629,15 @@ def make_descriptors(words):
         -Red Fin,
         -Cold Water (grill), etc...
 
-    Combines VBP/VB, with NN/NNS
+    Combines VBP/VB/RB, with NN/NNS
 
     ...could be optimized
     """
     new_words = []
-
-    def _helper(nouns, verbs):
-        words = []
-        try:
-            for noun in nouns:
-                for verb in verbs:
-                    words.append('{} {}'.format(noun, verb))
-                    words.append('{} {}'.format(verb, noun))
-        except KeyError:
-            pass
-        return words
-
-    new_words += _helper(words['NN'], words['VBP'])
-    new_words += _helper(words['NNS'], words['VBP'])
-    new_words += _helper(words['NN'], words['VB'])
-    return new_words
+    new_words += _check_pos_subtypes('NNP', words)
+    new_words += _check_pos_subtypes('NNS', words)
+    new_words += _check_pos_subtypes('NN', words)
+    return list(set(new_words))
 
 
 def super_scrub(data):

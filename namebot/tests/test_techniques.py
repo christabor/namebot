@@ -274,17 +274,22 @@ class MakePhraseTestCase(unittest.TestCase):
 
 
 class GetDescriptorsTestCase(unittest.TestCase):
-    # TODO
 
-    def test_simple(self):
-        pass
+    def test_complex(self):
+        self.assertEqual(techniques.get_descriptors(
+            ['Jumping', 'Fly', 'Monkey', 'Dog', 'Action']),
+            {'VBG': ['Jumping'], 'RB': ['Fly'],
+             'NNP': ['Monkey', 'Dog', 'Action']})
 
 
 class MakeDescriptorsTestCase(unittest.TestCase):
-    # TODO
 
     def test_simple(self):
-        pass
+        self.assertEqual(techniques.make_descriptors(
+            {'VBG': ['Jumping'], 'RB': ['Fly'],
+             'NNP': ['Monkey', 'Dog', 'Action']}),
+            ['Monkey Fly', 'Fly Monkey', 'Action Fly', 'Dog Fly',
+             'Fly Dog', 'Fly Action'])
 
 
 class SuperScrubTestCase(unittest.TestCase):
