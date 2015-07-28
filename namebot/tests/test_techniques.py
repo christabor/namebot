@@ -296,10 +296,9 @@ class RecycleTestCase(unittest.TestCase):
 
     def test_pig_latinize(self):
         words = techniques.pig_latinize(['purring', 'cats'])
-        print('words', words)
         self.assertEqual(techniques.recycle(
             words, techniques.pig_latinize),
-            ['urringpaywaywayway', 'atscaywaywayway'])
+            ['urringpaywayway', 'atscaywayway'])
 
     def test_portmanteau(self):
         words = ['ratchet', 'broccoli', 'potato', 'gadget', 'celery', 'hammer']

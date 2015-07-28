@@ -555,9 +555,6 @@ def acronym_lastname(description, lastname):
     return '{} {}'.format(desc, lastname)
 
 
-print(acronym_lastname('We make cool products.', 'Tabor'))
-
-
 def make_phrase(words):
     # TODO ADDME
     """
