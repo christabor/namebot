@@ -513,7 +513,7 @@ def make_name_from_latin_root(name_list):
     return
 
 
-def pig_latinize(word, postfix='ay'):
+def _pig_latinize(word, postfix='ay'):
     """Generates standard pig latin style,
     with customizeable postfix argument"""
     # Common postfixes: ['ay', 'yay', 'way']
@@ -533,6 +533,10 @@ def pig_latinize(word, postfix='ay'):
     else:
         piggified = ''.join([word[1: len(word)], first_letter, postfix])
     return piggified
+
+
+def pig_latinize(words, postfix='ay'):
+    return [_pig_latinize(word, postfix=postfix) for word in words]
 
 
 def make_word_metaphor(words):
@@ -638,6 +642,15 @@ def make_descriptors(words):
     new_words += _check_pos_subtypes('NNS', words)
     new_words += _check_pos_subtypes('NN', words)
     return list(set(new_words))
+
+
+def recycle(words, func, times=2):
+    """Runs a set of words applied to `func` and re-runs it
+    `times` with the last output as the new input.
+    `words` must be a list, and `func` must return a list."""
+    if times > 0:
+        return recycle(func(words), func, times - 1)
+    return words
 
 
 def super_scrub(data):

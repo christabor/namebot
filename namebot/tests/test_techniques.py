@@ -233,17 +233,17 @@ class PigLatinTestCase(unittest.TestCase):
     def test_simple(self):
         """Basic test."""
         self.assertEqual(
-            techniques.pig_latinize('rad'), 'adray')
+            techniques.pig_latinize(['rad']), ['adray'])
 
     def test_custom_postfix_value(self):
         """Basic test."""
         self.assertEqual(
-            techniques.pig_latinize('rad', postfix='ey'), 'adrey')
+            techniques.pig_latinize(['rad'], postfix='ey'), ['adrey'])
 
     def test_bad_postfix_value(self):
         """Basic test."""
         with self.assertRaises(TypeError):
-            techniques.pig_latinize('rad', postfix=1223)
+            techniques.pig_latinize(['rad'], postfix=1223)
 
 
 class AcronymLastnameTestCase(unittest.TestCase):
@@ -290,6 +290,25 @@ class MakeDescriptorsTestCase(unittest.TestCase):
              'NNP': ['Monkey', 'Dog', 'Action']}),
             ['Monkey Fly', 'Fly Monkey', 'Action Fly', 'Dog Fly',
              'Fly Dog', 'Fly Action'])
+
+
+class RecycleTestCase(unittest.TestCase):
+
+    def test_pig_latinize(self):
+        words = techniques.pig_latinize(['purring', 'cats'])
+        print('words', words)
+        self.assertEqual(techniques.recycle(
+            words, techniques.pig_latinize),
+            ['urringpaywaywayway', 'atscaywaywayway'])
+
+    def test_portmanteau(self):
+        words = ['ratchet', 'broccoli', 'potato', 'gadget', 'celery', 'hammer']
+        res = techniques.recycle(
+            words, techniques.make_portmanteau_default_vowel)
+        expected = ['potatchelery', 'potatchelery', 'potadgelery',
+                    'potadgelery', 'potammelery', 'potammelery',
+                    'ratchelery', 'ratchelery']
+        self.assertEqual(res, expected)
 
 
 class SuperScrubTestCase(unittest.TestCase):
