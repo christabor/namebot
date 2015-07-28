@@ -8,6 +8,7 @@ install:
 	pip install -U nltk
 	python -m nltk.downloader wordnet
 	python -m nltk.downloader stopwords
+	python -m nltk.downloader punkt
 	python setup.py install
 tests:
 	nosetests namebot/
