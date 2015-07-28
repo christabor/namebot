@@ -2,6 +2,27 @@ import unittest
 from namebot import techniques
 
 
+class PalindromeTestCase(unittest.TestCase):
+
+    def test_simple(self):
+        self.assertEqual(techniques.palindrome('Fool'), 'FoollooF')
+
+    def test_complicated(self):
+        self.assertEqual(techniques.palindrome(
+            'Aardvarks'), 'AardvarksskravdraA')
+
+    def test_spaced(self):
+        self.assertEqual(techniques.palindrome(
+            'Red Dragon'), 'Red DragonnogarD deR')
+
+    def test_simple_array(self):
+        self.assertEqual(techniques.palindromes(
+            ['foo', 'bar']), ['foooof', 'barrab'])
+
+    def test_single_letter(self):
+        self.assertEqual(techniques.palindrome('f'), 'ff')
+
+
 class SpoonerismTestCase(unittest.TestCase):
 
     def test_simple(self):

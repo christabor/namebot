@@ -195,6 +195,14 @@ def affix_words(words, affix_type):
     return new_arr
 
 
+def palindrome(word):
+    return '{}{}'.format(word, word[::-1])
+
+
+def palindromes(words):
+    return [palindrome(word) for word in words]
+
+
 def make_founder_product_name(founder1, founder2, product):
     """
     get the name of two people
@@ -662,6 +670,7 @@ def generate_all_techniques(words):
             'forkerism': forkerism(words),
             'kniferism': kniferism(words),
             'spoonerism': spoonerism(words),
+            'palindrome': palindromes(words),
             'reduplication_ablaut': reduplication_ablaut(words),
             'misspelling': make_misspelling(words),
             'descriptors': make_descriptors(
