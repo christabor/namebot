@@ -1,17 +1,14 @@
-[![Coverage Status](https://coveralls.io/repos/Automotron/namebot/badge.svg?branch=master&service=github)](https://coveralls.io/github/Automotron/namebot?branch=master)
-[![Build Status](https://travis-ci.org/Automotron/namebot.svg?branch=master)](https://travis-ci.org/Automotron/namebot)
+[![Coverage Status](https://coveralls.io/repos/christabor/namebot/badge.svg?branch=master&service=github)](https://coveralls.io/github/christabor/namebot?branch=master)
+[![Build Status](https://travis-ci.org/christabor/namebot.svg?branch=master)](https://travis-ci.org/Automotron/namebot)
 [![PyPI version](https://badge.fury.io/py/namebot.svg)](http://badge.fury.io/py/namebot)
 ![Donation badge](https://img.shields.io/gratipay/christabor.svg)
 
 # Namebot
 A company/product name generating tool written in Python. Powers parts of Automotron.com
 
-## Notes:
-This project is ongoing, but feel free to contribute! There's much more to add, but it's a full-fledged suite of tools that can help you get started generating ideas and names.
+This project is ongoing, but feel free to contribute! There's much more to add, but it's a full-fledged suite of tools that can help you get started generating real business names for your project or company!
 
 ## Modules:
-### Examples
-Some pregenerated examples for testing. This should be used for marshalling data into the views.
 
 ### Metrics
 A class of utilities for generating all kinds of linguistic metrics for a set of words.
