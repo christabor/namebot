@@ -171,8 +171,6 @@ def get_synsets(words=[], use_definitions=False, clean=False):
 
         for synset in synsets:
             key['synset_original'].append(synset.lemma_names())
-            if use_definitions:
-                key['synset_original'].append(synset.definition.split())
 
             # More Specific *nyms (deep)
             key['hyponyms'] = get_hyponyms(synset)
