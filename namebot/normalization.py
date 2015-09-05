@@ -112,3 +112,12 @@ def clean_sort(words):
         except TypeError:
             pass
     return words
+
+
+def chop_duplicate_ends(word):
+    """Remove duplicate letters on either end, if the are adjacent"""
+    if word[0] == word[1]:
+        word = word[1:]
+    if word[-2:-1] == word[-1:]:
+        word = word[:-1]
+    return word

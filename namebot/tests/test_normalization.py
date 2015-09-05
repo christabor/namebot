@@ -94,3 +94,16 @@ class CleanSortTestCase(unittest.TestCase):
         val = '!@foobar!#'
         cleaned = norm.clean_sort(val)
         self.assertEqual(cleaned, val)
+
+
+class ChopDuplicateEndsTestCase(unittest.TestCase):
+
+    def test_basic(self):
+        chopped = norm.chop_duplicate_ends('aabracadabraa')
+        self.assertEqual(chopped, 'abracadabra')
+
+    def test_one_end(self):
+        chopped1 = norm.chop_duplicate_ends('aabracadabra')
+        chopped2 = norm.chop_duplicate_ends('abracadabraa')
+        self.assertEqual(chopped1, 'abracadabra')
+        self.assertEqual(chopped2, 'abracadabra')
