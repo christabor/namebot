@@ -4,38 +4,6 @@ from nltk.corpus import wordnet
 
 from . import normalization
 
-"""
-def get_recursive_synsets(word, base_case=4):
-
-TODO ADDME
-
-perhaps this can have a threshold argument
-that determines how recursively down the
-*nym should go within a given synset,
-and have a default that is crafted over practice
-
-will obtain a synset, grab that synsets
-value and continue recursively until a
-base case is reached, defaulting to depth 4
-
-# base = 0
-# if not base_case >= base:
-#   return get_recursive_synsets(word, base_case=base+=1)
-    # stem and remove punctuation, if any
-
-E.G:
-for k in new_array:
-t = synset.hyponyms()
-for sub_t in t:
-#print "sub sub hyponyms", sub_t.hyponyms()
-x = sub_t.hyponyms()
-for sub_sub_t in x:
-y = sub_sub_t.hyponyms()
-for sub_sub_sub_t in y:
-print "sub sub sub sub hyponyms",sub_sub_sub_t.hyponyms()
-
-"""
-
 
 def print_all_synset_categories():
     # Prints all domains and
@@ -156,6 +124,25 @@ def get_word_synsets(word):
     return synset
 
 
+def get_synset_definitions(word):
+    """Given a word, returns all possible definitions for all synsets
+    in the synset ring."""
+    definitions = []
+    synsets = get_word_synsets(word)
+    for _synset in synsets:
+        definitions.append(_synset.definition().split())
+    return definitions
+
+
+def get_synsets_definitions(words):
+    """Given a set of words, for each word, returns all possible
+    definitions for all synsets in the synset ring."""
+    sets = []
+    for word in words:
+        sets.append(get_synset_definitions(word))
+    return sets
+
+
 def get_synsets(words=[], use_definitions=False, clean=False):
     """This is a brute force method of getting as many related words
     to a given set as possible. You are expected to filter or remove any
@@ -173,31 +160,48 @@ def get_synsets(words=[], use_definitions=False, clean=False):
             key['synset_original'].append(synset.lemma_names())
 
             # More Specific *nyms (deep)
-            key['hyponyms'] = get_hyponyms(synset)
-            key['instance_hyponyms'] = get_inst_hyponyms(synset)
-            key['member_meronyms'] = get_member_meronyms(synset)
-            key['substance_meronyms'] = get_substance_meronyms(synset)
-            key['part_meronyms'] = get_part_meronyms(synset)
-            key['substance_holonyms'] = get_substance_holoynms(synset)
+            key['hyponyms'] = get_hyponyms(
+                synset, use_definitions=use_definitions)
+            key['instance_hyponyms'] = get_inst_hyponyms(
+                synset, use_definitions=use_definitions)
+            key['member_meronyms'] = get_member_meronyms(
+                synset, use_definitions=use_definitions)
+            key['substance_meronyms'] = get_substance_meronyms(
+                synset, use_definitions=use_definitions)
+            key['part_meronyms'] = get_part_meronyms(
+                synset, use_definitions=use_definitions)
+            key['substance_holonyms'] = get_substance_holoynms(
+                synset, use_definitions=use_definitions)
 
             # More Generic *nyms (shallow)
-            key['member_holonyms'] = get_member_holoynms(synset)
-            key['part_holonyms'] = get_part_holoynms(synset)
-            key['instance_hypernyms'] = get_instance_hypernyms(synset)
-            key['hypernyms'] = get_hypernyms(synset)
+            key['member_holonyms'] = get_member_holoynms(
+                synset, use_definitions=use_definitions)
+            key['part_holonyms'] = get_part_holoynms(
+                synset, use_definitions=use_definitions)
+            key['instance_hypernyms'] = get_instance_hypernyms(
+                synset, use_definitions=use_definitions)
+            key['hypernyms'] = get_hypernyms(
+                synset, use_definitions=use_definitions)
 
             # Other types
-            # (need classification) TODO
-
-            key['topic_domains'] = get_topic_domains(synset)
-            key['region_domains'] = get_region_domains(synset)
-            key['usage_domains'] = get_usage_domains(synset)
-            key['attributes'] = get_attributes(synset)
-            key['entailments'] = get_entailments(synset)
-            key['causes'] = get_causes(synset)
-            key['also_sees'] = get_also_sees(synset)
-            key['verb_groups'] = get_verb_groups(synset)
-            key['similar_tos'] = get_similartos(synset)
+            key['topic_domains'] = get_topic_domains(
+                synset, use_definitions=use_definitions)
+            key['region_domains'] = get_region_domains(
+                synset, use_definitions=use_definitions)
+            key['usage_domains'] = get_usage_domains(
+                synset, use_definitions=use_definitions)
+            key['attributes'] = get_attributes(
+                synset, use_definitions=use_definitions)
+            key['entailments'] = get_entailments(
+                synset, use_definitions=use_definitions)
+            key['causes'] = get_causes(
+                synset, use_definitions=use_definitions)
+            key['also_sees'] = get_also_sees(
+                synset, use_definitions=use_definitions)
+            key['verb_groups'] = get_verb_groups(
+                synset, use_definitions=use_definitions)
+            key['similar_tos'] = get_similartos(
+                synset, use_definitions=use_definitions)
 
         results[word] = key
 
