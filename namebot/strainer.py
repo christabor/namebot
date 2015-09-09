@@ -1,3 +1,4 @@
+import re
 import scoring
 import settings as namebot_settings
 
@@ -8,8 +9,19 @@ filtered = [word for word in words if
             filter_length(word, max_length=7) and
             filter_startswith(word, beginning='c') and
             filter_startswith(word, beginning='c') and
-            filter_endswith(word, ending='e')]
+            filter_endswith(word, ending='e') ...]
 """
+
+
+def filter_vowel_cons_ratio(word, ratio=0.5):
+    """Return True if the ratio of vowels to consonants is > `ratio`.
+    This can be used as an ad-hoc pronunciation filter."""
+    vowels = re.compile(r'[aeiouy]')
+    consonants = re.compile(r'[^aeyiuo]')
+    vmatch = re.findall(vowels, word.lower())
+    cmatch = re.findall(consonants, word.lower())
+    _ratio = float(len(vmatch)) / float(len(cmatch))
+    return _ratio > ratio
 
 
 def filter_length(word,
