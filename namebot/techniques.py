@@ -2,6 +2,7 @@ from __future__ import absolute_import
 from __future__ import division
 
 from random import choice
+from string import ascii_uppercase
 import re
 import nltk
 
@@ -639,6 +640,35 @@ def make_descriptors(words):
     new_words += _check_pos_subtypes('NNS', words)
     new_words += _check_pos_subtypes('NN', words)
     return list(set(new_words))
+
+
+def all_prefix_first_vowel(word, letters=list(ascii_uppercase)):
+    """Finds the first vowel in a word and removes all letters before it,
+    prefixing it with all consonants.
+
+    Args:
+        word (str) - the word to update
+        letters (list) - the letters to use for prefixing.
+
+    Returns:
+        words (list) - All prefixed words
+
+    """
+    re_vowels = re.compile(r'[aeiouy]')
+    matches = re.search(re_vowels, word)
+    if matches is None:
+        return [word]
+    words = []
+    vowels = ['A', 'E', 'I', 'O', 'U']
+    first_match = matches.start(0)
+    for letter in letters:
+        if letter not in vowels:
+            # If beginning letter is a vowel, don't offset the index
+            if first_match == 0:
+                words.append('{}{}'.format(letter, word))
+            else:
+                words.append('{}{}'.format(letter, word[first_match:]))
+    return words
 
 
 def recycle(words, func, times=2):

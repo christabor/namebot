@@ -292,6 +292,20 @@ class MakeDescriptorsTestCase(unittest.TestCase):
              'Fly Dog', 'Fly Action'])
 
 
+class AllPrefixesToFirstVowelTestCase(unittest.TestCase):
+
+    def test_simple(self):
+        word = 'umbrellas'
+        expected = [
+            'Bumbrellas', 'Cumbrellas', 'Dumbrellas', 'Fumbrellas',
+            'Gumbrellas', 'Humbrellas', 'Jumbrellas', 'Kumbrellas',
+            'Lumbrellas', 'Mumbrellas', 'Numbrellas', 'Pumbrellas',
+            'Qumbrellas', 'Rumbrellas', 'Sumbrellas', 'Tumbrellas',
+            'Vumbrellas', 'Wumbrellas', 'Xumbrellas', 'Yumbrellas',
+            'Zumbrellas']
+        self.assertEqual(techniques.all_prefix_first_vowel(word), expected)
+
+
 class RecycleTestCase(unittest.TestCase):
 
     def test_pig_latinize(self):
