@@ -28,6 +28,18 @@ class InsufficientWordsError(Exception):
 
 
 def spoonerism(words):
+    """Convert a list of words formatted with the spoonerism
+    linguistic technique.
+
+    Args:
+        words (list) - The list of words to operate on
+
+    Returns:
+        words (list) - The updated list of words
+
+    >>> spoonerism(['foo', 'bar'])
+    >>> ['boo', 'far']
+    """
     "First: [f]oo [b]ar => boo far"
     new_words = []
     if len(words) < 2:
@@ -45,6 +57,18 @@ def spoonerism(words):
 
 
 def kniferism(words):
+    """Convert a list of words formatted with the kniferism
+    linguistic technique.
+
+    Args:
+        words (list) - The list of words to operate on
+
+    Returns:
+        words (list) - The updated list of words
+
+    >>> kniferism(['foo', 'bar'])
+    >>> ['fao', 'bor']
+    """
     "Mid: f[o]o b[a]r => fao bor"
     if len(words) < 2:
         raise InsufficientWordsError('Need more than one word to combine')
@@ -66,6 +90,18 @@ def kniferism(words):
 
 
 def forkerism(words):
+    """Convert a list of words formatted with the forkerism
+    linguistic technique.
+
+    Args:
+        words (list) - The list of words to operate on
+
+    Returns:
+        words (list) - The updated list of words
+
+    >>> forkerism(['foo', 'bar'])
+    >>> ['for', 'bao']
+    """
     "Last: fo[o] ba[r] => for bao"
     if len(words) < 2:
         raise InsufficientWordsError('Need more than one word to combine')
