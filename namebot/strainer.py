@@ -38,6 +38,12 @@ def filter_endswith(word, ending=None):
     return word.lower().endswith(ending)
 
 
+def filter_tld(word, tld='.com'):
+    if tld.startswith('.'):
+        tld = tld.replace('.', '')
+    return filter_endswith(word, ending=tld)
+
+
 def filter_metaphone(word):
     """Get the metaphone value, and if the second key is None
     pronunciation is unlikely."""

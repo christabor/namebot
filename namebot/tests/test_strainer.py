@@ -51,6 +51,15 @@ class FilterStartsEndsWithTestCase(unittest.TestCase):
         self.assertEqual(len(strained), 2)
 
 
+class FilterEndsTLDTestCase(unittest.TestCase):
+
+    def test_endswithtld(self):
+        words = ['sitcom', 'telecom', 'intercom', 'rabbit', 'elephant']
+        strained = [word for word in words
+                    if strain.filter_tld(word, tld='.com')]
+        self.assertEqual(len(strained), 3)
+
+
 class FilterVowelConsTestCase(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

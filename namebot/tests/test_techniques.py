@@ -2,6 +2,24 @@ import unittest
 from namebot import techniques
 
 
+class DomainifyTestCase(unittest.TestCase):
+
+    def test_threeletter(self):
+        self.assertEqual(techniques.domainify(['intercom']), ['inter.com'])
+
+    def test_twoletter(self):
+        self.assertEqual(
+            techniques.domainify(['actively'], tld='.ly'), ['active.ly'])
+
+    def test_fourletter(self):
+        self.assertEqual(
+            techniques.domainify(['scamp'], tld='.camp'), ['s.camp'])
+
+    def test_empty(self):
+        self.assertEqual(
+            techniques.domainify(['intercom'], tld=''), ['intercom'])
+
+
 class PalindromeTestCase(unittest.TestCase):
 
     def test_simple(self):

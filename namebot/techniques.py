@@ -27,6 +27,17 @@ class InsufficientWordsError(Exception):
         self.msg = msg
 
 
+def domainify(words, tld='com'):
+    _words = []
+    if tld.startswith('.'):
+        tld = tld.replace('.', '')
+    for word in words:
+        if word.endswith(tld) and tld != '':
+            word = word.replace(tld, '.{}'.format(tld))
+        _words.append(word)
+    return _words
+
+
 def spoonerism(words):
     """Convert a list of words formatted with the spoonerism
     linguistic technique.
