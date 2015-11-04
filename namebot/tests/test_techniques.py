@@ -296,8 +296,8 @@ class GetDescriptorsTestCase(unittest.TestCase):
     def test_complex(self):
         self.assertEqual(techniques.get_descriptors(
             ['Jumping', 'Fly', 'Monkey', 'Dog', 'Action']),
-            {'VBG': ['Jumping'], 'RB': ['Fly'],
-             'NNP': ['Monkey', 'Dog', 'Action']})
+            {'VBG': ['Jumping'],
+             'NNP': ['Fly', 'Monkey', 'Dog', 'Action']})
 
 
 class MakeDescriptorsTestCase(unittest.TestCase):

@@ -99,10 +99,30 @@ class GetNameSpacesTestCase(unittest.TestCase):
 
 
 class GetConsonantRepeatFrequencyTestCase(unittest.TestCase):
-    # TODO
 
     def test_basic(self):
-        pass
+        words = ['cat']
+        res = metrics.get_consonant_repeat_frequency(words)
+        self.assertEqual(res, {
+            'data': 1,
+            'summary': None
+        })
+
+    def test_multiple(self):
+        words = ['cat', 'foo', 'bar', 'quux']
+        res = metrics.get_consonant_repeat_frequency(words)
+        self.assertEqual(res, {
+            'data': 4,
+            'summary': None
+        })
+
+    def test_none(self):
+        words = []
+        res = metrics.get_consonant_repeat_frequency(words)
+        self.assertEqual(res, {
+            'data': 0,
+            'summary': None
+        })
 
 
 class GetConsonantDuplicateRepeatFrequencyTestCase(unittest.TestCase):

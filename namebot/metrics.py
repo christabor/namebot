@@ -207,6 +207,7 @@ def get_name_spaces(words):
 
 
 def get_consonant_repeat_frequency(words):
+    """Checks for repeating vowel frequency for a given set of words"""
     count = 0
     cons = re.compile(r'[^a|e|i|o|u{6}]')
     for val in words:
@@ -269,7 +270,6 @@ def get_keyword_relevancy_map(words, n_list, terms, sortcontext,
 
     for weight, term in results:
         results.append("%5.2f" % (weight * 100) + "%", term)
-
     return {
         'data': results_list,
         'summary': None
