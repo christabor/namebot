@@ -18,7 +18,10 @@ def _get_lemma_names(sub_synset, use_definitions=False):
     results = []
     if sub_synset():
         for v in sub_synset():
-            results += v.lemma_names()
+            if hasattr(v.lemma_names, '__call__'):
+                results += v.lemma_names()
+            else:
+                results += v.lemma_names
             if use_definitions:
                 results.append(v.definition.split())
     return results
@@ -157,7 +160,10 @@ def get_synsets(words=[], use_definitions=False, clean=False):
         key = {'synset_original': []}
 
         for synset in synsets:
-            key['synset_original'].append(synset.lemma_names())
+            if hasattr(synset.lemma_names, '__call__'):
+                key['synset_original'].append(synset.lemma_names())
+            else:
+                key['synset_original'].append(synset.lemma_names)
 
             # More Specific *nyms (deep)
             key['hyponyms'] = get_hyponyms(
