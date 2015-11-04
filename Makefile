@@ -10,6 +10,7 @@ install:
 	python -m nltk.downloader stopwords
 	python -m nltk.downloader punkt
 	python -m nltk.downloader maxent_treebank_pos_tagger
+	python -m nltk.downloader averaged_perceptron_tagger
 	python setup.py install
 tests:
 	nosetests namebot/
