@@ -4,9 +4,9 @@
 ![Donation badge](https://img.shields.io/gratipay/christabor.svg)
 
 # Namebot
-A company/product name generating tool written in Python. Powers parts of Automotron.com
+A company/product/whatever name generating tool written in Python.
 
-This project is ongoing, but feel free to contribute! There's much more to add, but it's a full-fledged suite of tools that can help you get started generating real business names for your project or company!
+This project is ongoing, but feel free to contribute! It's a full-fledged suite of tools that can help you get started generating real business names for your project or company!
 
 ## Modules:
 
@@ -24,6 +24,9 @@ Some scoring algorithms, primarily for classifying pronunciation, such as Sounde
 
 ### Techniques
 The major chunk of work represented in this library. The many techniques I've created after researching hundreds of corporate names and naming agency techniques
+
+### Language Techniques
+Techniques that involve the use of language translation for stylistic name use, such as Latin.
 
 ### Strainer
 Similar to normalization, but for filtering based on rules, like length, count, etc... good for mapping 1:1 with UI inputs or just calling from the functions directly.
