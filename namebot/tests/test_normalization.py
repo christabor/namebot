@@ -107,3 +107,18 @@ class ChopDuplicateEndsTestCase(unittest.TestCase):
         chopped2 = norm.chop_duplicate_ends('abracadabraa')
         self.assertEqual(chopped1, 'abracadabra')
         self.assertEqual(chopped2, 'abracadabra')
+
+
+class KeyWordsByPosTagTestCase(unittest.TestCase):
+
+    def test_basic(self):
+        data = [
+            ('Monkey', 'NNP'), ('Fly', 'VBG'), ('Fly', 'RB'),
+            ('Dog', 'NNP'), ('Cat', 'NNP')]
+        keyed = norm.key_words_by_pos_tag(data)
+        expected = {
+            'RB': ['Fly'],
+            'NNP': ['Monkey', 'Dog', 'Cat'],
+            'VBG': ['Fly']
+        }
+        self.assertEqual(dict(keyed), expected)
