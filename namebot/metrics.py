@@ -17,6 +17,14 @@ from nltk import pos_tag
 
 
 def prep_file(file_name):
+    """Takes a file, extracts items line-by-line, and returns a list of them.
+
+    Args:
+        file_name (str): The file name to open
+
+    Returns:
+        items (list): A list of items extracted from the file
+    """
     items = []
     with open(file_name) as files:
         for newline in files:
@@ -25,9 +33,14 @@ def prep_file(file_name):
 
 
 def get_named_numbers_1_10(words):
-    """
-    Check for numbers spelled out
-    e.g. One, Two, Three, Four
+    """Check for numbers spelled out e.g. One, Two, Three, Four, and return
+    a text summary and the number of matches.
+
+    Args:
+        words (list): A list of words
+
+    Returns:
+        data (dict) - A dictionary with `data` and `summary` keys.
     """
     matches = []
     numbers = re.compile(
@@ -43,6 +56,15 @@ def get_named_numbers_1_10(words):
 
 
 def name_length(words):
+    """Check the length of each word and return a list of all lengths,
+    and a summary of the average.
+
+    Args:
+        words (list): A list of words
+
+    Returns:
+        data (dict) - A dictionary with `data` and `summary` keys.
+    """
     names_length = []
     for val in words:
         names_length.append(len(val))
@@ -56,6 +78,15 @@ def name_length(words):
 
 
 def name_vowel_count(words):
+    """Check the number of times a vowel occurs in each word, and total
+    the results.
+
+    Args:
+        words (list): A list of words
+
+    Returns:
+        data (dict) - A dictionary with `data` and `summary` keys.
+    """
     num_count = {'a': 0, 'e': 0, 'i': 0, 'o': 0, 'u': 0}
     try:
         for word in words:
@@ -74,6 +105,14 @@ def name_vowel_count(words):
 
 
 def name_starts_with_vowel(words):
+    """Check the number of times a list of words starts with a vowel
+
+    Args:
+        words (list): A list of words
+
+    Returns:
+        data (dict) - A dictionary with `data` and `summary` keys.
+    """
     vowelcount = 0
     vowels = re.compile(r'\A[aeiou]')
     for name in words:
@@ -88,41 +127,14 @@ def name_starts_with_vowel(words):
     }
 
 
-def get_search_results(words):
-    # TODO ADDME
-    # values = []
-    #
-    # for name in words:
-    #     engine = Bing(
-    #         license=None)
-    #     searches = engine.search(
-    #         name,
-    #         type='SEARCH',
-    #         start=1,
-    #         count=10000,
-    #         sort='RELEVANCY',
-    #         size=None,
-    #         cached=False,)
-    #     values.append(name, len(searches))
-
-    # summary = 'VAL: {} SEARCHES: {} {}'.format(
-    #     name,
-    #     len(searches),
-    #     searches)
-    # return {
-    #     'data': values,
-    #     'summary': summary
-    # }
-    return {
-        'data': None,
-        'summary': None
-    }
-
-
 def get_digits_frequency(words):
-    """
-    Look for and count the
-    digits in names, e.g. 7-11, 3M, etc...
+    """Look for and count the digits in names, e.g. 7-11, 3M, etc...
+
+    Args:
+        words (list): A list of words
+
+    Returns:
+        data (dict) - A dictionary with `data` and `summary` keys.
     """
     new_words = []
     count = 0
@@ -141,9 +153,13 @@ def get_digits_frequency(words):
 
 
 def get_first_letter_frequency(words):
-    """
-    Add the frequency of first letters
-    e.g. [C]at, [C]law, c = 2
+    """Add the frequency of first letters e.g. [C]at, [C]law, c = 2
+
+    Args:
+        words (list): A list of words
+
+    Returns:
+        data (dict) - A dictionary with `data` and `summary` keys.
     """
     letters = {}
     # populate keys
@@ -161,7 +177,14 @@ def get_first_letter_frequency(words):
 
 
 def get_special_chars(words):
-    """Finds occurrences of special characters"""
+    """Finds occurrences of special characters (non-alphabetical characters)
+
+    Args:
+        words (list): A list of words
+
+    Returns:
+        data (dict) - A dictionary with `data` and `summary` keys.
+    """
     data = []
     chars = re.compile(r'[^a-z]', re.IGNORECASE)
     for word in words:
@@ -175,6 +198,14 @@ def get_special_chars(words):
 
 
 def get_word_types(words):
+    """Determines the occurrences of pos types.
+
+    Args:
+        words (list): A list of words
+
+    Returns:
+        data (dict) - A dictionary with `data` and `summary` keys.
+    """
     new_arr = []
     for val in words:
         try:
@@ -197,7 +228,14 @@ def get_word_types(words):
 
 
 def get_name_spaces(words):
-    """Checks number of spaces for a given set of words"""
+    """Checks number of spaces for a given set of words
+
+    Args:
+        words (list): A list of words
+
+    Returns:
+        data (dict) - A dictionary with `data` and `summary` keys.
+    """
     results = [{'word': word, 'spaces': len(word.split(r' '))}
                for word in words]
     return {
@@ -207,7 +245,14 @@ def get_name_spaces(words):
 
 
 def get_consonant_repeat_frequency(words):
-    """Checks for repeating vowel frequency for a given set of words"""
+    """Checks for repeating consonant frequency for a given set of words
+
+    Args:
+        words (list): A list of words
+
+    Returns:
+        data (dict) - A dictionary with `data` and `summary` keys.
+    """
     count = 0
     cons = re.compile(r'[^a|e|i|o|u{6}]')
     for val in words:
@@ -220,6 +265,15 @@ def get_consonant_repeat_frequency(words):
 
 
 def get_consonant_duplicate_repeat_frequency(words):
+    """Checks for duplicate repeating consonant
+    frequency for a given set of words
+
+    Args:
+        words (list): A list of words
+
+    Returns:
+        data (dict) - A dictionary with `data` and `summary` keys.
+    """
     count = 0
     cons_dup = re.compile(r'[^a|e|i|o|u]{1,}')
     for name in words:
@@ -232,6 +286,14 @@ def get_consonant_duplicate_repeat_frequency(words):
 
 
 def get_vowel_repeat_frequency(words):
+    """Checks for repeating vowel frequency for a given set of words
+
+    Args:
+        words (list): A list of words
+
+    Returns:
+        data (dict) - A dictionary with `data` and `summary` keys.
+    """
     count = 0
     cons_vowel = re.compile(r'[aeiou{3}]')
     for val in words:
@@ -342,6 +404,13 @@ def categorize_word_type(words):
     8. Puns
     9. People's names
     10. Initials and Acronyms
+
+    Args:
+        words (list): A list of words
+
+    Returns:
+        new_words (list) - A list of lists, with each word
+                           and its distribution by word "type"
     """
     new_words = []
 
@@ -385,7 +454,6 @@ def get_word_ranking(words):
         results = get_search_result_count(words)
         domains = check_domain_searches(words)
         results.append(results / domains)
-    return
     return {
         'data': results,
         'summary': None
@@ -412,7 +480,6 @@ def generate_all_metrics(filename=None, words=None):
             'consonant_dup_repeat_freq': get_consonant_duplicate_repeat_frequency(allnames),
             'vowel_repeat_freq': get_vowel_repeat_frequency(allnames),
             'special_characters': get_special_chars(allnames),
-            'search_results': get_search_results(allnames),
             'name_numbers': get_named_numbers_1_10(allnames),
             'adj_verb_noun': get_adjective_verb_or_noun(allnames),
             'first_letter_freq': get_first_letter_frequency(allnames),
