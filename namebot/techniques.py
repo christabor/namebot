@@ -373,7 +373,7 @@ def make_vowel(words, vowel_type, vowel_index):
                 # add 1 to it so we're not dividing by zero
                 if pos_i is 0:
                     pos_i = 1
-                elif pos_j is 0:
+                if pos_j is 0:
                     pos_j = 1
 
                 # Decide which word should be the
