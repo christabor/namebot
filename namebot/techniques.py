@@ -223,12 +223,11 @@ def duplifixify(words):
         if not word:
             continue
         for letter in _alphabet:
-            # check if the first letter is NOT the same as the second letter.
-            if word[0] is not letter:
-                # check if the first word is
-                # NOT the same as the second word.
-                if word is not letter + word[1:]:
-                    new_arr.append('{} {}{}'.format(word, letter, word[1:]))
+            # check if the first letter is NOT the same as the second letter,
+            # or the combined word is not a duplicate of the first.
+            duplicate_word = '{}{}'.format(letter, word[1:]) == word
+            if word[0] is not letter and not duplicate_word:
+                new_arr.append('{} {}{}'.format(word, letter, word[1:]))
     return new_arr
 
 

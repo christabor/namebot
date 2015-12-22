@@ -120,6 +120,10 @@ class AffixWordsTestCase(unittest.TestCase):
         res = techniques.duplifixify(self.words)
         self.assertEqual(res[:3], ['shop ahop', 'shop bhop', 'shop chop'])
 
+    def test_duplifix_duplicates(self):
+        res = techniques.duplifixify(self.words)
+        self.assertTrue('shop shop' not in res)
+
     def test_infix(self):
         # TODO
         pass
