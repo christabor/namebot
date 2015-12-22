@@ -10,11 +10,11 @@ from . import settings as namebot_settings
 from . import normalization
 
 
-___prefixes___ = namebot_settings.PREFIXES
-___suffixes___ = namebot_settings.SUFFIXES
-___alphabet___ = namebot_settings.ALPHABET
-___vowels___ = namebot_settings.VOWELS
-___regexes___ = namebot_settings.regexes
+_prefixes = namebot_settings.PREFIXES
+_suffixes = namebot_settings.SUFFIXES
+_alphabet = namebot_settings.ALPHABET
+_vowels = namebot_settings.VOWELS
+_regexes = namebot_settings.regexes
 
 """
 Unless otherwise noted, all techniques operate
@@ -143,7 +143,7 @@ def reduplication_ablaut(words, count=1, random=True, vowel='e'):
     if len(words) < 2:
         raise InsufficientWordsError('Need more than one word to combine')
     new_words = []
-    substitution = choice(___vowels___) if random else vowel
+    substitution = choice(_vowels) if random else vowel
     for word in words:
         second = re.sub(r'a|e|i|o|u', substitution, word, count=count)
         # Only append if the first and second are different.
@@ -152,94 +152,113 @@ def reduplication_ablaut(words, count=1, random=True, vowel='e'):
     return new_words
 
 
-def affix_words(words, affix_type):
-    """
-    Do some type of affixing technique,
-    such as prefixing or suffixing.
-    TODO FINISH *-fixes from article
+def prefixify(words):
+    """Apply a prefix technique to a set of words
+
+    Args:
+        words (list) - The list of words to operate on.
+
+    Returns:
+        new_arr (list): the updated *fixed words
     """
     new_arr = []
-    if len(words):
-        if affix_type is 'prefix':
-            for word in words:
-                if not word:
-                    continue
-                for prefix in ___prefixes___:
-                    first_prefix_no_vowel = re.search(
-                        ___regexes___['no_vowels'], word[0])
-                    second_prefix_no_vowel = re.search(
-                        ___regexes___['no_vowels'], prefix[0])
-                    if first_prefix_no_vowel or second_prefix_no_vowel:
-                                # if there's a vowel at the end of
-                                # prefix but not at the beginning
-                                # of the word (or vice versa)
-                                vowel_beginning = re.search(
-                                    r'a|e|i|o|u', prefix[-1:])
-                                vowel_end = re.search(
-                                    r'^a|e|i|o|u', word[:1])
-                                if vowel_beginning or vowel_end:
-                                    new_arr.append('{}{}'.format(prefix, word))
+    for word in words:
+        if not word:
+            continue
+        for prefix in _prefixes:
+            first_prefix_no_vowel = re.search(_regexes['no_vowels'], word[0])
+            second_prefix_no_vowel = re.search(_regexes['no_vowels'], prefix[0])
+            if first_prefix_no_vowel or second_prefix_no_vowel:
+                # if there's a vowel at the end of
+                # prefix but not at the beginning
+                # of the word (or vice versa)
+                vowel_beginning = re.search(r'a|e|i|o|u', prefix[-1:])
+                vowel_end = re.search(r'^a|e|i|o|u', word[:1])
+                if vowel_beginning or vowel_end:
+                    new_arr.append('{}{}'.format(prefix, word))
+    return new_arr
 
-        elif affix_type is 'suffix':
-            for word in words:
-                if not word:
-                    continue
-                for suffix in ___suffixes___:
-                    prefix_start_vowel = re.search(
-                        ___regexes___['all_vowels'], word[0])
-                    suffix_start_vowel = re.search(
-                        ___regexes___['all_vowels'], suffix[0])
-                    if prefix_start_vowel or suffix_start_vowel:
-                            if suffix is "ify":
-                                if word[-1] is "e":
-                                    if word[-2] is not "i":
-                                        new_arr.append('{}{}'.format(
-                                            word[:-2], suffix))
-                                    else:
-                                        new_arr.append(
-                                            '{}{}'.format(
-                                                word[:-1], suffix))
-                                new_arr.append(word + suffix)
-                            else:
-                                new_arr.append(word + suffix)
 
-        elif affix_type is 'duplifix':
-            """
-            makes duplification
-            (e.g: teeny weeny, etc...)
-            """
-            for word in words:
-                if not word:
-                    continue
-                for letter in ___alphabet___:
-                    vowel_first = re.match(
-                        ___regexes___['all_vowels'], word[1])
-                    no_vowel_letter = re.match(
-                        ___regexes___['no_vowels'], letter)
-                    no_vowel_first = re.match(
-                        ___regexes___['no_vowels'], word[1])
-                    vowel_letter = re.match(
-                        ___regexes___['all_vowels'], letter)
-                    # check if the first letter is
-                    # NOT the same as the second letter in reduplication
-                    if word[0] is not letter:
-                        # check if the first word is
-                        # NOT the same as the second word. (or letter)
-                        if word is not letter + word[1:]:
-                            if vowel_first:
-                                if no_vowel_letter:
-                                    new_arr.append('{} {}{}'.format(
-                                        word, letter, word[1:]))
-                            elif no_vowel_first:
-                                if vowel_letter:
-                                    new_arr.append('{} {}{}'.format(
-                                        word, letter, word[1:]))
-        elif affix_type is "infix":
-            pass
+def suffixify(words):
+    """Apply a suffix technique to a set of words
 
-        elif affix_type is "disfix":
-            pass
+    Args:
+        words (list) - The list of words to operate on.
+            (e.g -> chard + ard = chardard -> chard)
 
+    Returns:
+        new_arr (list): the updated *fixed words
+    """
+    new_arr = []
+    for word in words:
+        if not word:
+            continue
+        for suffix in _suffixes:
+            prefix_start_vowel = re.search(_regexes['all_vowels'], word[0])
+            suffix_start_vowel = re.search(_regexes['all_vowels'], suffix[0])
+            if prefix_start_vowel or suffix_start_vowel:
+                if suffix is 'ify':
+                    if word[-1] is 'e':
+                        if word[-2] is not 'i':
+                            new_arr.append('{}{}'.format(word[:-2], suffix))
+                        else:
+                            new_arr.append('{}{}'.format(word[:-1], suffix))
+                    new_arr.append(word + suffix)
+                else:
+                    new_arr.append(word + suffix)
+    return new_arr
+
+
+def duplifixify(words):
+    """Apply a duplifix technique to a set of words (e.g: teeny weeny, etc...)
+
+    Args:
+        words (list) - The list of words to operate on.
+
+    Returns:
+        new_arr (list): the updated *fixed words
+    """
+    new_arr = []
+    for word in words:
+        if not word:
+            continue
+        for letter in _alphabet:
+            # check if the first letter is NOT the same as the second letter.
+            if word[0] is not letter:
+                # check if the first word is
+                # NOT the same as the second word.
+                if word is not letter + word[1:]:
+                    new_arr.append('{} {}{}'.format(word, letter, word[1:]))
+    return new_arr
+
+
+def disfixify(words):
+    """Apply a disfix technique to a set of words
+
+    TODO: implement
+
+    Args:
+        words (list) - The list of words to operate on.
+
+    Returns:
+        new_arr (list): the updated *fixed words
+    """
+    new_arr = []
+    return new_arr
+
+
+def infixify(words):
+    """Apply a disfix technique to a set of words
+
+    TODO: implement
+
+    Args:
+        words (list) - The list of words to operate on.
+
+    Returns:
+        new_arr (list): the updated *fixed words
+    """
+    new_arr = []
     return new_arr
 
 
@@ -364,8 +383,8 @@ def make_vowel(words, vowel_type, vowel_index):
                     p2 = j[pos_j: len(j)]
                     if len(p) + len(p2) > 2:
                         if re.search(
-                            ___regexes___['all_vowels'], p) or re.search(
-                                ___regexes___['all_vowels'], p2):
+                            _regexes['all_vowels'], p) or re.search(
+                                _regexes['all_vowels'], p2):
                                     if p[-1] is p2[0]:
                                         new_arr.append(p[:-1] + p2)
                                     else:
@@ -463,7 +482,7 @@ def make_vowelify(words):
     """
     new_arr = []
     for word in words:
-        if re.search(___regexes___['all_vowels'], word[:-2]):
+        if re.search(_regexes['all_vowels'], word[:-2]):
             new_arr.append(word[:-1])
     return new_arr
 
@@ -752,11 +771,11 @@ def generate_all_techniques(words):
             'alliterations': make_name_alliteration(words),
             'portmanteau': make_portmanteau_default_vowel(words),
             'vowels': make_vowelify(words),
-            'suffix': affix_words(words, 'suffix'),
-            'prefix': affix_words(words, 'prefix'),
-            'duplifix': affix_words(words, 'duplifix'),
-            'disfix': affix_words(words, 'disfix'),
-            'infix': affix_words(words, 'infix'),
+            'suffix': suffixify(words, 'suffix'),
+            'prefix': prefixify(words, 'prefix'),
+            'duplifix': duplifixify(words, 'duplifix'),
+            'disfix': disfixify(words, 'disfix'),
+            'infix': infixify(words, 'infix'),
             'founder_product_name': make_founder_product_name(
                 'Lindsey', 'Chris', 'Widgets'),
             'cc_to_vc_swap': make_cc_to_vc_swap(words),

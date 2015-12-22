@@ -109,16 +109,16 @@ class AffixWordsTestCase(unittest.TestCase):
         self.words = ['shop']
 
     def test_prefix(self):
-        res = techniques.affix_words(self.words, 'prefix')
+        res = techniques.prefixify(self.words)
         self.assertEqual(res[:3], ['ennishop', 'epishop', 'equishop'])
 
     def test_suffix(self):
-        res = techniques.affix_words(self.words, 'suffix')
+        res = techniques.suffixify(self.words)
         self.assertEqual(res[:3], ['shopage', 'shopable', 'shopible'])
 
     def test_duplifix(self):
-        # TODO
-        pass
+        res = techniques.duplifixify(self.words)
+        self.assertEqual(res[:3], ['shop ahop', 'shop bhop', 'shop chop'])
 
     def test_infix(self):
         # TODO
