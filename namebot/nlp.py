@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 import itertools
-from nltk.corpus import wordnet
+from nltk.corpus import wordnet, verbnet
 
 from . import normalization
 
@@ -120,6 +120,24 @@ def get_instance_hypernyms(synset, use_definitions=False):
 def get_hypernyms(synset, use_definitions=False):
     return _get_lemma_names(
         synset.hypernyms, use_definitions=use_definitions)
+
+
+def get_verb_lemmas(verbs):
+    """Return verbnet lemmas for the given verbs.
+    These verbs are stemmed before lookup to prevent empty results.
+
+    Args:
+        verbs (list) - The list of verbs (verbs) to reference.
+
+    Returns:
+        lemmas (list) - A list of lemmas for all verbs
+                        - these are not separated by verb.
+    """
+    lemmas = []
+    for verb in normalization.stem_words(verbs):
+        _lemmas = verbnet.classids(lemma=verb)
+        lemmas += [l.split('-')[0] for l in _lemmas]
+    return lemmas
 
 
 def get_word_synsets(word):

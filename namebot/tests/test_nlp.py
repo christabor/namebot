@@ -11,3 +11,18 @@ class NLPTestCase(unittest.TestCase):
             self.assertIsInstance(vals, dict)
             self.assertIsNotNone(synset)
             self.assertIsNotNone(vals)
+
+    def test_get_synsets_definitions(self):
+        res = nlp.get_synsets_definitions(words=['potato'])
+        self.assertIsInstance(res, list)
+        self.assertGreater(len(res), 0)
+
+    def test_get_verb_lemmas(self):
+        res = nlp.get_verb_lemmas(['flying', 'crying', 'dying'])
+        self.assertGreater(len(res), 0)
+        for word in res:
+            self.assertIsInstance(word, unicode)
+
+    def test_get_verb_lemmas_noverbs(self):
+        res = nlp.get_verb_lemmas(['cat', 'dog', 'parrot'])
+        self.assertEqual(len(res), 0)
