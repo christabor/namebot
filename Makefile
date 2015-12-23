@@ -7,6 +7,7 @@ install:
 	pip install -r requirements.txt
 	pip install -U nltk
 	python -m nltk.downloader wordnet
+	python -m nltk.downloader verbnet
 	python -m nltk.downloader stopwords
 	python -m nltk.downloader punkt
 	python -m nltk.downloader maxent_treebank_pos_tagger
