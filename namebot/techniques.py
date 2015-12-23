@@ -13,6 +13,7 @@ from . import normalization
 _prefixes = namebot_settings.PREFIXES
 _suffixes = namebot_settings.SUFFIXES
 _alphabet = namebot_settings.ALPHABET
+_consonants = namebot_settings.CONSONANTS
 _vowels = namebot_settings.VOWELS
 _regexes = namebot_settings.regexes
 
@@ -259,6 +260,33 @@ def infixify(words):
     """
     new_arr = []
     return new_arr
+
+
+def simulfixify(words, pairs=None, max=5):
+    """Generates randomly simulfixed words.
+
+    Args:
+        words (list) - List of words to operate on.
+        pairs (list, optional) - Simulfix pairs to use for each word.
+                                 If not specified, these will be generated
+                                 randomly as vowel + consonant strings.
+        max (int, optional): The number of simulfix pairs to generate
+                             (if pairs is not specified.)
+
+    Returns:
+        results (list) - The simulfix version of each word,
+                         for each simulfix pair.
+    """
+    results = []
+    if pairs is None:
+        pairs = ['{}{}'.format(choice(_vowels), choice(_consonants))
+                 for _ in range(max)]
+    for word in words:
+        for combo in pairs:
+            mid = len(word) // 2
+            _word = '{}{}{}'.format(word[0:mid], combo, word[mid:])
+            results.append(_word)
+    return results
 
 
 def palindrome(word):
@@ -770,11 +798,12 @@ def generate_all_techniques(words):
             'alliterations': make_name_alliteration(words),
             'portmanteau': make_portmanteau_default_vowel(words),
             'vowels': make_vowelify(words),
-            'suffix': suffixify(words, 'suffix'),
-            'prefix': prefixify(words, 'prefix'),
-            'duplifix': duplifixify(words, 'duplifix'),
-            'disfix': disfixify(words, 'disfix'),
-            'infix': infixify(words, 'infix'),
+            'suffix': suffixify(words),
+            'prefix': prefixify(words),
+            'duplifix': duplifixify(words),
+            'disfix': disfixify(words),
+            'infix': infixify(words),
+            'simulfix': simulfixify(words),
             'founder_product_name': make_founder_product_name(
                 'Lindsey', 'Chris', 'Widgets'),
             'cc_to_vc_swap': make_cc_to_vc_swap(words),

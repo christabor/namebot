@@ -132,6 +132,27 @@ class AffixWordsTestCase(unittest.TestCase):
         # TODO
         pass
 
+    def test_simulfix(self):
+        res = techniques.simulfixify(self.words)
+        self.assertIsInstance(res, list)
+        self.assertGreater(len(res), len(self.words))
+        # Confirm that the pairs were added to each word
+        for word in res:
+            self.assertEqual(len(self.words[0]) + 2, len(word))
+
+    def test_simulfix_custom_pairs(self):
+        res = techniques.simulfixify(self.words, pairs=['ab', 'ec', 'oz'])
+        self.assertEqual(res, ['shabop', 'shecop', 'shozop'])
+
+    def test_simulfix_empty_strings(self):
+        res = techniques.simulfixify(['', ''], pairs=['ab', 'ec'])
+        self.assertEqual(res, ['ab', 'ec', 'ab', 'ec'])
+
+    def test_simulfix_short_words(self):
+        res = techniques.simulfixify(['f', 'b', 'a'], pairs=['ab', 'ec'])
+        expected = ['abf', 'ecf', 'abb', 'ecb', 'aba', 'eca']
+        self.assertEqual(res, expected)
+
 
 class MakeFounderProductNameTestCase(unittest.TestCase):
 
