@@ -755,7 +755,6 @@ def generate_all_techniques(words):
             'punctuator': make_punctuator_vowels(words),
             'name_abbreviation': make_name_abbreviation(words),
             'make_portmanteau_split': make_portmanteau_split(words),
-            'latin_root': make_name_from_latin_root(words),
             'make_phrase': make_phrase(words),
             'forkerism': forkerism(words),
             'kniferism': kniferism(words),
