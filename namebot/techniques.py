@@ -3,6 +3,7 @@ from __future__ import division
 
 from random import choice
 from string import ascii_uppercase
+from collections import defaultdict
 import re
 import nltk
 
@@ -613,20 +614,9 @@ def get_descriptors(words):
     for later retrieval and usage
     """
 
-    descriptors = {}
+    descriptors = defaultdict(list)
     tokens = nltk.word_tokenize(' '.join(words))
     parts = nltk.pos_tag(tokens)
-
-    # TODO ADD freq. measurement to metrics
-
-    """
-    populate with an empty array for each type
-    so no KeyErrors will be thrown,
-    and no knowledge of NLTK classification
-    is required
-    """
-    for part in parts:
-        descriptors[part[1]] = []
 
     # Then, push the word into the matching type
     for part in parts:
