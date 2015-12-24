@@ -8,6 +8,7 @@ import nltk
 
 from . import settings as namebot_settings
 from . import normalization
+from . import techniques_language as langs
 
 
 _prefixes = namebot_settings.PREFIXES
@@ -559,16 +560,6 @@ def make_misspelling(words):
         for tokens in token_groups:
             new_arr.append(word.replace(*tokens))
     return normalization.uniquify(new_arr)
-
-
-def make_name_from_latin_root(name_list):
-    # TODO ADDME
-    """
-    This will take a latin word that is returned
-    from a seperate lookup function and tweak it
-    for misspelling specific to latin roots.
-    """
-    return
 
 
 def _pig_latinize(word, postfix='ay'):

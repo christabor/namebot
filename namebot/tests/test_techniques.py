@@ -250,13 +250,6 @@ class MakemisspellingTestCase(unittest.TestCase):
             assert word in res
 
 
-class MakeNameFromLatinRootTestCase(unittest.TestCase):
-    # TODO
-
-    def test_simple(self):
-        pass
-
-
 class PigLatinTestCase(unittest.TestCase):
 
     def test_simple(self):
