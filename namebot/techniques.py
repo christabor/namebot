@@ -602,19 +602,25 @@ def get_descriptors(words):
     and provide a dictionary with a list of each type
     for later retrieval and usage
     """
-
     descriptors = defaultdict(list)
     tokens = nltk.word_tokenize(' '.join(words))
     parts = nltk.pos_tag(tokens)
-
     # Then, push the word into the matching type
     for part in parts:
         descriptors[part[1]].append(part[0])
-
     return descriptors
 
 
 def _add_pos_subtypes(nouns, verbs):
+    """Combine alternating verbs and nouns into a new list.
+
+    Args:
+        nouns (list) - List of nouns, noun phrases, etc...
+        verbs (list) - List of verbs, verb phrases, etc...
+
+    Returns:
+        words (list) - The newly combined list
+    """
     words = []
     try:
         for noun in nouns:
@@ -626,7 +632,17 @@ def _add_pos_subtypes(nouns, verbs):
     return words
 
 
-def _check_pos_subtypes(key, words):
+def _create_pos_subtypes(words):
+    """Check the part-of-speech tags for a noun-phrase, and if it exists,
+    add combinations with noun-phrase + verb-phrase, noun-phrase + verb,
+    and noun-phrase + adverb, for each pos type that exists.
+
+    Args:
+        words (list) - List of verbs, verb phrases, etc...
+
+    Returns:
+        new_words (list) - The newly combined list
+    """
     new_words = []
     types = words.keys()
     if 'NNP' in types:
@@ -640,24 +656,16 @@ def _check_pos_subtypes(key, words):
 
 
 def make_descriptors(words):
-    """
-    Make descriptor names based off of a
-    verb or adjective and noun combination.
+    """Make descriptor names based from a verb + noun,
+    or adjective + noun combination.
     Examples:
         -Pop Cap,
         -Big Fish,
         -Red Fin,
         -Cold Water (grill), etc...
-
     Combines VBP/VB/RB, with NN/NNS
-
-    ...could be optimized
     """
-    new_words = []
-    new_words += _check_pos_subtypes('NNP', words)
-    new_words += _check_pos_subtypes('NNS', words)
-    new_words += _check_pos_subtypes('NN', words)
-    return list(set(new_words))
+    return list(set(_create_pos_subtypes(words)))
 
 
 def all_prefix_first_vowel(word, letters=list(ascii_uppercase)):
