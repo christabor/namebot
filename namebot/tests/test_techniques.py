@@ -167,20 +167,6 @@ class MakeFounderProductNameTestCase(unittest.TestCase):
                 'Foo', 'Bar', 'Goods'), 'foo bar & co goods')
 
 
-class MakeNameObscuredTestCase(unittest.TestCase):
-    # TODO
-
-    def test_simple(self):
-        pass
-
-
-class MakeCCtoVCSwapTestCase(unittest.TestCase):
-    # TODO
-
-    def test_simple(self):
-        pass
-
-
 class MakeNameAlliterationTestCase(unittest.TestCase):
 
     def test_simple(self):
@@ -300,13 +286,6 @@ class AcronymLastnameTestCase(unittest.TestCase):
         desc = 'A cool product'
         self.assertEqual(
             'CP McDonald', techniques.acronym_lastname(desc, 'McDonald'))
-
-
-class MakeWordMetaphorTestCase(unittest.TestCase):
-    # TODO
-
-    def test_simple(self):
-        pass
 
 
 class MakePhraseTestCase(unittest.TestCase):

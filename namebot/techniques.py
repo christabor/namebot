@@ -17,11 +17,6 @@ _consonants = namebot_settings.CONSONANTS
 _vowels = namebot_settings.VOWELS
 _regexes = namebot_settings.regexes
 
-"""
-Unless otherwise noted, all techniques operate
-on a list of words and return a list of modified words.
-"""
-
 
 class InsufficientWordsError(Exception):
     def __init__(self, msg):
@@ -309,34 +304,6 @@ def make_founder_product_name(founder1, founder2, product):
         product)
 
 
-def make_name_obscured(words):
-    """
-    Takes a name and makes it obscure,
-    ala Bebo, Ning, Bix, Jajah, Kiko.
-
-    TODO ADDME
-    """
-    return
-
-
-def make_cc_to_vc_swap(arr):
-    """
-    make name based on original word,
-    but swap a CC with a V+C combo.
-    if no double CC is found, skip it.
-
-    origination: zappos -> zapatos
-
-    examples:
-        christopher -> christofaher
-        christopher -> christokoer
-        marshmallow -> margimallow
-
-    TODO ADDME
-    """
-    return
-
-
 def make_name_alliteration(word_array, divider=' '):
     new_arr = []
     """
@@ -522,9 +489,6 @@ def make_misspelling(words):
 
     Brute force all combinations,
     then use double metaphone to remove odd ones.
-    ...find a better way to do this
-    TODO
-
     """
     token_groups = (
         ('ics', 'ix'),
@@ -631,15 +595,6 @@ def _pig_latinize(word, postfix='ay'):
 
 def pig_latinize(words, postfix='ay'):
     return [_pig_latinize(word, postfix=postfix) for word in words]
-
-
-def make_word_metaphor(words):
-    # TODO ADDME
-    """
-    Make a metaphor based
-    on some words...?
-    """
-    return
 
 
 def acronym_lastname(description, lastname):
@@ -806,13 +761,10 @@ def generate_all_techniques(words):
             'simulfix': simulfixify(words),
             'founder_product_name': make_founder_product_name(
                 'Lindsey', 'Chris', 'Widgets'),
-            'cc_to_vc_swap': make_cc_to_vc_swap(words),
-            'name_obscured': make_name_obscured(words),
             'punctuator': make_punctuator_vowels(words),
             'name_abbreviation': make_name_abbreviation(words),
             'make_portmanteau_split': make_portmanteau_split(words),
             'latin_root': make_name_from_latin_root(words),
-            'make_word_metaphor': make_word_metaphor(words),
             'make_phrase': make_phrase(words),
             'forkerism': forkerism(words),
             'kniferism': kniferism(words),
