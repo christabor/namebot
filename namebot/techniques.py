@@ -9,7 +9,6 @@ import nltk
 
 from . import settings as namebot_settings
 from . import normalization
-from . import techniques_language as langs
 
 
 _prefixes = namebot_settings.PREFIXES
