@@ -596,16 +596,6 @@ def acronym_lastname(description, lastname):
     return '{} {}'.format(desc, lastname)
 
 
-def make_phrase(words):
-    # TODO ADDME
-    """
-    WIP (e.g.
-        simplyhired, second life,
-        stumbleupon)
-    """
-    return
-
-
 def get_descriptors(words):
     """
     Use NLTK to first grab tokens by looping through words,

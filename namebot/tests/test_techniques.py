@@ -281,13 +281,6 @@ class AcronymLastnameTestCase(unittest.TestCase):
             'CP McDonald', techniques.acronym_lastname(desc, 'McDonald'))
 
 
-class MakePhraseTestCase(unittest.TestCase):
-    # TODO
-
-    def test_simple(self):
-        pass
-
-
 class GetDescriptorsTestCase(unittest.TestCase):
 
     def test_complex(self):
