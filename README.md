@@ -33,6 +33,10 @@ Similar to normalization, but for filtering based on rules, like length, count, 
 
 ## How to setup server and test:
 
+```
+sudo make install
+```
+
 Check out https://github.com/Automotron/namebot-flask to see an example app
 and configuration setup to use namebot and generate results with test data.
 
@@ -40,6 +44,11 @@ and configuration setup to use namebot and generate results with test data.
 See [requirements.txt](requirements.txt) and [Makefile](Makefile) for details.
 
 ## Tests
+
+```
+sudo make install
+make tests
+```
 
 Tests are available in the `tests/` folder. They are not super comprehensive, but there is coverage. Test runner is provided by nose and can be run via `make`.
 
