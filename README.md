@@ -2,6 +2,7 @@
 [![Build Status](https://travis-ci.org/christabor/namebot.svg?branch=master)](https://travis-ci.org/christabor/namebot)
 [![PyPI version](https://badge.fury.io/py/namebot.svg)](http://badge.fury.io/py/namebot)
 ![Donation badge](https://img.shields.io/gratipay/christabor.svg)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/christabor/namebot/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/christabor/namebot/?branch=master)
 
 # Namebot
 A company/product/whatever name generating tool written in Python.
