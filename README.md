@@ -3,6 +3,7 @@
 [![PyPI version](https://badge.fury.io/py/namebot.svg)](http://badge.fury.io/py/namebot)
 ![Donation badge](https://img.shields.io/gratipay/christabor.svg)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/christabor/namebot/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/christabor/namebot/?branch=master)
+[![Code Climate](https://codeclimate.com/github/christabor/namebot/badges/gpa.svg)](https://codeclimate.com/github/christabor/namebot)
 
 # Namebot
 A company/product/whatever name generating tool written in Python.
@@ -66,5 +67,3 @@ Versioning style follows the semantic versioning convention. For more info, see 
     </a>
     <div class="bitcoin-address">Ƀitcoin address: <code>1G5MdiPHCnPJUKXW1SJwWmUTDVjG1aG7xj</code></div>
 </div>
-
-![Donation badge](https://img.shields.io/gratipay/christabor.svg)
