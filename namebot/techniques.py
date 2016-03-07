@@ -1,3 +1,5 @@
+"""Primary techniques for the core functionality of namebot."""
+
 from __future__ import absolute_import
 from __future__ import division
 
@@ -45,8 +47,7 @@ def domainify(words, tld='com'):
 
 
 def spoonerism(words):
-    """Convert a list of words formatted with the spoonerism
-    linguistic technique.
+    """Convert a list of words formatted with the spoonerism technique.
 
     Args:
         words (list) - The list of words to operate on
@@ -74,8 +75,7 @@ def spoonerism(words):
 
 
 def kniferism(words):
-    """Convert a list of words formatted with the kniferism
-    linguistic technique.
+    """Convert a list of words formatted with the kniferism technique.
 
     Args:
         words (list) - The list of words to operate on
@@ -107,8 +107,7 @@ def kniferism(words):
 
 
 def forkerism(words):
-    """Convert a list of words formatted with the forkerism
-    linguistic technique.
+    """Convert a list of words formatted with the forkerism technique.
 
     Args:
         words (list) - The list of words to operate on
@@ -141,10 +140,10 @@ def forkerism(words):
 
 
 def reduplication_ablaut(words, count=1, random=True, vowel='e'):
-    """
-    http://phrases.org.uk/meanings/reduplication.html
-    A technique to combine words and altering the vowels
-    e.g ch[i]t-ch[a]t, d[i]lly, d[a]lly
+    """A technique to combine words and altering the vowels.
+
+    e.g ch[i]t-ch[a]t, d[i]lly, d[a]lly.
+    See http://phrases.org.uk/meanings/reduplication.html.
     """
     if len(words) < 2:
         raise InsufficientWordsError('Need more than one word to combine')
@@ -159,7 +158,7 @@ def reduplication_ablaut(words, count=1, random=True, vowel='e'):
 
 
 def prefixify(words):
-    """Apply a prefix technique to a set of words
+    """Apply a prefix technique to a set of words.
 
     Args:
         words (list) - The list of words to operate on.
@@ -186,7 +185,7 @@ def prefixify(words):
 
 
 def suffixify(words):
-    """Apply a suffix technique to a set of words
+    """Apply a suffix technique to a set of words.
 
     Args:
         words (list) - The list of words to operate on.
@@ -216,7 +215,7 @@ def suffixify(words):
 
 
 def duplifixify(words):
-    """Apply a duplifix technique to a set of words (e.g: teeny weeny, etc...)
+    """Apply a duplifix technique to a set of words (e.g: teeny weeny, etc...).
 
     Args:
         words (list) - The list of words to operate on.
@@ -238,7 +237,7 @@ def duplifixify(words):
 
 
 def disfixify(words):
-    """Apply a disfix technique to a set of words
+    """Apply a disfix technique to a set of words.
 
     TODO: implement
 
@@ -253,7 +252,7 @@ def disfixify(words):
 
 
 def infixify(words):
-    """Apply a disfix technique to a set of words
+    """Apply a disfix technique to a set of words.
 
     TODO: implement
 
@@ -268,7 +267,7 @@ def infixify(words):
 
 
 def simulfixify(words, pairs=None, max=5):
-    """Generates randomly simulfixed words.
+    """Generate simulfixed words.
 
     Args:
         words (list) - List of words to operate on.
@@ -303,11 +302,7 @@ def palindromes(words):
 
 
 def make_founder_product_name(founder1, founder2, product):
-    """
-    get the name of two people
-    forming a company and combine it
-    TODO: 1, 0, infinite
-    """
+    """Get the name of two people forming a company and combine it."""
     return '{} & {} {}'.format(
         founder1[0].upper(),
         founder2[0].upper(),
@@ -337,9 +332,8 @@ def make_name_alliteration(word_array, divider=' '):
 
 
 def make_name_abbreviation(words):
-    """
-    this function will make some kind of
-    interesting company acronym
+    """Will make some kind of company acronym.
+
     eg: BASF, AT&T, A&W
     Returns a single string of the new word combined.
     """
@@ -347,8 +341,9 @@ def make_name_abbreviation(words):
 
 
 def make_vowel(words, vowel_type, vowel_index):
-    """Primary for all Portmanteau generators, that creates
-    the portmanteau based on :vowel_index, and :vowel_type.
+    """Primary for all Portmanteau generators.
+
+    This creates the portmanteau based on :vowel_index, and :vowel_type.
 
     The algorithm works as following:
 
@@ -397,9 +392,9 @@ def make_vowel(words, vowel_type, vowel_index):
 
 
 def make_portmanteau_default_vowel(words):
-    """
-    Make a portmanteau based on vowel
-    matches (ala Brad+Angelina = Brangelina)
+    """Make a portmanteau based on vowel matches.
+
+    E.g. (ala Brad+Angelina = Brangelina)
     Only matches for second to last letter
     in first word and matching vowel in second word.
 
@@ -423,9 +418,9 @@ def make_portmanteau_default_vowel(words):
 
 
 def make_portmanteau_split(words):
-    """
-    nikon = [ni]pp[on] go[k]aku
-    make words similar to nikon,
+    """Make a portmeanteau, split by vowel/consonant combos.
+
+    Based on the word formation of nikon: [ni]pp[on] go[k]aku,
     which is comprised of Nippon + Gokaku.
 
     We get the first C+V in the first word,
@@ -456,8 +451,9 @@ def make_portmanteau_split(words):
 
 
 def make_punctuator(words, replace):
-    """Put some hyphens or dots, or a given punctutation via :replace
-    in the word, but only around vowels ala "del.ic.ious"
+    """Put some hyphens or dots, or a given punctutation.
+
+    Works via :replace in the word, but only around vowels ala "del.ic.ious"
     """
     def _replace(words, replace, replace_type='.'):
         return [word.replace(
@@ -469,8 +465,7 @@ def make_punctuator(words, replace):
 
 
 def make_punctuator_vowels(words):
-    """Helper function that combines all
-    possible combinations for vowels"""
+    """Helper function that combines all possible combinations for vowels."""
     new_words = []
     new_words += make_punctuator(words, 'a')
     new_words += make_punctuator(words, 'e')
@@ -481,9 +476,7 @@ def make_punctuator_vowels(words):
 
 
 def make_vowelify(words):
-    """Chop off consonant ala nautica
-    if second to last letter is a vowel.
-    """
+    """Chop off consonant ala nautica if second to last letter is a vowel."""
     new_arr = []
     for word in words:
         if re.search(_regexes['all_vowels'], word[:-2]):
@@ -492,14 +485,7 @@ def make_vowelify(words):
 
 
 def make_misspelling(words):
-    """
-    This is used as the primary "misspelling"
-    technique, through a few different techniques
-    that are all categorized as misspelling.
-
-    Brute force all combinations,
-    then use double metaphone to remove odd ones.
-    """
+    """Misspell a word in numerous ways, to create interesting results."""
     token_groups = (
         ('ics', 'ix'),
         ('ph', 'f'),
@@ -717,8 +703,8 @@ def recycle(words, func, times=2):
 
 
 def super_scrub(data):
-    """Run words through a comprehensive
-    list of filtering functions
+    """Run words through a comprehensive list of filtering functions.
+
     Expects a dictionary with key "words"
     """
     for technique in data['words']:
