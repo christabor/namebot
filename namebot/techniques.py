@@ -25,6 +25,15 @@ class InsufficientWordsError(Exception):
 
 
 def domainify(words, tld='com'):
+    """Convert words into a domain format for testing domains.
+
+    Args:
+        words (list): List of words
+        tld (str, optional): The TLD (top-level domain) to use.
+
+    Returns:
+        list: The modified list of words.
+    """
     _words = []
     if tld.startswith('.'):
         tld = tld.replace('.', '')
@@ -656,8 +665,9 @@ def _create_pos_subtypes(words):
 
 
 def make_descriptors(words):
-    """Make descriptor names based from a verb + noun,
-    or adjective + noun combination.
+    """Make descriptor names.
+
+    Based from a verb + noun, adjective + noun combination.
     Examples:
         -Pop Cap,
         -Big Fish,
@@ -698,7 +708,7 @@ def all_prefix_first_vowel(word, letters=list(ascii_uppercase)):
 
 
 def recycle(words, func, times=2):
-    """Runs a set of words applied to `func` and re-runs it
+    """Run a set of words applied to `func` and re-runs it
     `times` with the last output as the new input.
     `words` must be a list, and `func` must return a list."""
     if times > 0:
@@ -707,8 +717,7 @@ def recycle(words, func, times=2):
 
 
 def super_scrub(data):
-    """
-    Runs words through a comprehensive
+    """Run words through a comprehensive
     list of filtering functions
     Expects a dictionary with key "words"
     """
@@ -721,10 +730,7 @@ def super_scrub(data):
 
 
 def generate_all_techniques(words):
-    """
-    Generates all techniques across the
-    library in one place, and cleans them for use
-    """
+    """Generate all techniques across the library in one place."""
     data = {
         'words': {
             'alliterations': make_name_alliteration(words),
