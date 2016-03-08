@@ -1,10 +1,17 @@
+"""Provides various scoring methods for word strength."""
+
 import fuzzy
 import re
 
-# http://pypi.python.org/pypi/Fuzzy
-
 
 def score_dmetaphone(words):
+    """Score words using the double metaphone algorithm.
+
+    Args:
+        words (list) - the list of words.
+    Returns:
+        scores (list) - the scored words
+    """
     scores = []
     dmeta = fuzzy.DMetaphone()
     for word in words:
@@ -14,6 +21,13 @@ def score_dmetaphone(words):
 
 
 def score_soundex(words):
+    """Score words using the soundex algorithm.
+
+    Args:
+        words (list) - the list of words.
+    Returns:
+        scores (list) - the scored words
+    """
     scores = []
     soundex = fuzzy.Soundex(4)
     for word in words:
@@ -23,6 +37,13 @@ def score_soundex(words):
 
 
 def score_nysiis(words):
+    """Score words using the nysiis algorithm.
+
+    Args:
+        words (list) - the list of words.
+    Returns:
+        scores (list) - the scored words
+    """
     scores = []
     for word in words:
         scored = '{}: {}'.format(word.lower(), fuzzy.nysiis(word))
@@ -31,9 +52,12 @@ def score_nysiis(words):
 
 
 def score_length(word):
-    """Return a score, 1-5, of the length of the word. Really long, or
-    really short words get a lower score. There is no hard science, but popular
-    opinion suggests that a word somewhere between 8-15 letters is optimal."""
+    """Return a score, 1-5, of the length of the word.
+
+    Really long, or really short words get a lower score.
+    There is no hard science, but popular opinion suggests
+    that a word somewhere between 8-15 letters is optimal.
+    """
     if not word or len(word) == 0:
         return 0
     _len = len(word)
@@ -60,8 +84,8 @@ def bounded(num, start, end):
 
 
 def score_pronounceability(word):
+    """Get the ratio of vowels to consonants, a very basic measurement.
 
-    """Gets the ratio of vowels to consonants, a very basic measurement.
     Half vowels and half consonants indicates a highly pronounceable word.
     For example, 0.5 / 0.5 = 1.0, so one is perfect, and lower is worse.
 
@@ -90,7 +114,6 @@ def score_pronounceability(word):
         ratio = vowels / consonants
     else:
         ratio = consonants / vowels
-    print('w: {} v: {} c: {} r: {}'.format(word, vowels, consonants, ratio))
     if ratio == 0.0:
         return 0
     if ratio == 1.0:
@@ -109,8 +132,10 @@ def score_pronounceability(word):
 
 
 def score_simplicity(word):
-    """Determine how simple the word is. Simple is defined as the number of
-    separate words. In this case, higher is better, indicating a better score.
+    """Determine how simple the word is.
+
+    Simple is defined as the number of separate words.
+    In this case, higher is better, indicating a better score.
 
     Args:
         word (string) - the name
@@ -138,8 +163,11 @@ def score_simplicity(word):
 
 
 def score_name_overall(word):
-    """Scores the name using separate scoring functions, then normalize to 100
-    to give an overall intuitive score. The closer to 100%, the better.
+    """Score the name using separate scoring functions, then normalize to 100.
+
+    This method gives an overall intuitive score.
+    The closer to 100%, the better.
+
     Args:
         word (string) - the name
     Returns:
@@ -158,6 +186,7 @@ def score_name_overall(word):
 
 def score_names_overall(words):
     """Score all names.
+
     Args:
         words (list) - the list of words.
     Returns:
@@ -170,6 +199,13 @@ def score_names_overall(words):
 
 
 def generate_all_scoring(words):
+    """Return all scoring methods for a set of words.
+
+    Args:
+        words (list) - the list of words.
+    Returns:
+        words (dict) - the scores, keyed by scoring name.
+    """
     return {
         'dmetaphone': score_dmetaphone(words),
         'soundex': score_soundex(words),
