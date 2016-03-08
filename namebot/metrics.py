@@ -1,23 +1,23 @@
+"""Metrics for measuring various aspects of words.
+
+Conventions used in this utility:
+1.  All functions return a dictionary,
+    with key 'data' and/or 'summary':
+    return {
+        'data': data,
+        'summary': summary or None
+    }
+"""
+
 from __future__ import division
 import re
 from pattern.en import parse
 from pattern.web import sort
 from nltk import pos_tag
 
-"""
-    Conventions used in this utility:
-    1.  All functions return a dictionary,
-        with key 'data' and/or 'summary':
-        return {
-            'data': data,
-            'summary': summary or None
-        }
-
-"""
-
 
 def prep_file(file_name):
-    """Takes a file, extracts items line-by-line, and returns a list of them.
+    """Take a file, extracts items line-by-line, and returns a list of them.
 
     Args:
         file_name (str): The file name to open
@@ -33,14 +33,13 @@ def prep_file(file_name):
 
 
 def get_named_numbers_1_10(words):
-    """Check for numbers spelled out e.g. One, Two, Three, Four, and return
-    a text summary and the number of matches.
+    """Return a summary of words spelled out (e.g. one, two).
 
     Args:
         words (list): A list of words
 
     Returns:
-        data (dict) - A dictionary with `data` and `summary` keys.
+        dict: The data and summary results.
     """
     matches = []
     numbers = re.compile(
@@ -56,14 +55,13 @@ def get_named_numbers_1_10(words):
 
 
 def name_length(words):
-    """Check the length of each word and return a list of all lengths,
-    and a summary of the average.
+    """Check the length of each word and an average.
 
     Args:
         words (list): A list of words
 
     Returns:
-        data (dict) - A dictionary with `data` and `summary` keys.
+        dict: The data and summary results.
     """
     names_length = []
     for val in words:
@@ -78,14 +76,13 @@ def name_length(words):
 
 
 def name_vowel_count(words):
-    """Check the number of times a vowel occurs in each word, and total
-    the results.
+    """Check the number of times vowels occurs, and total the results.
 
     Args:
         words (list): A list of words
 
     Returns:
-        data (dict) - A dictionary with `data` and `summary` keys.
+        dict: The data and summary results.
     """
     num_count = {'a': 0, 'e': 0, 'i': 0, 'o': 0, 'u': 0}
     try:
@@ -105,13 +102,13 @@ def name_vowel_count(words):
 
 
 def name_starts_with_vowel(words):
-    """Check the number of times a list of words starts with a vowel
+    """Check the number of times a list of words starts with a vowel.
 
     Args:
         words (list): A list of words
 
     Returns:
-        data (dict) - A dictionary with `data` and `summary` keys.
+        dict: The data and summary results.
     """
     vowelcount = 0
     vowels = re.compile(r'\A[aeiou]')
@@ -134,7 +131,7 @@ def get_digits_frequency(words):
         words (list): A list of words
 
     Returns:
-        data (dict) - A dictionary with `data` and `summary` keys.
+        dict: The data and summary results.
     """
     new_words = []
     count = 0
@@ -153,13 +150,13 @@ def get_digits_frequency(words):
 
 
 def get_first_letter_frequency(words):
-    """Add the frequency of first letters e.g. [C]at, [C]law, c = 2
+    """Add the frequency of first letters e.g. [C]at, [C]law, c = 2.
 
     Args:
         words (list): A list of words
 
     Returns:
-        data (dict) - A dictionary with `data` and `summary` keys.
+        dict: The data and summary results.
     """
     letters = {}
     # populate keys
@@ -177,13 +174,13 @@ def get_first_letter_frequency(words):
 
 
 def get_special_chars(words):
-    """Finds occurrences of special characters (non-alphabetical characters)
+    """Find occurrences of special characters (non-alphabetical characters).
 
     Args:
         words (list): A list of words
 
     Returns:
-        data (dict) - A dictionary with `data` and `summary` keys.
+        dict: The data and summary results.
     """
     data = []
     chars = re.compile(r'[^a-z]', re.IGNORECASE)
@@ -198,13 +195,13 @@ def get_special_chars(words):
 
 
 def get_word_types(words):
-    """Determines the occurrences of pos types.
+    """Determine the occurrences of pos types.
 
     Args:
         words (list): A list of words
 
     Returns:
-        data (dict) - A dictionary with `data` and `summary` keys.
+        dict: The data and summary results.
     """
     new_arr = []
     for val in words:
@@ -228,13 +225,13 @@ def get_word_types(words):
 
 
 def get_name_spaces(words):
-    """Checks number of spaces for a given set of words
+    """Check number of spaces for a given set of words.
 
     Args:
         words (list): A list of words
 
     Returns:
-        data (dict) - A dictionary with `data` and `summary` keys.
+        dict: The data and summary results.
     """
     results = [{'word': word, 'spaces': len(word.split(r' '))}
                for word in words]
@@ -245,13 +242,13 @@ def get_name_spaces(words):
 
 
 def get_consonant_repeat_frequency(words):
-    """Checks for repeating consonant frequency for a given set of words
+    """Check for repeating consonant frequency for a given set of words.
 
     Args:
         words (list): A list of words
 
     Returns:
-        data (dict) - A dictionary with `data` and `summary` keys.
+        dict: The data and summary results.
     """
     count = 0
     cons = re.compile(r'[^a|e|i|o|u{6}]')
@@ -265,14 +262,13 @@ def get_consonant_repeat_frequency(words):
 
 
 def get_consonant_duplicate_repeat_frequency(words):
-    """Checks for duplicate repeating consonant
-    frequency for a given set of words
+    """Check for duplicate repeating consonant frequency.
 
     Args:
         words (list): A list of words
 
     Returns:
-        data (dict) - A dictionary with `data` and `summary` keys.
+        dict: The data and summary results.
     """
     count = 0
     cons_dup = re.compile(r'[^a|e|i|o|u]{1,}')
@@ -286,13 +282,13 @@ def get_consonant_duplicate_repeat_frequency(words):
 
 
 def get_vowel_repeat_frequency(words):
-    """Checks for repeating vowel frequency for a given set of words
+    """Check for repeating vowel frequency for a given set of words.
 
     Args:
         words (list): A list of words
 
     Returns:
-        data (dict) - A dictionary with `data` and `summary` keys.
+        dict: The data and summary results.
     """
     count = 0
     cons_vowel = re.compile(r'[aeiou{3}]')
@@ -306,20 +302,36 @@ def get_vowel_repeat_frequency(words):
 
 
 def get_adjective_verb_or_noun(words):
-    # TODO
+    """Get the number of words that are classified as verbs or nouns.
+
+    Args:
+        words (TYPE): Description
+
+    Returns:
+        dict: The data and summary results.
+    """
+    total = len(words)
+    data = {'verbs': 0, 'nouns': 0}
+    verby = ['VBP', 'VB', 'RB', 'VBG']
+    nouns = ['NN', 'NNP']
+    for word, tag in pos_tag(words):
+        if tag in nouns:
+            data['nouns'] += 1
+        elif tag in verby:
+            data['verbs'] += 1
+    remainder = total - (data['verbs'] + data['nouns'])
     return {
-        'data': None,
-        'summary': None
+        'data': data,
+        'summary': ('Of {0} words, {1} were nouns, {2} were verbs, '
+                    'and {3} were everything else.').format(
+                        total, data['nouns'], data['verbs'], remainder)
     }
 
 
 def get_keyword_relevancy_map(words, n_list, terms, sortcontext,
                               enginetype='BING',
                               license=None):
-    # TODO
-    """
-    http://www.clips.ua.ac.be/pages/pattern-web#sort
-    """
+    """http://www.clips.ua.ac.be/pages/pattern-web#sort."""
     results_list = []
     results = sort(
         terms=[],
@@ -340,11 +352,7 @@ def get_keyword_relevancy_map(words, n_list, terms, sortcontext,
 
 def check_trademark_registration(words):
     # TODO
-    """
-    search the USTM office and return
-    the number of results, and
-    what they are (if applicable)
-    """
+    """Search the USTM office and return the number of results."""
     return {
         'data': None,
         'summary': None
@@ -353,34 +361,24 @@ def check_trademark_registration(words):
 
 def check_domain_searches(words):
     # TODO
-    """
-    check domains for each name...
-    perhap hook into other domain
-    name generators, sites..?
-    """
-    return {
-        'data': None,
-        'summary': None
-    }
+    """Check domain search results for each name."""
+    raise NotImplemented
 
 
 def get_search_result_count(words):
     # TODO
     """
-    check google results and return
-    a number of results (number)
+    Check google results and return the number of results.
 
     http://www.clips.ua.ac.be/pages/pattern-web#DOM
     """
-    return {
-        'data': None,
-        'summary': None
-    }
+    raise NotImplemented
 
 
 def categorize_word_type(words):
-    """Gets the common naming strategy 'category' of a name,
-    based on precedence. Categories are derived from
+    """Get the common naming strategy 'category' of a name, based on precedence.
+
+    Categories are derived from
     http://www.thenameinspector.com/10-name-types/,
     so it is important to note there is no agreed upon standard,
     meaning it is ultimately a little arbitrary.
@@ -418,12 +416,21 @@ def categorize_word_type(words):
         # TODO:
         # misspelled, foreign, tweaked, affixed, fake_obscure,
         # initials_acronym, blend, puns, person, compound
-        """Returns the likely distribution for all categories,
-        given a single word."""
-        categories = {'real': 0, 'misspelled': 0, 'foreign': 0, 'compound': 0,
-                      'phrase': 0, 'blend': 0, 'tweaked': 0, 'affixed': 0,
-                      'fake_obscure': 0, 'puns': 0, 'person': 0,
-                      'initials_acronym': 0}
+        """Return the distribution for all categories, given a single word."""
+        categories = {
+            'real': 0,
+            'misspelled': 0,
+            'foreign': 0,
+            'compound': 0,
+            'phrase': 0,
+            'blend': 0,
+            'tweaked': 0,
+            'affixed': 0,
+            'fake_obscure': 0,
+            'puns': 0,
+            'person': 0,
+            'initials_acronym': 0,
+        }
         if len(word.split(' ')) == 1:
             # Real words are single
             categories['real'] = 50
@@ -443,10 +450,9 @@ def categorize_word_type(words):
 
 
 def get_word_ranking(words):
-    """
-    use google results and get a quality of
-    ranking based on other metrics such as
-    domain name availability,
+    """Use google results and get a quality of ranking.
+
+    This is based on other metrics such as domain name availability,
     google results and others.
     """
     results = []
@@ -461,6 +467,15 @@ def get_word_ranking(words):
 
 
 def generate_all_metrics(filename=None, words=None):
+    """Generate all metrics in this module in one place.
+
+    Args:
+        filename (str, optional): A filename to load words from.
+        words (TYPE, optional): Words to use, if file is not specified.
+
+    Returns:
+        dict: All metrics results, keyed by name.
+    """
     if not filename and not words:
         return None
     if filename:

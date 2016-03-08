@@ -142,10 +142,21 @@ class GetVowelRepeatFrequencyTestCase(unittest.TestCase):
 
 
 class GetAdjectiveVerbOrNounTestCase(unittest.TestCase):
-    # TODO
 
-    def test_basic(self):
-        pass
+    def test_only_nouns(self):
+        res = metrics.get_adjective_verb_or_noun(['cat', 'dog'])
+        self.assertEqual(res['data']['nouns'], 2)
+        self.assertEqual(res['data']['verbs'], 0)
+
+    def test_only_verbs(self):
+        res = metrics.get_adjective_verb_or_noun(['jumping', 'flying'])
+        self.assertEqual(res['data']['nouns'], 0)
+        self.assertEqual(res['data']['verbs'], 2)
+
+    def test_noun_verbs(self):
+        res = metrics.get_adjective_verb_or_noun(['jumping', 'dog'])
+        self.assertEqual(res['data']['nouns'], 1)
+        self.assertEqual(res['data']['verbs'], 1)
 
 
 class GetKeywordRelevancyMapTestCase(unittest.TestCase):
