@@ -21,11 +21,6 @@ _vowels = namebot_settings.VOWELS
 _regexes = namebot_settings.regexes
 
 
-class InsufficientWordsError(Exception):
-    def __init__(self, msg):
-        self.msg = msg
-
-
 def domainify(words, tld='com'):
     """Convert words into a domain format for testing domains.
 
@@ -61,7 +56,7 @@ def spoonerism(words):
     "First: [f]oo [b]ar => boo far"
     new_words = []
     if len(words) < 2:
-        raise InsufficientWordsError('Need more than one word to combine')
+        raise ValueError('Need more than one word to combine')
     for k, word in enumerate(words):
         try:
             new_words.append('{}{} {}{}'.format(
@@ -88,7 +83,7 @@ def kniferism(words):
     """
     "Mid: f[o]o b[a]r => fao bor"
     if len(words) < 2:
-        raise InsufficientWordsError('Need more than one word to combine')
+        raise ValueError('Need more than one word to combine')
     new_words = []
     for k, word in enumerate(words):
         try:
@@ -120,7 +115,7 @@ def forkerism(words):
     """
     "Last: fo[o] ba[r] => for bao"
     if len(words) < 2:
-        raise InsufficientWordsError('Need more than one word to combine')
+        raise ValueError('Need more than one word to combine')
     new_words = []
     for k, word in enumerate(words):
         try:
@@ -146,7 +141,7 @@ def reduplication_ablaut(words, count=1, random=True, vowel='e'):
     See http://phrases.org.uk/meanings/reduplication.html.
     """
     if len(words) < 2:
-        raise InsufficientWordsError('Need more than one word to combine')
+        raise ValueError('Need more than one word to combine')
     new_words = []
     substitution = choice(_vowels) if random else vowel
     for word in words:
@@ -171,8 +166,10 @@ def prefixify(words):
         if not word:
             continue
         for prefix in _prefixes:
-            first_prefix_no_vowel = re.search(_regexes['no_vowels'], word[0])
-            second_prefix_no_vowel = re.search(_regexes['no_vowels'], prefix[0])
+            first_prefix_no_vowel = re.search(
+                _regexes['no_vowels'], word[0])
+            second_prefix_no_vowel = re.search(
+                _regexes['no_vowels'], prefix[0])
             if first_prefix_no_vowel or second_prefix_no_vowel:
                 # if there's a vowel at the end of
                 # prefix but not at the beginning
@@ -294,10 +291,26 @@ def simulfixify(words, pairs=None, max=5):
 
 
 def palindrome(word):
+    """Create a palindrome from a word.
+
+    Args:
+        word (str): The word.
+
+    Returns:
+        str: The updated palindrome.
+    """
     return '{}{}'.format(word, word[::-1])
 
 
 def palindromes(words):
+    """Convert a list of words into their palindromic form.
+
+    Args:
+        words (list): The words.
+
+    Returns:
+        list: The list of palindromes.
+    """
     return [palindrome(word) for word in words]
 
 
@@ -310,8 +323,9 @@ def make_founder_product_name(founder1, founder2, product):
 
 
 def make_name_alliteration(word_array, divider=' '):
-    new_arr = []
-    """
+    """Make an alliteration with a set of words, if applicable.
+
+    Examples:
     java jacket
     singing sally
     earth engines
@@ -320,8 +334,8 @@ def make_name_alliteration(word_array, divider=' '):
     1. Loop through a given array of words
     2. group by words with the same first letter
     3. combine them and return to new array
-
     """
+    new_arr = []
     word_array = sorted(word_array)
 
     for word1 in word_array:
@@ -409,11 +423,11 @@ def make_portmanteau_default_vowel(words):
     vowel_o_re = re.compile(r'o{1}')
     vowel_u_re = re.compile(r'u{1}')
 
-    new_arr += make_vowel(words, vowel_a_re, "a")
-    new_arr += make_vowel(words, vowel_e_re, "e")
-    new_arr += make_vowel(words, vowel_i_re, "i")
-    new_arr += make_vowel(words, vowel_o_re, "o")
-    new_arr += make_vowel(words, vowel_u_re, "u")
+    new_arr += make_vowel(words, vowel_a_re, 'a')
+    new_arr += make_vowel(words, vowel_e_re, 'e')
+    new_arr += make_vowel(words, vowel_i_re, 'i')
+    new_arr += make_vowel(words, vowel_o_re, 'o')
+    new_arr += make_vowel(words, vowel_u_re, 'u')
     return new_arr
 
 
@@ -558,8 +572,7 @@ def make_misspelling(words):
 
 
 def _pig_latinize(word, postfix='ay'):
-    """Generates standard pig latin style,
-    with customizeable postfix argument"""
+    """Generate standard pig latin style, with optional postfix argument."""
     # Common postfixes: ['ay', 'yay', 'way']
     if not type(postfix) is str:
         raise TypeError('Must use a string for postfix.')
@@ -580,22 +593,36 @@ def _pig_latinize(word, postfix='ay'):
 
 
 def pig_latinize(words, postfix='ay'):
+    """Pig latinize a set of words.
+
+    Args:
+        words (list): A list of words.
+        postfix (str, optional): A postfix to use. Default is `ay`.
+
+    Returns:
+        words (list): The updated list.
+
+    """
     return [_pig_latinize(word, postfix=postfix) for word in words]
 
 
 def acronym_lastname(description, lastname):
-    """Inspiration: ALFA Romeo"""
-    desc = ''.join([word[0].upper() for word in normalization.remove_stop_words(
-        description.split(' '))])
+    """Create an acronym plus the last name.
+
+    Inspiration: ALFA Romeo.
+    """
+    desc = ''.join([word[0].upper() for word
+                   in normalization.remove_stop_words(description.split(' '))])
     return '{} {}'.format(desc, lastname)
 
 
 def get_descriptors(words):
-    """
+    """Group words by their NLTK part-of-speech descriptors.
+
     Use NLTK to first grab tokens by looping through words,
     then tag part-of-speech (in isolation)
     and provide a dictionary with a list of each type
-    for later retrieval and usage
+    for later retrieval and usage.
     """
     descriptors = defaultdict(list)
     tokens = nltk.word_tokenize(' '.join(words))
@@ -628,9 +655,11 @@ def _add_pos_subtypes(nouns, verbs):
 
 
 def _create_pos_subtypes(words):
-    """Check the part-of-speech tags for a noun-phrase, and if it exists,
-    add combinations with noun-phrase + verb-phrase, noun-phrase + verb,
-    and noun-phrase + adverb, for each pos type that exists.
+    """Check part-of-speech tags for a noun-phrase, adding combinations if so.
+
+    If it exists, add combinations with noun-phrase + verb-phrase,
+    noun-phrase + verb, and noun-phrase + adverb,
+    for each pos type that exists.
 
     Args:
         words (list) - List of verbs, verb phrases, etc...
@@ -665,8 +694,7 @@ def make_descriptors(words):
 
 
 def all_prefix_first_vowel(word, letters=list(ascii_uppercase)):
-    """Finds the first vowel in a word and removes all letters before it,
-    prefixing it with all consonants.
+    """Find the first vowel in a word and prefixes with consonants.
 
     Args:
         word (str) - the word to update
@@ -694,9 +722,11 @@ def all_prefix_first_vowel(word, letters=list(ascii_uppercase)):
 
 
 def recycle(words, func, times=2):
-    """Run a set of words applied to `func` and re-runs it
-    `times` with the last output as the new input.
-    `words` must be a list, and `func` must return a list."""
+    """Run a set of words applied to a function repeatedly.
+
+    It will re-run with the last output as the new input.
+    `words` must be a list, and `func` must return a list.
+    """
     if times > 0:
         return recycle(func(words), func, times - 1)
     return words
