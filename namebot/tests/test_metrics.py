@@ -166,35 +166,7 @@ class GetKeywordRelevancyMapTestCase(unittest.TestCase):
         pass
 
 
-class CheckTrademarkRegistrationTestCase(unittest.TestCase):
-    # TODO
-
-    def test_basic(self):
-        pass
-
-
-class CheckDomainSearchesTestCase(unittest.TestCase):
-    # TODO
-
-    def test_basic(self):
-        pass
-
-
-class GetSearchResultCountTestCase(unittest.TestCase):
-    # TODO
-
-    def test_basic(self):
-        pass
-
-
 class CategorizeWordType(unittest.TestCase):
-    # TODO
-
-    def test_basic(self):
-        pass
-
-
-class GetWordRankingTestCase(unittest.TestCase):
     # TODO
 
     def test_basic(self):

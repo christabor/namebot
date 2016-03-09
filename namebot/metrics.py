@@ -162,11 +162,9 @@ def get_first_letter_frequency(words):
     # populate keys
     for name in words:
         letters[name[0]] = 0
-
     # add counts
     for name in words:
         letters[name[0]] += 1
-
     return {
         'data': letters,
         'summary': None
@@ -350,31 +348,6 @@ def get_keyword_relevancy_map(words, n_list, terms, sortcontext,
     }
 
 
-def check_trademark_registration(words):
-    # TODO
-    """Search the USTM office and return the number of results."""
-    return {
-        'data': None,
-        'summary': None
-    }
-
-
-def check_domain_searches(words):
-    # TODO
-    """Check domain search results for each name."""
-    raise NotImplemented
-
-
-def get_search_result_count(words):
-    # TODO
-    """
-    Check google results and return the number of results.
-
-    http://www.clips.ua.ac.be/pages/pattern-web#DOM
-    """
-    raise NotImplemented
-
-
 def categorize_word_type(words):
     """Get the common naming strategy 'category' of a name, based on precedence.
 
@@ -447,23 +420,6 @@ def categorize_word_type(words):
     for word in words:
         new_words.append([word, _get_distribution(word)])
     return new_words
-
-
-def get_word_ranking(words):
-    """Use google results and get a quality of ranking.
-
-    This is based on other metrics such as domain name availability,
-    google results and others.
-    """
-    results = []
-    for name in words:
-        results = get_search_result_count(words)
-        domains = check_domain_searches(words)
-        results.append(results / domains)
-    return {
-        'data': results,
-        'summary': None
-    }
 
 
 def generate_all_metrics(filename=None, words=None):
