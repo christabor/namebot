@@ -49,7 +49,7 @@ class SpoonerismTestCase(unittest.TestCase):
             ['blim foom', 'doom bang', 'dang dune'])
 
     def test_single_word(self):
-        with self.assertRaises(techniques.InsufficientWordsError):
+        with self.assertRaises(ValueError):
             self.assertEqual(techniques.spoonerism(['foo']))
 
 
@@ -61,7 +61,7 @@ class KniferismTestCase(unittest.TestCase):
             ['flom boim', 'bonm daog', 'dang dune'])
 
     def test_single_word(self):
-        with self.assertRaises(techniques.InsufficientWordsError):
+        with self.assertRaises(ValueError):
             self.assertEqual(techniques.kniferism(['foo']))
 
 
@@ -73,7 +73,7 @@ class ForkerismTestCase(unittest.TestCase):
             ['flim boom', 'boog danm', 'dane dung'])
 
     def test_single_word(self):
-        with self.assertRaises(techniques.InsufficientWordsError):
+        with self.assertRaises(ValueError):
             self.assertEqual(techniques.forkerism(['foo']))
 
 
@@ -196,14 +196,33 @@ class MakeNameAbbreviationTestCase(unittest.TestCase):
 
 
 class MakeVowelTestCase(unittest.TestCase):
-    # TODO
 
-    def test_simple(self):
-        pass
+    def test_a(self):
+        self.assertEqual(techniques.make_vowel(
+            ['brad', 'angelina',], r'a{1}', 'a'), ['brangelina'])
+
+    def test_e(self):
+        self.assertEqual(techniques.make_vowel(
+            ['street', 'credence',], r'e{1}', 'e'), ['stredence'])
+
+    def test_i(self):
+        self.assertEqual(techniques.make_vowel(
+            ['stripe', 'wild',], r'i{1}', 'i'), ['strild'])
+
+    def test_o(self):
+        self.assertEqual(techniques.make_vowel(
+            ['strode', 'pork',], r'o{1}', 'o'), ['strork'])
+
+    def test_u(self):
+        self.assertEqual(techniques.make_vowel(
+            ['true', 'crude',], r'u{1}', 'u'), ['trude'])
+
 
     def test_no_substring(self):
-        """Checks for values that aren't found in the regex list."""
-        pass
+        """Check for values that aren't found in the regex list."""
+        self.assertEqual(techniques.make_vowel(
+            ['matching', 'not',], r'a{1}', 'a'), [])
+
 
 
 class MakePortmanteauDefaultVowelTestCase(unittest.TestCase):
