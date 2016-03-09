@@ -159,15 +159,17 @@ class GetAdjectiveVerbOrNounTestCase(unittest.TestCase):
         self.assertEqual(res['data']['verbs'], 1)
 
 
-class GetKeywordRelevancyMapTestCase(unittest.TestCase):
-    # TODO
-
-    def test_basic(self):
-        pass
-
-
 class CategorizeWordType(unittest.TestCase):
-    # TODO
 
-    def test_basic(self):
-        pass
+    def setUp(self):
+        self.words = ['rain', 'a lot of sunshine']
+
+    def test_not_phrase(self):
+        res = metrics.categorize_word_type(self.words)
+        self.assertEqual(res[1][1]['real'], 0)
+        self.assertEqual(res[1][1]['phrase'], 50)
+
+    def test_phrase(self):
+        res = metrics.categorize_word_type(self.words)
+        self.assertEqual(res[0][1]['real'], 50)
+        self.assertEqual(res[0][1]['phrase'], 0)

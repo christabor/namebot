@@ -12,7 +12,6 @@ Conventions used in this utility:
 from __future__ import division
 import re
 from pattern.en import parse
-from pattern.web import sort
 from nltk import pos_tag
 
 
@@ -323,28 +322,6 @@ def get_adjective_verb_or_noun(words):
         'summary': ('Of {0} words, {1} were nouns, {2} were verbs, '
                     'and {3} were everything else.').format(
                         total, data['nouns'], data['verbs'], remainder)
-    }
-
-
-def get_keyword_relevancy_map(words, n_list, terms, sortcontext,
-                              enginetype='BING',
-                              license=None):
-    """http://www.clips.ua.ac.be/pages/pattern-web#sort."""
-    results_list = []
-    results = sort(
-        terms=[],
-        context=sortcontext,   # Term used for sorting.
-        service=enginetype,    # GOOGLE, YAHOO, BING, ...
-        license=None,          # You should supply your own API license key
-        strict=True,           # Wraps query in quotes: 'mac sweet'.
-        reverse=True,          # Reverse: 'sweet mac' <=> 'mac sweet'.
-        cached=True)
-
-    for weight, term in results:
-        results.append("%5.2f" % (weight * 100) + "%", term)
-    return {
-        'data': results_list,
-        'summary': None
     }
 
 
