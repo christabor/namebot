@@ -61,6 +61,7 @@ class FilterEndsTLDTestCase(unittest.TestCase):
 
 
 class FilterVowelConsTestCase(unittest.TestCase):
+
     @classmethod
     def setUpClass(cls):
         cls.words = ['chrysanthemum', 'younker', 'overalcoholizing',
@@ -90,19 +91,51 @@ class FilterVowelConsTestCase(unittest.TestCase):
         self.assertIsInstance(res, list)
 
 
-class FilterMetaphoneTestCase(unittest.TestCase):
-    def test_bad_pronunciation(self):
-        # TODO
-        pass
+class FilterDoubleMetaphoneTestCase(unittest.TestCase):
+
+    def setUp(self):
+        self.words = ['3foo33', 'bar', 'baz', 'quux', 'what', 'improbable']
+
+    def test_none(self):
+        res = [w for w in self.words if strain.filter_soundex(w, code=None)]
+        self.assertEqual(res, self.words)
+
+    def test_filter_one(self):
+        res = [w for w in self.words
+               if strain.filter_dmetaphone(w, code='AMPR')]
+        self.assertEqual(res, ['improbable'])
+
+    def test_filter_double(self):
+        res = [w for w in self.words + ['improbable']
+               if strain.filter_dmetaphone(w, code='AMPR')]
+        self.assertEqual(res, ['improbable', 'improbable'])
 
 
 class FilterSoundexTestCase(unittest.TestCase):
-    def test_soundex(self):
-        # TODO
-        pass
+
+    def setUp(self):
+        self.words = ['foo', 'bar', 'baz', 'quux', 'what', 'improbable']
+
+    def test_none(self):
+        res = [w for w in self.words if strain.filter_soundex(w, code=None)]
+        self.assertEqual(res, self.words)
+
+    def test_filter_one(self):
+        res = [w for w in self.words
+               if strain.filter_soundex(w, code='b600')]
+        self.assertEqual(res, ['bar'])
 
 
 class FilterNysiisTestCase(unittest.TestCase):
-    def test_nysiis(self):
-        # TODO
-        pass
+
+    def setUp(self):
+        self.words = ['foo', 'bar', 'baz', 'quux', 'what', 'improbable']
+
+    def test_none(self):
+        res = [w for w in self.words if strain.filter_nysiis(w, code=None)]
+        self.assertEqual(res, self.words)
+
+    def test_filter_one(self):
+        res = [w for w in self.words
+               if strain.filter_nysiis(w, code='INPRABABL')]
+        self.assertEqual(res, ['improbable'])

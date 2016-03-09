@@ -15,7 +15,8 @@ def score_dmetaphone(words):
     scores = []
     dmeta = fuzzy.DMetaphone()
     for word in words:
-        scored = '{}: {}'.format(word.lower(), dmeta(word))
+        res, output = dmeta(word)
+        scored = '{0}:{1}:{2}'.format(word, res, output)
         scores.append(scored)
     return scores
 

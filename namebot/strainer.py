@@ -85,19 +85,23 @@ def filter_tld(word, tld='.com'):
     return filter_endswith(word, ending=tld)
 
 
-def filter_metaphone(word):
-    """Get metaphone value, checking score.
+def filter_dmetaphone(word, code=None):
+    """Get double metaphone value, checking score.
 
     Where second key being None, an easy pronunciation is unlikely.
 
     Args:
         word (str): The word.
+        code (str, optional): The double metaphone pronunciation code.
 
     Returns:
         bool: The resulting check.
     """
-    score = scoring.score_dmetaphone(word)
-    return score[1] is not None
+    score = scoring.score_dmetaphone([word])[0]
+    _, pronunciation, dmcode = score.split(':')
+    if code is None:
+        return True
+    return pronunciation.lower() == code.lower()
 
 
 def filter_soundex(word, code=None):
@@ -112,7 +116,8 @@ def filter_soundex(word, code=None):
     """
     if code is None:
         return True
-    return scoring.score_soundex(word).split(':')[1].strip() == code
+    retcode = scoring.score_soundex([word])[0].split(':')[1].strip().lower()
+    return retcode == code.lower()
 
 
 def filter_nysiis(word, code=None):
@@ -127,4 +132,5 @@ def filter_nysiis(word, code=None):
     """
     if code is None:
         return True
-    return scoring.score_nysiis(word).split(':')[1].strip() == code
+    retcode = scoring.score_nysiis([word])[0].split(':')[1].strip().lower()
+    return retcode == code.lower()
