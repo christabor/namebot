@@ -35,7 +35,11 @@ class PalindromeTestCase(unittest.TestCase):
 
     def test_simple_array(self):
         self.assertEqual(techniques.palindromes(
-            ['foo', 'bar']), ['foooof', 'barrab'])
+            ['wtf', 'omg']), ['wtfftw', 'omggmo'])
+
+    def test_simple_array_spaced(self):
+        self.assertEqual(techniques.palindromes(
+            ['wtf omg', 'omg wtf']), ['wtf omggmo ftw', 'omg wtfftw gmo'])
 
     def test_single_letter(self):
         self.assertEqual(techniques.palindrome('f'), 'ff')
