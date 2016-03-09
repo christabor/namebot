@@ -199,30 +199,28 @@ class MakeVowelTestCase(unittest.TestCase):
 
     def test_a(self):
         self.assertEqual(techniques.make_vowel(
-            ['brad', 'angelina',], r'a{1}', 'a'), ['brangelina'])
+            ['brad', 'angelina'], r'a{1}', 'a'), ['brangelina'])
 
     def test_e(self):
         self.assertEqual(techniques.make_vowel(
-            ['street', 'credence',], r'e{1}', 'e'), ['stredence'])
+            ['street', 'credence'], r'e{1}', 'e'), ['stredence'])
 
     def test_i(self):
         self.assertEqual(techniques.make_vowel(
-            ['stripe', 'wild',], r'i{1}', 'i'), ['strild'])
+            ['stripe', 'wild'], r'i{1}', 'i'), ['strild'])
 
     def test_o(self):
         self.assertEqual(techniques.make_vowel(
-            ['strode', 'pork',], r'o{1}', 'o'), ['strork'])
+            ['strode', 'pork'], r'o{1}', 'o'), ['strork'])
 
     def test_u(self):
         self.assertEqual(techniques.make_vowel(
-            ['true', 'crude',], r'u{1}', 'u'), ['trude'])
-
+            ['true', 'crude'], r'u{1}', 'u'), ['trude'])
 
     def test_no_substring(self):
         """Check for values that aren't found in the regex list."""
         self.assertEqual(techniques.make_vowel(
-            ['matching', 'not',], r'a{1}', 'a'), [])
-
+            ['matching', 'not'], r'a{1}', 'a'), [])
 
 
 class MakePortmanteauDefaultVowelTestCase(unittest.TestCase):
@@ -235,10 +233,24 @@ class MakePortmanteauDefaultVowelTestCase(unittest.TestCase):
 
 
 class MakemakePortmanteauSplitTestCase(unittest.TestCase):
-    # TODO
 
-    def test_simple(self):
-        pass
+    def test_2words(self):
+        self.assertEqual(
+            techniques.make_portmanteau_split(['dad', 'cool']),
+            ['dadool', 'dadool', 'datool', 'dasool', 'dazool',
+             'daxool', 'cocad', 'coad', 'colad', 'cotad',
+             'cosad', 'cozad', 'coxad'])
+
+    def test_results_count(self):
+        self.assertEqual(
+            len(techniques.make_portmanteau_split(
+                ['dad', 'neat', 'cool'])), 40)
+        self.assertEqual(
+            len(techniques.make_portmanteau_split(
+                ['dad', 'neat', 'cool', 'nifty'])), 58)
+        self.assertEqual(
+            len(techniques.make_portmanteau_split(
+                ['dad', 'neat', 'cool', 'nifty', 'super', 'duper'])), 166)
 
 
 class MakePunctuatorTestCase(unittest.TestCase):
@@ -352,7 +364,19 @@ class RecycleTestCase(unittest.TestCase):
 
 
 class SuperScrubTestCase(unittest.TestCase):
-    # TODO
 
-    def test_simple(self):
-        pass
+    def test_uniq(self):
+        data = {'words': {'technique': ['words', 'words']}}
+        self.assertEqual(
+            techniques.super_scrub(data)['words']['technique'], ['words'])
+
+    def test_remove_odd(self):
+        data = {'words': {'technique': ['asdsaasdokokk', 'words']}}
+        self.assertEqual(
+            techniques.super_scrub(data)['words']['technique'], ['words'])
+
+    def test_cleansort(self):
+        data = {'words': {'technique': ['!!@words', 'radio0']}}
+        self.assertEqual(
+            techniques.super_scrub(data)['words']['technique'],
+            ['radio', 'words'])
