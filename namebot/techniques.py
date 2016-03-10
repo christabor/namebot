@@ -233,18 +233,26 @@ def duplifixify(words):
     return new_arr
 
 
-def disfixify(words):
+def disfixify(words, replaces=1):
     """Apply a disfix technique to a set of words.
 
-    TODO: implement
+    Disfixing is done by removing the first set of vowel-consonant pairs.
 
     Args:
         words (list) - The list of words to operate on.
+        replaces (int, optional): Number of replacements
+            to make on this string.
 
     Returns:
         new_arr (list): the updated *fixed words
     """
     new_arr = []
+    vc_combo = r'[a-zA-Z][aeiou]{1}[qwrtypsdfghjklzxcvbnm]{1}'
+    for word in words:
+        if len(re.findall(vc_combo, word)) > 1:
+            new_arr.append(re.sub(vc_combo, '', word, replaces))
+        else:
+            new_arr.append(word)
     return new_arr
 
 

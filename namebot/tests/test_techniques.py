@@ -128,11 +128,17 @@ class AffixWordsTestCase(unittest.TestCase):
         res = techniques.duplifixify(self.words)
         self.assertTrue('shop shop' not in res)
 
-    def test_infix(self):
-        # TODO
-        pass
-
     def test_disfix(self):
+        words = ['propagating', 'gigantic']
+        res = techniques.disfixify(words)
+        self.assertEqual(res, ['pagating', 'antic'])
+
+    def test_disfix_nosingle_pairs(self):
+        words = ['shop', 'prop']
+        res = techniques.disfixify(words)
+        self.assertEqual(res, ['shop', 'prop'])
+
+    def test_infix(self):
         # TODO
         pass
 
