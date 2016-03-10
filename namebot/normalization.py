@@ -1,3 +1,5 @@
+"""Helpers to normalize inputs and text."""
+
 from nltk.corpus import stopwords
 from pattern.vector import stem
 from pattern.vector import PORTER
@@ -9,10 +11,7 @@ import settings as namebot_settings
 
 
 def remove_odd_sounding_words(words):
-    """
-    after manipulating words through other techniques,
-    remove random odd sounding word combinations
-    via regular expressions
+    """Remove random odd sounding word combinations via regular expressions.
 
     Args:
         words (list): The list of words
@@ -37,7 +36,7 @@ def remove_odd_sounding_words(words):
 
 
 def stem_words(words):
-    """Stem words to their base linguistic stem to remove redundancy
+    """Stem words to their base linguistic stem to remove redundancy.
 
     Args:
         words (list): The list of words
@@ -70,9 +69,7 @@ def remove_stop_words(words):
 
 
 def remove_bad_words(words):
-    """
-    remove naughty words that might
-    come from wordnet synsets and lemmata
+    """Remove naughty words that might come from wordnet synsets and lemmata.
 
     Args:
         words (list): The list of words
@@ -89,8 +86,7 @@ def remove_bad_words(words):
 
 
 def filter_words(words):
-    """Filter words by max_length and min_length,
-    given by the default settings in the settings module
+    """Filter words by default min/max settings in the settings module.
 
     Args:
         words (list): The list of words
@@ -120,8 +116,7 @@ def filter_words(words):
 
 
 def uniquify(words):
-    """
-    remove duplicates from a list
+    """Remove duplicates from a list.
 
     Args:
         words (list): The list of words
@@ -136,9 +131,7 @@ def uniquify(words):
 
 
 def clean_sort(words):
-    """
-    A function for cleaning string arrays
-    and prepping them for word techniques
+    """A function for cleaning and prepping words for techniques.
 
     Args:
         words (list): The list of words
@@ -160,7 +153,7 @@ def clean_sort(words):
 
 
 def chop_duplicate_ends(word):
-    """Remove duplicate letters on either end, if the are adjacent
+    """Remove duplicate letters on either end, if the are adjacent.
 
     Args:
         words (list): The list of words

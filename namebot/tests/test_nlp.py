@@ -5,7 +5,7 @@ from namebot import nlp
 class NLPTestCase(unittest.TestCase):
 
     def test_create_synset_basic(self):
-        res = nlp.get_synsets(words=['potato'])
+        res = nlp.get_synsets(['potato'])
         self.assertIsInstance(res, dict)
         for synset, vals in res.iteritems():
             self.assertIsInstance(vals, dict)
@@ -13,7 +13,7 @@ class NLPTestCase(unittest.TestCase):
             self.assertIsNotNone(vals)
 
     def test_get_synsets_definitions(self):
-        res = nlp.get_synsets_definitions(words=['potato'])
+        res = nlp.get_synsets_definitions(['potato'])
         self.assertIsInstance(res, list)
         self.assertGreater(len(res), 0)
 
