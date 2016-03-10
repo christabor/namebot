@@ -3,21 +3,23 @@
 import fuzzy
 import re
 
+dmeta = fuzzy.DMetaphone()
+soundex = fuzzy.Soundex(4)
+
 
 def score_dmetaphone(words):
     """Score words using the double metaphone algorithm.
 
     Args:
         words (list) - the list of words.
+
     Returns:
         scores (list) - the scored words
     """
     scores = []
-    dmeta = fuzzy.DMetaphone()
     for word in words:
         res, output = dmeta(word)
-        scored = '{0}:{1}:{2}'.format(word, res, output)
-        scores.append(scored)
+        scores.append('{0}:{1}:{2}'.format(word, res, output))
     return scores
 
 
@@ -26,15 +28,11 @@ def score_soundex(words):
 
     Args:
         words (list) - the list of words.
+
     Returns:
         scores (list) - the scored words
     """
-    scores = []
-    soundex = fuzzy.Soundex(4)
-    for word in words:
-        scored = '{}: {}'.format(word.lower(), soundex(word))
-        scores.append(scored)
-    return scores
+    return ['{}: {}'.format(w.lower(), soundex(w)) for w in words]
 
 
 def score_nysiis(words):
@@ -42,14 +40,11 @@ def score_nysiis(words):
 
     Args:
         words (list) - the list of words.
+
     Returns:
         scores (list) - the scored words
     """
-    scores = []
-    for word in words:
-        scored = '{}: {}'.format(word.lower(), fuzzy.nysiis(word))
-        scores.append(scored)
-    return scores
+    return ['{}: {}'.format(w.lower(), fuzzy.nysiis(w)) for w in words]
 
 
 def score_length(word):
@@ -58,6 +53,12 @@ def score_length(word):
     Really long, or really short words get a lower score.
     There is no hard science, but popular opinion suggests
     that a word somewhere between 8-15 letters is optimal.
+
+    Args:
+        word (str): The word to score.
+
+    Returns:
+        score (int): The resulting score.
     """
     if not word or len(word) == 0:
         return 0
@@ -80,7 +81,16 @@ def score_length(word):
 
 
 def bounded(num, start, end):
-    """Determine if a number is within the bounds of `start` and `end`."""
+    """Determine if a number is within the bounds of `start` and `end`.
+
+    Args:
+        num (int): An integer.
+        start (int): A start minimum.
+        end (int): An end maximum.
+
+    Returns:
+        is_bounded (bool): Whether number is bounded by start and end.
+    """
     return num >= start and num <= end
 
 
@@ -99,6 +109,7 @@ def score_pronounceability(word):
 
     Args:
         word (string) - the name
+
     Returns:
         score (int) - the final pronounceability score
     """
@@ -140,6 +151,7 @@ def score_simplicity(word):
 
     Args:
         word (string) - the name
+
     Returns:
         score (int) - the final simplicity score
 
@@ -171,6 +183,7 @@ def score_name_overall(word):
 
     Args:
         word (string) - the name
+
     Returns:
         score (float) - the final name score
     """
@@ -190,13 +203,11 @@ def score_names_overall(words):
 
     Args:
         words (list) - the list of words.
+
     Returns:
         words (list) - a list of tuples, with the score and word.
     """
-    new = []
-    for k, word in enumerate(words):
-        new.append((score_name_overall(word), word))
-    return new
+    return [(score_name_overall(w), w) for w in words]
 
 
 def generate_all_scoring(words):
@@ -204,6 +215,7 @@ def generate_all_scoring(words):
 
     Args:
         words (list) - the list of words.
+
     Returns:
         words (dict) - the scores, keyed by scoring name.
     """
