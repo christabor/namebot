@@ -257,9 +257,10 @@ def disfixify(words, replaces=1):
 
 
 def infixify(words):
-    """Apply a disfix technique to a set of words.
+    """Apply a infix technique to a set of words.
 
-    TODO: implement
+    Adds all consonant+vowel pairs to all inner matching vowel+consonant pairs
+    of a word, giving all combinations for each word.
 
     Args:
         words (list) - The list of words to operate on.
@@ -268,6 +269,36 @@ def infixify(words):
         new_arr (list): the updated *fixed words
     """
     new_arr = []
+    vc_combo_pair = re.compile(
+        r'[a-zA-Z][aeiou]{1}[qwrtypsdfghjklzxcvbnm]{1}[aeiou]'
+        '{1}[qwrtypsdfghjklzxcvbnm]{1}')
+    for word in words:
+        matches = re.findall(vc_combo_pair, word)
+        if matches:
+            for match in matches:
+                for infix_pair in namebot_settings.CV_TL_PAIRS:
+                    # Get midpoint of this string.
+                    mid = len(match) // 2
+                    # Get the left and right substrings to join with.
+                    first, second = match[0:mid], match[mid:]
+                    # Check if the infix_pair is the same as start, or end.
+                    bad_matches = [
+                        # Duplicates joined is bad.
+                        infix_pair == first, infix_pair == second,
+                        # Matching letters on start/end joining substrings
+                        # is bad.
+                        first[-1] == infix_pair[0],
+                        # Matching letters on end/start joining substrings
+                        # is also bad.
+                        first[0] == infix_pair[-1],
+                    ]
+                    # Skip bad 'fusings'
+                    if any(bad_matches):
+                        continue
+                    replacer = '{}{}{}'.format(first, infix_pair, second)
+                    new_arr.append(word.replace(match, replacer))
+        else:
+            new_arr.append(word)
     return new_arr
 
 

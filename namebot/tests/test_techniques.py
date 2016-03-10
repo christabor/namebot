@@ -138,9 +138,37 @@ class AffixWordsTestCase(unittest.TestCase):
         res = techniques.disfixify(words)
         self.assertEqual(res, ['shop', 'prop'])
 
+    def test_disfix_novowels(self):
+        words = ['shp', 'prp']
+        res = techniques.disfixify(words)
+        self.assertEqual(res, words)
+
+    def test_disfix_noconsonants(self):
+        words = ['oooaeoa']
+        res = techniques.disfixify(words)
+        self.assertEqual(res, words)
+
     def test_infix(self):
-        # TODO
-        pass
+        words = ['sophisticated']
+        res = techniques.infixify(words)
+        expected = ['sophistiqacated', 'sophistiqecated',
+                    'sophistiqicated', 'sophistiqocated']
+        self.assertEqual(res[0:4], expected)
+
+    def test_infix_novowels(self):
+        words = ['shp', 'prp']
+        res = techniques.infixify(words)
+        self.assertEqual(res, words)
+
+    def test_infix_noconsonants(self):
+        words = ['oooaeoa']
+        res = techniques.infixify(words)
+        self.assertEqual(res, words)
+
+    def test_infix_nosingle_pairs(self):
+        words = ['shop', 'prop']
+        res = techniques.infixify(words)
+        self.assertEqual(res, words)
 
     def test_simulfix(self):
         res = techniques.simulfixify(self.words)
