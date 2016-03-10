@@ -1,8 +1,6 @@
-all:
-	echo 'Running Namebot tests...'
-	nosetests namebot/tests
+all: cleanpyc install tests
 cleanpyc:
-	find . -iname '*.pyc' -type f -delete
+	find ./ -iname '*.pyc' -type f -delete
 install:
 	pip install -r requirements.txt
 	pip install -U nltk
@@ -14,4 +12,4 @@ install:
 	python -m nltk.downloader averaged_perceptron_tagger
 	python setup.py install
 tests:
-	nosetests namebot/
+	nosetests
