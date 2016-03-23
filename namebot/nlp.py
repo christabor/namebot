@@ -4,9 +4,15 @@ Word relationships found (via NLTK and other libraries)
 to find and generate related words.
 """
 
+
 from __future__ import absolute_import
+
 import itertools
-from nltk.corpus import wordnet, verbnet
+
+from nltk.corpus import (
+    verbnet,
+    wordnet,
+)
 
 from . import normalization
 

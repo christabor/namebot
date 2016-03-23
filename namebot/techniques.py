@@ -3,14 +3,15 @@
 from __future__ import absolute_import
 from __future__ import division
 
+import re
+from collections import defaultdict
 from random import choice
 from string import ascii_uppercase
-from collections import defaultdict
-import re
+
 import nltk
 
-from . import settings as namebot_settings
 from . import normalization
+from . import settings as namebot_settings
 
 
 _prefixes = namebot_settings.PREFIXES

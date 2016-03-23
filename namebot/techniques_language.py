@@ -2,6 +2,7 @@
 
 from __future__ import absolute_import
 from __future__ import division
+
 from .latin_words import words as lwords
 
 

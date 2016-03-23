@@ -11,7 +11,9 @@ filtered = [word for word in words if
 """
 
 import re
+
 import scoring
+
 import settings as namebot_settings
 
 

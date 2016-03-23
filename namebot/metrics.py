@@ -11,8 +11,9 @@ Conventions used in this utility:
 
 from __future__ import division
 import re
-from pattern.en import parse
+
 from nltk import pos_tag
+from pattern.en import parse
 
 
 def prep_file(file_name):

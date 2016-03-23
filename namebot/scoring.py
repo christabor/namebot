@@ -1,7 +1,8 @@
 """Provides various scoring methods for word strength."""
 
-import fuzzy
 import re
+
+import fuzzy
 
 dmeta = fuzzy.DMetaphone()
 soundex = fuzzy.Soundex(4)

@@ -1,11 +1,11 @@
-"""Examples using namebot."""
+"""All example generation for demos, etc..."""
 
 from __future__ import absolute_import
 
-from . import nlp
-from . import techniques
 from . import metrics
+from . import nlp
 from . import scoring
+from . import techniques
 
 
 def generate_all_examples(filename=None, words=None):
@@ -18,9 +18,6 @@ def generate_all_examples(filename=None, words=None):
     Returns:
         dict: All generated examples
     """
-    print '< ##=========##===========##=========## > '
-    print '... -=|=- Running ALL the examples -=|=- ... '
-    print '< ##=========##===========##=========## > '
     return {
         'synset_categories': nlp.print_all_synset_categories(),
         'synsets': nlp.get_synsets(words, use_definitions=True),

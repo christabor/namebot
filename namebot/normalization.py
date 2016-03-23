@@ -1,11 +1,13 @@
 """Helpers to normalize inputs and text."""
 
-from nltk.corpus import stopwords
-from pattern.vector import stem
-from pattern.vector import PORTER
-from collections import defaultdict
 import re
 import string
+from collections import defaultdict
+
+from nltk.corpus import stopwords
+
+from pattern.vector import PORTER
+from pattern.vector import stem
 
 import settings as namebot_settings
 
