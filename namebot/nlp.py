@@ -17,6 +17,23 @@ from nltk.corpus import (
 from . import normalization
 
 
+def _get_synset_words(word):
+    """Simple helper wrapping the more involved get_synsets function.
+
+    Args:
+        word (str): The seed word.
+
+    Returns:
+        words (list): The list of NLTK words.
+    """
+    res = get_synsets([word])[word]
+    if not res:
+        return []
+    res = res.values()
+    words = list(normalization.flatten([l for l in res if l]))
+    return words
+
+
 def print_all_synset_categories():
     """Print all domains and categories for research purposes.
 
@@ -336,8 +353,7 @@ def get_word_synsets(word):
     Returns:
         object: The synset ring instance.
     """
-    synset = wordnet.synsets(word.encode("utf-8"), pos=None)
-    return synset
+    return wordnet.synsets(word.encode('utf-8'), pos=None)
 
 
 def get_synset_definitions(word):
@@ -365,10 +381,7 @@ def get_synsets_definitions(words):
     Returns:
         sets (list): The synsets.
     """
-    sets = []
-    for word in words:
-        sets.append(get_synset_definitions(word))
-    return sets
+    return [get_synset_definitions(w) for w in words if w]
 
 
 def get_synsets(words, use_definitions=False, clean=False):

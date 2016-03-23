@@ -10,6 +10,7 @@ from string import ascii_uppercase
 
 import nltk
 
+from . import nlp
 from . import normalization
 from . import settings as namebot_settings
 
@@ -770,6 +771,70 @@ def recycle(words, func, times=2):
     if times > 0:
         return recycle(func(words), func, times - 1)
     return words
+
+
+def backronym(acronym, theme, max_attempts=10):
+    """Attempt to generate a backronym based on a given acronym and theme.
+
+    Args:
+        acronym (str): The starting acronym.
+        theme (str): The seed word to base other words off of.
+        max_attempts (int, optional): The number of attempts before failing.
+
+    Returns:
+        dict: The result dictionary. If a backronym was successfully generated,
+            the `success` key will be True, otherwise False.
+    """
+    ret = {
+        'acronym': '.'.join(list(acronym)).upper(),
+        'backronym': '',
+        'words': [],
+        'success_ratio': 0.0,
+        'success': False
+    }
+    if not acronym or not theme:
+        return ret
+    all_words = set()
+    words = nlp._get_synset_words(theme)
+    _backronym = []
+    acronym = acronym.lower()
+    # Add words if they contain the same first letter
+    # as any in the given acronym.
+    cur_step = 0
+    while len(_backronym) < len(acronym) or cur_step < max_attempts:
+        all_words.update(words)
+        for word in words:
+            if word[0].lower() in acronym:
+                if '_' in word:
+                    # Don't add multi-word strings, but don't leave it blank.
+                    _backronym.append(word[0])
+                else:
+                    _backronym.append(word)
+        sdict = {}
+        # Sort the word in order of the acronyms
+        # letters by re-arranging indices.
+        for word in _backronym:
+            try:
+                index = acronym.index(word[0].lower())
+                sdict[index] = word
+            except IndexError:
+                continue
+        cur_step += 1
+        # Refresh words for next attempt.
+        words = nlp._get_synset_words(theme)
+        # Try again if no words existed.
+        if not words:
+            continue
+        # Get new theme, similar to originating theme.
+        theme = words[0]
+    vals = sdict.values()
+    ret.update({
+        'backronym': ' '.join(vals).upper(),
+        'words': vals,
+        'success_ratio': float(len(vals)) / float(len(acronym)),
+        'success': len(vals) == len(acronym)
+    })
+    return ret
 
 
 def super_scrub(data):

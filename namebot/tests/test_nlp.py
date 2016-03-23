@@ -1,4 +1,7 @@
+"""NLP module tests."""
+
 import unittest
+
 from namebot import nlp
 
 
@@ -26,3 +29,10 @@ class NLPTestCase(unittest.TestCase):
     def test_get_verb_lemmas_noverbs(self):
         res = nlp.get_verb_lemmas(['cat', 'dog', 'parrot'])
         self.assertEqual(len(res), 0)
+
+
+class GetSynsetWordsTestCase(unittest.TestCase):
+
+    def test_get_words_basic(self):
+        res = nlp._get_synset_words('cat')
+        self.assertIsInstance(res, list)

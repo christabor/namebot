@@ -1,4 +1,7 @@
+"""Normalization module tests."""
+
 import unittest
+
 from namebot import normalization as norm
 
 
@@ -21,13 +24,13 @@ class RemoveOddWordTestCase(unittest.TestCase):
         self.assertEqual(new_count, original_count)
 
     def test_none_remove_odd_sounding_words(self):
-        """Tests that no input is returned without looping"""
+        """Test that no input is returned without looping"""
         original = None
         updated = norm.remove_odd_sounding_words(original)
         self.assertEqual(updated, original)
 
     def test_empty_remove_odd_sounding_words(self):
-        """Tests that empty list is returned without looping"""
+        """Test that empty list is returned without looping"""
         original = []
         updated = norm.remove_odd_sounding_words(original)
         self.assertEqual(len(original), 0)
@@ -36,13 +39,13 @@ class RemoveOddWordTestCase(unittest.TestCase):
 
 class StemWordsTestCase(unittest.TestCase):
     def test_stem_words(self):
-        """Tests stemmer is working"""
+        """Test stemmer is working"""
         words = ['running', 'jumping']
         stemmed = norm.stem_words(words)
         self.assertEqual(['run', 'jump'], stemmed)
 
     def test_no_stem_words(self):
-        """Tests stemmer is not stemming root words"""
+        """Test stemmer is not stemming root words"""
         words = ['run', 'jump']
         stemmed = norm.stem_words(words)
         self.assertEqual(words, stemmed)
@@ -50,7 +53,7 @@ class StemWordsTestCase(unittest.TestCase):
 
 class RemoveBadWordsTestCase(unittest.TestCase):
     def test_stem_words(self):
-        """Tests bad words are getting filtered out."""
+        """Test bad words are getting filtered out."""
         bad_words = ['fuck', 'pussy', 'cunt']
         words = bad_words + ['cool', 'neat', 'rad']
         cleaned = norm.remove_bad_words(words)
@@ -69,7 +72,7 @@ class RemoveStopWordsTestCase(unittest.TestCase):
 
 class FilterWordsTestCase(unittest.TestCase):
     def test_filter_long_words(self):
-        """Tests that very long words are filtered out"""
+        """Test that very long words are filtered out"""
         long_words = ['areallyverylongword', 'anextrareallyverylongword']
         words = long_words + ['normal', 'words']
         filtered = norm.filter_words(words)
@@ -122,3 +125,13 @@ class KeyWordsByPosTagTestCase(unittest.TestCase):
             'VBG': ['Fly']
         }
         self.assertEqual(dict(keyed), expected)
+
+
+class FlattenTestCase(unittest.TestCase):
+
+    def test_basic(self):
+        self.assertEqual(list(norm.flatten([1, 2, 3])), [1, 2, 3])
+
+    def test_nested(self):
+        nested = [[1, [2, 3, 4], [5, 6, [7]]], [8]]
+        self.assertEqual(list(norm.flatten(nested)), range(1, 9))

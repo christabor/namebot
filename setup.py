@@ -1,4 +1,7 @@
+"""Installation setup."""
+
 import os
+
 try:
     from setuptools import setup, find_packages
 except ImportError:
@@ -7,7 +10,7 @@ except ImportError:
 
 
 PACKAGE = 'namebot'
-VERSION = '3.3.2'
+VERSION = '3.4.2'
 
 
 def _get_requires(filepath):

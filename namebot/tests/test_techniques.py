@@ -1,4 +1,7 @@
+"""Techniques module tests."""
+
 import unittest
+
 from namebot import techniques
 
 
@@ -418,3 +421,14 @@ class SuperScrubTestCase(unittest.TestCase):
         self.assertEqual(
             techniques.super_scrub(data)['words']['technique'],
             ['radio', 'words'])
+
+
+class BackronymTestCase(unittest.TestCase):
+
+    def test_basic(self):
+        res = techniques.backronym('rad', 'computer', max_attempts=5)
+        self.assertIsInstance(res, dict)
+        expected_keys = ['acronym', 'backronym', 'words',
+                         'success_ratio', 'success']
+        for key in expected_keys:
+            self.assertTrue(key in res)
