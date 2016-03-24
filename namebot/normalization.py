@@ -126,19 +126,19 @@ def filter_words(words):
     new_arr = []
     for word in words:
         if not re.search(' ', word):
-            if len(word) <= namebot_settings.MAX_LENGTH and \
-                    len(word) >= namebot_settings.MIN_LENGTH:
-                        new_arr.append(word)
-
+            lte = len(word) <= namebot_settings.MAX_LENGTH
+            gte = len(word) >= namebot_settings.MIN_LENGTH
+            if all([lte, gte]):
+                new_arr.append(word)
         elif re.search(' ', word):
             split = re.split(' ', word)
             split_join = []
             for chunks in split:
                 length = len(chunks)
-                if length <= namebot_settings.SPACED_MAX_LENGTH and \
-                        length >= namebot_settings.MIN_LENGTH:
-                            split_join.append(chunks)
-
+                lte = length <= namebot_settings.SPACED_MAX_LENGTH
+                gte = length >= namebot_settings.MIN_LENGTH
+                if all([lte, gte]):
+                    split_join.append(chunks)
             new_arr.append(
                 ' '.join(split_join))
     return new_arr
@@ -153,10 +153,7 @@ def uniquify(words):
     Returns:
         list: An updated word list with duplicates removed.
     """
-    if words is not None:
-        return {}.fromkeys(words).keys()
-    else:
-        return words
+    return {}.fromkeys(words).keys() if words is not None else words
 
 
 def clean_sort(words):

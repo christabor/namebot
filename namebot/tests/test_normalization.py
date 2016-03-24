@@ -71,6 +71,13 @@ class RemoveStopWordsTestCase(unittest.TestCase):
 
 
 class FilterWordsTestCase(unittest.TestCase):
+    def test_filter_normal_words(self):
+        """Test that normal words are not filtered out"""
+        long_words = ['notlong', 'short']
+        words = long_words + ['normal', 'words']
+        filtered = norm.filter_words(words)
+        self.assertEqual(words, filtered)
+
     def test_filter_long_words(self):
         """Test that very long words are filtered out"""
         long_words = ['areallyverylongword', 'anextrareallyverylongword']
