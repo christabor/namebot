@@ -13,3 +13,8 @@ install:
 	python setup.py install
 tests:
 	nosetests
+docs: clean
+	sphinx-apidoc -e --private -F -s 'md' -A 'Chris Tabor' -H 'namebot' -o docs namebot
+	cd docs && make html
+clean:
+	rm -r docs
