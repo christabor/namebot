@@ -1,4 +1,0 @@
-Fuzzy==1.0
-Numpy
-Pattern >= 2.3
-nose

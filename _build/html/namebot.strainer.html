@@ -1,0 +1,326 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>namebot.strainer module &mdash; namebot  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="namebot  documentation" href="index.html"/>
+        <link rel="up" title="namebot package" href="namebot.html"/>
+        <link rel="next" title="namebot.techniques module" href="namebot.techniques.html"/>
+        <link rel="prev" title="namebot.scoring module" href="namebot.scoring.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> namebot
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="namebot.html">namebot package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="namebot.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="namebot.examples.html">namebot.examples module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="namebot.latin_words.html">namebot.latin_words module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="namebot.metrics.html">namebot.metrics module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="namebot.nlp.html">namebot.nlp module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="namebot.normalization.html">namebot.normalization module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="namebot.scoring.html">namebot.scoring module</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="">namebot.strainer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="namebot.techniques.html">namebot.techniques module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="namebot.techniques_language.html">namebot.techniques_language module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="namebot.html#module-namebot">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">namebot</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="namebot.html">namebot package</a> &raquo;</li>
+      
+    <li>namebot.strainer module</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/namebot.strainer.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-namebot.strainer">
+<span id="namebot-strainer-module"></span><h1>namebot.strainer module<a class="headerlink" href="#module-namebot.strainer" title="Permalink to this headline">¶</a></h1>
+<p>Provides filtering functions for reducing large sets of generated words.</p>
+<p>Recommended usage: filtered results using a list comprehension
+of all filters &#8216;anded&#8217; together.
+e.g:
+filtered = [word for word in words if</p>
+<blockquote>
+<div>filter_length(word, max_length=7) and
+filter_startswith(word, beginning=&#8217;c&#8217;) and
+filter_startswith(word, beginning=&#8217;c&#8217;) and
+filter_endswith(word, ending=&#8217;e&#8217;) ...]</div></blockquote>
+<dl class="function">
+<dt id="namebot.strainer.filter_dmetaphone">
+<code class="descclassname">namebot.strainer.</code><code class="descname">filter_dmetaphone</code><span class="sig-paren">(</span><em>word</em>, <em>code=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/strainer.html#filter_dmetaphone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.strainer.filter_dmetaphone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get double metaphone value, checking score.</p>
+<p>Where second key being None, an easy pronunciation is unlikely.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>word (str): The word.
+code (str, optional): The double metaphone pronunciation code.</dd>
+<dt>Returns:</dt>
+<dd>bool: The resulting check.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.strainer.filter_endswith">
+<code class="descclassname">namebot.strainer.</code><code class="descname">filter_endswith</code><span class="sig-paren">(</span><em>word</em>, <em>ending=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/strainer.html#filter_endswith"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.strainer.filter_endswith" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filter words ending with a specified suffix.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>word (str): A word.
+ending (str, optional): The optional ending to check.</dd>
+<dt>Returns:</dt>
+<dd>bool: The resulting check.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.strainer.filter_length">
+<code class="descclassname">namebot.strainer.</code><code class="descname">filter_length</code><span class="sig-paren">(</span><em>word</em>, <em>min_length=4</em>, <em>max_length=13</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/strainer.html#filter_length"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.strainer.filter_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filter based on min and max lengths.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>word (str): The word.
+min_length (int, optional): The minimum allowed length.
+max_length (int, optional): The maximum allowed length.</dd>
+<dt>Returns:</dt>
+<dd>bool: The resulting check.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.strainer.filter_nysiis">
+<code class="descclassname">namebot.strainer.</code><code class="descname">filter_nysiis</code><span class="sig-paren">(</span><em>word</em>, <em>code=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/strainer.html#filter_nysiis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.strainer.filter_nysiis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get nysiis value, checking score.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>word (str): The word.
+code (str, optional): The nysiis pronunciation code.</dd>
+<dt>Returns:</dt>
+<dd>bool: The resulting check.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.strainer.filter_soundex">
+<code class="descclassname">namebot.strainer.</code><code class="descname">filter_soundex</code><span class="sig-paren">(</span><em>word</em>, <em>code=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/strainer.html#filter_soundex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.strainer.filter_soundex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get soundex value, checking result against a given code.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>word (str): The word.
+code (str, optional): The soundex pronunciation code.</dd>
+<dt>Returns:</dt>
+<dd>bool: The resulting check.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.strainer.filter_startswith">
+<code class="descclassname">namebot.strainer.</code><code class="descname">filter_startswith</code><span class="sig-paren">(</span><em>word</em>, <em>beginning=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/strainer.html#filter_startswith"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.strainer.filter_startswith" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filter a word starting with specified string.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>word (str): The word.
+beginning (str, optional): The beginning string to check.</dd>
+<dt>Returns:</dt>
+<dd>bool: The resulting check.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.strainer.filter_tld">
+<code class="descclassname">namebot.strainer.</code><code class="descname">filter_tld</code><span class="sig-paren">(</span><em>word</em>, <em>tld='.com'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/strainer.html#filter_tld"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.strainer.filter_tld" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if a word ends with a TLD suffix (can be used to make a valid TLD).</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>word (str): The wor.d
+tld (str, optional): The TLD to check against, with or without a dot.</dd>
+<dt>Returns:</dt>
+<dd>bool: The resulting check.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.strainer.filter_vowel_cons_ratio">
+<code class="descclassname">namebot.strainer.</code><code class="descname">filter_vowel_cons_ratio</code><span class="sig-paren">(</span><em>word</em>, <em>ratio=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/strainer.html#filter_vowel_cons_ratio"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.strainer.filter_vowel_cons_ratio" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if the ratio of vowels to consonants is &gt; <cite>ratio</cite>.</p>
+<p>This can be used as an ad-hoc pronunciation filter.</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="namebot.techniques.html" class="btn btn-neutral float-right" title="namebot.techniques module" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="namebot.scoring.html" class="btn btn-neutral" title="namebot.scoring module" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Chris Tabor.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

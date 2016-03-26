@@ -1,0 +1,324 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>namebot.strainer &mdash; namebot  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="namebot  documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> namebot
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../namebot.html">namebot package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">namebot</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>namebot.strainer</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for namebot.strainer</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;Provides filtering functions for reducing large sets of generated words.</span>
+
+<span class="sd">Recommended usage: filtered results using a list comprehension</span>
+<span class="sd">of all filters &#39;anded&#39; together.</span>
+<span class="sd">e.g:</span>
+<span class="sd">filtered = [word for word in words if</span>
+<span class="sd">            filter_length(word, max_length=7) and</span>
+<span class="sd">            filter_startswith(word, beginning=&#39;c&#39;) and</span>
+<span class="sd">            filter_startswith(word, beginning=&#39;c&#39;) and</span>
+<span class="sd">            filter_endswith(word, ending=&#39;e&#39;) ...]</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="kn">import</span> <span class="nn">scoring</span>
+
+<span class="kn">import</span> <span class="nn">settings</span> <span class="kn">as</span> <span class="nn">namebot_settings</span>
+
+
+<div class="viewcode-block" id="filter_vowel_cons_ratio"><a class="viewcode-back" href="../../namebot.strainer.html#namebot.strainer.filter_vowel_cons_ratio">[docs]</a><span class="k">def</span> <span class="nf">filter_vowel_cons_ratio</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return True if the ratio of vowels to consonants is &gt; `ratio`.</span>
+
+<span class="sd">    This can be used as an ad-hoc pronunciation filter.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">vowels</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&#39;[aeiouy]&#39;</span><span class="p">)</span>
+    <span class="n">consonants</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&#39;[^aeyiuo]&#39;</span><span class="p">)</span>
+    <span class="n">vmatch</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">vowels</span><span class="p">,</span> <span class="n">word</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+    <span class="n">cmatch</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">consonants</span><span class="p">,</span> <span class="n">word</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+    <span class="n">_ratio</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">vmatch</span><span class="p">))</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cmatch</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">_ratio</span> <span class="o">&gt;</span> <span class="n">ratio</span></div>
+
+
+<div class="viewcode-block" id="filter_length"><a class="viewcode-back" href="../../namebot.strainer.html#namebot.strainer.filter_length">[docs]</a><span class="k">def</span> <span class="nf">filter_length</span><span class="p">(</span><span class="n">word</span><span class="p">,</span>
+                  <span class="n">min_length</span><span class="o">=</span><span class="n">namebot_settings</span><span class="o">.</span><span class="n">MIN_LENGTH</span><span class="p">,</span>
+                  <span class="n">max_length</span><span class="o">=</span><span class="n">namebot_settings</span><span class="o">.</span><span class="n">MAX_LENGTH</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Filter based on min and max lengths.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        word (str): The word.</span>
+<span class="sd">        min_length (int, optional): The minimum allowed length.</span>
+<span class="sd">        max_length (int, optional): The maximum allowed length.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: The resulting check.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">min_length</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">max_length</span></div>
+
+
+<div class="viewcode-block" id="filter_startswith"><a class="viewcode-back" href="../../namebot.strainer.html#namebot.strainer.filter_startswith">[docs]</a><span class="k">def</span> <span class="nf">filter_startswith</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">beginning</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Filter a word starting with specified string.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        word (str): The word.</span>
+<span class="sd">        beginning (str, optional): The beginning string to check.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: The resulting check.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">word</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">beginning</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="filter_endswith"><a class="viewcode-back" href="../../namebot.strainer.html#namebot.strainer.filter_endswith">[docs]</a><span class="k">def</span> <span class="nf">filter_endswith</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">ending</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Filter words ending with a specified suffix.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        word (str): A word.</span>
+<span class="sd">        ending (str, optional): The optional ending to check.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: The resulting check.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">word</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">ending</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="filter_tld"><a class="viewcode-back" href="../../namebot.strainer.html#namebot.strainer.filter_tld">[docs]</a><span class="k">def</span> <span class="nf">filter_tld</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">tld</span><span class="o">=</span><span class="s">&#39;.com&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check if a word ends with a TLD suffix (can be used to make a valid TLD).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        word (str): The wor.d</span>
+<span class="sd">        tld (str, optional): The TLD to check against, with or without a dot.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: The resulting check.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">tld</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">):</span>
+        <span class="n">tld</span> <span class="o">=</span> <span class="n">tld</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">filter_endswith</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">ending</span><span class="o">=</span><span class="n">tld</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="filter_dmetaphone"><a class="viewcode-back" href="../../namebot.strainer.html#namebot.strainer.filter_dmetaphone">[docs]</a><span class="k">def</span> <span class="nf">filter_dmetaphone</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get double metaphone value, checking score.</span>
+
+<span class="sd">    Where second key being None, an easy pronunciation is unlikely.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        word (str): The word.</span>
+<span class="sd">        code (str, optional): The double metaphone pronunciation code.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: The resulting check.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">score</span> <span class="o">=</span> <span class="n">scoring</span><span class="o">.</span><span class="n">score_dmetaphone</span><span class="p">([</span><span class="n">word</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">pronunciation</span><span class="p">,</span> <span class="n">dmcode</span> <span class="o">=</span> <span class="n">score</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;:&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">code</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">True</span>
+    <span class="k">return</span> <span class="n">pronunciation</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">code</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="filter_soundex"><a class="viewcode-back" href="../../namebot.strainer.html#namebot.strainer.filter_soundex">[docs]</a><span class="k">def</span> <span class="nf">filter_soundex</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get soundex value, checking result against a given code.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        word (str): The word.</span>
+<span class="sd">        code (str, optional): The soundex pronunciation code.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: The resulting check.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">code</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">True</span>
+    <span class="n">retcode</span> <span class="o">=</span> <span class="n">scoring</span><span class="o">.</span><span class="n">score_soundex</span><span class="p">([</span><span class="n">word</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;:&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">retcode</span> <span class="o">==</span> <span class="n">code</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="filter_nysiis"><a class="viewcode-back" href="../../namebot.strainer.html#namebot.strainer.filter_nysiis">[docs]</a><span class="k">def</span> <span class="nf">filter_nysiis</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get nysiis value, checking score.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        word (str): The word.</span>
+<span class="sd">        code (str, optional): The nysiis pronunciation code.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: The resulting check.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">code</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">True</span>
+    <span class="n">retcode</span> <span class="o">=</span> <span class="n">scoring</span><span class="o">.</span><span class="n">score_nysiis</span><span class="p">([</span><span class="n">word</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;:&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">retcode</span> <span class="o">==</span> <span class="n">code</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Chris Tabor.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

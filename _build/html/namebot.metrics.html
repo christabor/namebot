@@ -1,0 +1,450 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>namebot.metrics module &mdash; namebot  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="namebot  documentation" href="index.html"/>
+        <link rel="up" title="namebot package" href="namebot.html"/>
+        <link rel="next" title="namebot.nlp module" href="namebot.nlp.html"/>
+        <link rel="prev" title="namebot.latin_words module" href="namebot.latin_words.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> namebot
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="namebot.html">namebot package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="namebot.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="namebot.examples.html">namebot.examples module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="namebot.latin_words.html">namebot.latin_words module</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="">namebot.metrics module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="namebot.nlp.html">namebot.nlp module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="namebot.normalization.html">namebot.normalization module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="namebot.scoring.html">namebot.scoring module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="namebot.strainer.html">namebot.strainer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="namebot.techniques.html">namebot.techniques module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="namebot.techniques_language.html">namebot.techniques_language module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="namebot.html#module-namebot">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">namebot</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="namebot.html">namebot package</a> &raquo;</li>
+      
+    <li>namebot.metrics module</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/namebot.metrics.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-namebot.metrics">
+<span id="namebot-metrics-module"></span><h1>namebot.metrics module<a class="headerlink" href="#module-namebot.metrics" title="Permalink to this headline">¶</a></h1>
+<p>Metrics for measuring various aspects of words.</p>
+<p>Conventions used in this utility:
+1.  All functions return a dictionary,</p>
+<blockquote>
+<div><p>with key &#8216;data&#8217; and/or &#8216;summary&#8217;:
+return {</p>
+<blockquote>
+<div>&#8216;data&#8217;: data,
+&#8216;summary&#8217;: summary or None</div></blockquote>
+<p>}</p>
+</div></blockquote>
+<dl class="function">
+<dt id="namebot.metrics.categorize_word_type">
+<code class="descclassname">namebot.metrics.</code><code class="descname">categorize_word_type</code><span class="sig-paren">(</span><em>words</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/metrics.html#categorize_word_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.metrics.categorize_word_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the common naming strategy &#8216;category&#8217; of a name, based on precedence.</p>
+<p>Categories are derived from
+<a class="reference external" href="http://www.thenameinspector.com/10-name-types/">http://www.thenameinspector.com/10-name-types/</a>,
+so it is important to note there is no agreed upon standard,
+meaning it is ultimately a little arbitrary.</p>
+<p>Since it is a bit challenging to actually determine its type,
+we give a weighting for each word based on a few known metrics.
+This can be updated in the future so that weightings are binary
+(e.g. 0.0 and 100.0), giving traditional False/True.</p>
+<p>Categories ====</p>
+<ol class="arabic simple">
+<li>Real Words</li>
+</ol>
+<blockquote>
+<div>1a. Misspelled words
+1b. Foreign words</div></blockquote>
+<ol class="arabic simple" start="2">
+<li>Compounds</li>
+<li>Phrases</li>
+<li>Blends</li>
+<li>Tweaked</li>
+<li>Affixed</li>
+<li>Fake/obscure</li>
+<li>Puns</li>
+<li>People&#8217;s names</li>
+<li>Initials and Acronyms</li>
+</ol>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>words (list): A list of words</dd>
+<dt>Returns:</dt>
+<dd><dl class="first last docutils">
+<dt>new_words (list) - A list of lists, with each word</dt>
+<dd>and its distribution by word &#8220;type&#8221;</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.metrics.generate_all_metrics">
+<code class="descclassname">namebot.metrics.</code><code class="descname">generate_all_metrics</code><span class="sig-paren">(</span><em>filename=None</em>, <em>words=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/metrics.html#generate_all_metrics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.metrics.generate_all_metrics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate all metrics in this module in one place.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>filename (str, optional): A filename to load words from.
+words (TYPE, optional): Words to use, if file is not specified.</dd>
+<dt>Returns:</dt>
+<dd>dict: All metrics results, keyed by name.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.metrics.get_adjective_verb_or_noun">
+<code class="descclassname">namebot.metrics.</code><code class="descname">get_adjective_verb_or_noun</code><span class="sig-paren">(</span><em>words</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/metrics.html#get_adjective_verb_or_noun"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.metrics.get_adjective_verb_or_noun" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the number of words that are classified as verbs or nouns.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>words (TYPE): Description</dd>
+<dt>Returns:</dt>
+<dd>dict: The data and summary results.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.metrics.get_consonant_duplicate_repeat_frequency">
+<code class="descclassname">namebot.metrics.</code><code class="descname">get_consonant_duplicate_repeat_frequency</code><span class="sig-paren">(</span><em>words</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/metrics.html#get_consonant_duplicate_repeat_frequency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.metrics.get_consonant_duplicate_repeat_frequency" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check for duplicate repeating consonant frequency.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>words (list): A list of words</dd>
+<dt>Returns:</dt>
+<dd>dict: The data and summary results.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.metrics.get_consonant_repeat_frequency">
+<code class="descclassname">namebot.metrics.</code><code class="descname">get_consonant_repeat_frequency</code><span class="sig-paren">(</span><em>words</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/metrics.html#get_consonant_repeat_frequency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.metrics.get_consonant_repeat_frequency" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check for repeating consonant frequency for a given set of words.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>words (list): A list of words</dd>
+<dt>Returns:</dt>
+<dd>dict: The data and summary results.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.metrics.get_digits_frequency">
+<code class="descclassname">namebot.metrics.</code><code class="descname">get_digits_frequency</code><span class="sig-paren">(</span><em>words</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/metrics.html#get_digits_frequency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.metrics.get_digits_frequency" title="Permalink to this definition">¶</a></dt>
+<dd><p>Look for and count the digits in names, e.g. 7-11, 3M, etc...</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>words (list): A list of words</dd>
+<dt>Returns:</dt>
+<dd>dict: The data and summary results.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.metrics.get_first_letter_frequency">
+<code class="descclassname">namebot.metrics.</code><code class="descname">get_first_letter_frequency</code><span class="sig-paren">(</span><em>words</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/metrics.html#get_first_letter_frequency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.metrics.get_first_letter_frequency" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add the frequency of first letters e.g. [C]at, [C]law, c = 2.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>words (list): A list of words</dd>
+<dt>Returns:</dt>
+<dd>dict: The data and summary results.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.metrics.get_name_spaces">
+<code class="descclassname">namebot.metrics.</code><code class="descname">get_name_spaces</code><span class="sig-paren">(</span><em>words</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/metrics.html#get_name_spaces"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.metrics.get_name_spaces" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check number of spaces for a given set of words.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>words (list): A list of words</dd>
+<dt>Returns:</dt>
+<dd>dict: The data and summary results.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.metrics.get_named_numbers_1_10">
+<code class="descclassname">namebot.metrics.</code><code class="descname">get_named_numbers_1_10</code><span class="sig-paren">(</span><em>words</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/metrics.html#get_named_numbers_1_10"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.metrics.get_named_numbers_1_10" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a summary of words spelled out (e.g. one, two).</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>words (list): A list of words</dd>
+<dt>Returns:</dt>
+<dd>dict: The data and summary results.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.metrics.get_special_chars">
+<code class="descclassname">namebot.metrics.</code><code class="descname">get_special_chars</code><span class="sig-paren">(</span><em>words</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/metrics.html#get_special_chars"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.metrics.get_special_chars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find occurrences of special characters (non-alphabetical characters).</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>words (list): A list of words</dd>
+<dt>Returns:</dt>
+<dd>dict: The data and summary results.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.metrics.get_vowel_repeat_frequency">
+<code class="descclassname">namebot.metrics.</code><code class="descname">get_vowel_repeat_frequency</code><span class="sig-paren">(</span><em>words</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/metrics.html#get_vowel_repeat_frequency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.metrics.get_vowel_repeat_frequency" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check for repeating vowel frequency for a given set of words.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>words (list): A list of words</dd>
+<dt>Returns:</dt>
+<dd>dict: The data and summary results.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.metrics.get_word_types">
+<code class="descclassname">namebot.metrics.</code><code class="descname">get_word_types</code><span class="sig-paren">(</span><em>words</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/metrics.html#get_word_types"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.metrics.get_word_types" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine the occurrences of pos types.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>words (list): A list of words</dd>
+<dt>Returns:</dt>
+<dd>dict: The data and summary results.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.metrics.name_length">
+<code class="descclassname">namebot.metrics.</code><code class="descname">name_length</code><span class="sig-paren">(</span><em>words</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/metrics.html#name_length"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.metrics.name_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check the length of each word and an average.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>words (list): A list of words</dd>
+<dt>Returns:</dt>
+<dd>dict: The data and summary results.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.metrics.name_starts_with_vowel">
+<code class="descclassname">namebot.metrics.</code><code class="descname">name_starts_with_vowel</code><span class="sig-paren">(</span><em>words</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/metrics.html#name_starts_with_vowel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.metrics.name_starts_with_vowel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check the number of times a list of words starts with a vowel.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>words (list): A list of words</dd>
+<dt>Returns:</dt>
+<dd>dict: The data and summary results.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.metrics.name_vowel_count">
+<code class="descclassname">namebot.metrics.</code><code class="descname">name_vowel_count</code><span class="sig-paren">(</span><em>words</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/metrics.html#name_vowel_count"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.metrics.name_vowel_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check the number of times vowels occurs, and total the results.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>words (list): A list of words</dd>
+<dt>Returns:</dt>
+<dd>dict: The data and summary results.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.metrics.prep_file">
+<code class="descclassname">namebot.metrics.</code><code class="descname">prep_file</code><span class="sig-paren">(</span><em>file_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/metrics.html#prep_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.metrics.prep_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Take a file, extracts items line-by-line, and returns a list of them.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>file_name (str): The file name to open</dd>
+<dt>Returns:</dt>
+<dd>items (list): A list of items extracted from the file</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="namebot.nlp.html" class="btn btn-neutral float-right" title="namebot.nlp module" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="namebot.latin_words.html" class="btn btn-neutral" title="namebot.latin_words module" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Chris Tabor.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

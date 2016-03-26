@@ -1,0 +1,357 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>namebot.scoring module &mdash; namebot  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="namebot  documentation" href="index.html"/>
+        <link rel="up" title="namebot package" href="namebot.html"/>
+        <link rel="next" title="namebot.strainer module" href="namebot.strainer.html"/>
+        <link rel="prev" title="namebot.normalization module" href="namebot.normalization.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> namebot
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="namebot.html">namebot package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="namebot.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="namebot.examples.html">namebot.examples module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="namebot.latin_words.html">namebot.latin_words module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="namebot.metrics.html">namebot.metrics module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="namebot.nlp.html">namebot.nlp module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="namebot.normalization.html">namebot.normalization module</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="">namebot.scoring module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="namebot.strainer.html">namebot.strainer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="namebot.techniques.html">namebot.techniques module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="namebot.techniques_language.html">namebot.techniques_language module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="namebot.html#module-namebot">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">namebot</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="namebot.html">namebot package</a> &raquo;</li>
+      
+    <li>namebot.scoring module</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/namebot.scoring.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-namebot.scoring">
+<span id="namebot-scoring-module"></span><h1>namebot.scoring module<a class="headerlink" href="#module-namebot.scoring" title="Permalink to this headline">¶</a></h1>
+<p>Provides various scoring methods for word strength.</p>
+<dl class="function">
+<dt id="namebot.scoring.bounded">
+<code class="descclassname">namebot.scoring.</code><code class="descname">bounded</code><span class="sig-paren">(</span><em>num</em>, <em>start</em>, <em>end</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/scoring.html#bounded"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.scoring.bounded" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if a number is within the bounds of <cite>start</cite> and <cite>end</cite>.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>num (int): An integer.
+start (int): A start minimum.
+end (int): An end maximum.</dd>
+<dt>Returns:</dt>
+<dd>is_bounded (bool): Whether number is bounded by start and end.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.scoring.generate_all_scoring">
+<code class="descclassname">namebot.scoring.</code><code class="descname">generate_all_scoring</code><span class="sig-paren">(</span><em>words</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/scoring.html#generate_all_scoring"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.scoring.generate_all_scoring" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return all scoring methods for a set of words.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>words (list) - the list of words.</dd>
+<dt>Returns:</dt>
+<dd>words (dict) - the scores, keyed by scoring name.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.scoring.score_dmetaphone">
+<code class="descclassname">namebot.scoring.</code><code class="descname">score_dmetaphone</code><span class="sig-paren">(</span><em>words</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/scoring.html#score_dmetaphone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.scoring.score_dmetaphone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Score words using the double metaphone algorithm.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>words (list) - the list of words.</dd>
+<dt>Returns:</dt>
+<dd>scores (list) - the scored words</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.scoring.score_length">
+<code class="descclassname">namebot.scoring.</code><code class="descname">score_length</code><span class="sig-paren">(</span><em>word</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/scoring.html#score_length"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.scoring.score_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a score, 1-5, of the length of the word.</p>
+<p>Really long, or really short words get a lower score.
+There is no hard science, but popular opinion suggests
+that a word somewhere between 8-15 letters is optimal.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>word (str): The word to score.</dd>
+<dt>Returns:</dt>
+<dd>score (int): The resulting score.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.scoring.score_name_overall">
+<code class="descclassname">namebot.scoring.</code><code class="descname">score_name_overall</code><span class="sig-paren">(</span><em>word</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/scoring.html#score_name_overall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.scoring.score_name_overall" title="Permalink to this definition">¶</a></dt>
+<dd><p>Score the name using separate scoring functions, then normalize to 100.</p>
+<p>This method gives an overall intuitive score.
+The closer to 100%, the better.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>word (string) - the name</dd>
+<dt>Returns:</dt>
+<dd>score (float) - the final name score</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.scoring.score_names_overall">
+<code class="descclassname">namebot.scoring.</code><code class="descname">score_names_overall</code><span class="sig-paren">(</span><em>words</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/scoring.html#score_names_overall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.scoring.score_names_overall" title="Permalink to this definition">¶</a></dt>
+<dd><p>Score all names.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>words (list) - the list of words.</dd>
+<dt>Returns:</dt>
+<dd>words (list) - a list of tuples, with the score and word.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.scoring.score_nysiis">
+<code class="descclassname">namebot.scoring.</code><code class="descname">score_nysiis</code><span class="sig-paren">(</span><em>words</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/scoring.html#score_nysiis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.scoring.score_nysiis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Score words using the nysiis algorithm.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>words (list) - the list of words.</dd>
+<dt>Returns:</dt>
+<dd>scores (list) - the scored words</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.scoring.score_pronounceability">
+<code class="descclassname">namebot.scoring.</code><code class="descname">score_pronounceability</code><span class="sig-paren">(</span><em>word</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/scoring.html#score_pronounceability"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.scoring.score_pronounceability" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the ratio of vowels to consonants, a very basic measurement.</p>
+<p>Half vowels and half consonants indicates a highly pronounceable word.
+For example, 0.5 / 0.5 = 1.0, so one is perfect, and lower is worse.</p>
+<p>The 1-5 scale translation:</p>
+<p>0.0   0.1   0.2   0.3   0.4   0.5   0.6   0.7   0.8   0.9   1.0</p>
+<p>0      1     2     3     4     5     4     3     2     1      5</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>word (string) - the name</dd>
+<dt>Returns:</dt>
+<dd>score (int) - the final pronounceability score</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.scoring.score_simplicity">
+<code class="descclassname">namebot.scoring.</code><code class="descname">score_simplicity</code><span class="sig-paren">(</span><em>word</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/scoring.html#score_simplicity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.scoring.score_simplicity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine how simple the word is.</p>
+<p>Simple is defined as the number of separate words.
+In this case, higher is better, indicating a better score.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>word (string) - the name</dd>
+<dt>Returns:</dt>
+<dd>score (int) - the final simplicity score</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">score_simplicity</span><span class="p">(</span><span class="s">&#39;the cat in the hat&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">score_simplicity</span><span class="p">(</span><span class="s">&#39;facebook&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="mi">5</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.scoring.score_soundex">
+<code class="descclassname">namebot.scoring.</code><code class="descname">score_soundex</code><span class="sig-paren">(</span><em>words</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/scoring.html#score_soundex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.scoring.score_soundex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Score words using the soundex algorithm.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>words (list) - the list of words.</dd>
+<dt>Returns:</dt>
+<dd>scores (list) - the scored words</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="namebot.strainer.html" class="btn btn-neutral float-right" title="namebot.strainer module" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="namebot.normalization.html" class="btn btn-neutral" title="namebot.normalization module" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Chris Tabor.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

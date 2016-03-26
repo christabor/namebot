@@ -1,0 +1,361 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>namebot.tests.test_metrics &mdash; namebot  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="namebot  documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> namebot
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../namebot.html">namebot package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">namebot</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+    <li>namebot.tests.test_metrics</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for namebot.tests.test_metrics</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">from</span> <span class="nn">namebot</span> <span class="kn">import</span> <span class="n">metrics</span>
+
+
+<div class="viewcode-block" id="GetNamedNumbersTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_metrics.html#namebot.tests.test_metrics.GetNamedNumbersTestCase">[docs]</a><span class="k">class</span> <span class="nc">GetNamedNumbersTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_basic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">get_named_numbers_1_10</span><span class="p">(</span>
+            <span class="p">[</span><span class="s">&#39;360 networks&#39;</span><span class="p">,</span> <span class="s">&#39;Three Sixty networks&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s">&#39;Three Sixty networks&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s">&#39;summary&#39;</span><span class="p">],</span> <span class="s">&#39;Of 2 words, 1 matched&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="NameLengthTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_metrics.html#namebot.tests.test_metrics.NameLengthTestCase">[docs]</a><span class="k">class</span> <span class="nc">NameLengthTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_basic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">name_length</span><span class="p">([</span><span class="s">&#39;short&#39;</span><span class="p">,</span> <span class="s">&#39;medium&#39;</span><span class="p">,</span> <span class="s">&#39;veryveryverylong&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">16</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+            <span class="n">res</span><span class="p">[</span><span class="s">&#39;summary&#39;</span><span class="p">],</span> <span class="s">&#39;Of 3 words, the average length of names is...9.0&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="NameVowelCountTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_metrics.html#namebot.tests.test_metrics.NameVowelCountTestCase">[docs]</a><span class="k">class</span> <span class="nc">NameVowelCountTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_basic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">name_vowel_count</span><span class="p">([</span><span class="s">&#39;neato&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">][</span><span class="s">&#39;a&#39;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">][</span><span class="s">&#39;e&#39;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">][</span><span class="s">&#39;o&#39;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">][</span><span class="s">&#39;i&#39;</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="NameStartsWithVowelTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_metrics.html#namebot.tests.test_metrics.NameStartsWithVowelTestCase">[docs]</a><span class="k">class</span> <span class="nc">NameStartsWithVowelTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_basic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">name_starts_with_vowel</span><span class="p">([</span><span class="s">&#39;aardvark&#39;</span><span class="p">,</span> <span class="s">&#39;apple&#39;</span><span class="p">,</span> <span class="s">&#39;banana&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">],</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+            <span class="n">res</span><span class="p">[</span><span class="s">&#39;summary&#39;</span><span class="p">],</span>
+            <span class="s">&#39;Of 3 words, 2 or 67.0% are vowels as the first letter.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_diff_percentage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;aardvark&#39;</span><span class="p">,</span> <span class="s">&#39;apple&#39;</span><span class="p">,</span> <span class="s">&#39;banana&#39;</span><span class="p">,</span> <span class="s">&#39;fruit&#39;</span><span class="p">,</span> <span class="s">&#39;orange&#39;</span><span class="p">,</span> <span class="s">&#39;grape&#39;</span><span class="p">]</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">name_starts_with_vowel</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">],</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+            <span class="n">res</span><span class="p">[</span><span class="s">&#39;summary&#39;</span><span class="p">],</span>
+            <span class="s">&#39;Of 6 words, 3 or 50.0% are vowels as the first letter.&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="GetSearchResultsTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_metrics.html#namebot.tests.test_metrics.GetSearchResultsTestCase">[docs]</a><span class="k">class</span> <span class="nc">GetSearchResultsTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_basic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+
+<div class="viewcode-block" id="GetDigitsFrequencyTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_metrics.html#namebot.tests.test_metrics.GetDigitsFrequencyTestCase">[docs]</a><span class="k">class</span> <span class="nc">GetDigitsFrequencyTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_basic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;Of 3 words, 3 have numbers in them, with a&#39;</span>
+               <span class="s">&#39; total of 5 numbers found.&#39;</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">get_digits_frequency</span><span class="p">([</span><span class="s">&#39;7-11&#39;</span><span class="p">,</span> <span class="s">&#39;24/7Networks&#39;</span><span class="p">,</span> <span class="s">&#39;360corp&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s">&#39;7&#39;</span><span class="p">,</span> <span class="s">&#39;11&#39;</span><span class="p">,</span> <span class="s">&#39;24&#39;</span><span class="p">,</span> <span class="s">&#39;7&#39;</span><span class="p">,</span> <span class="s">&#39;360&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s">&#39;summary&#39;</span><span class="p">],</span> <span class="n">msg</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="GetFirstLetterFrequencyTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_metrics.html#namebot.tests.test_metrics.GetFirstLetterFrequencyTestCase">[docs]</a><span class="k">class</span> <span class="nc">GetFirstLetterFrequencyTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_basic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">get_first_letter_frequency</span><span class="p">([</span><span class="s">&#39;fjord&#39;</span><span class="p">,</span> <span class="s">&#39;flower&#39;</span><span class="p">,</span> <span class="s">&#39;apple&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">][</span><span class="s">&#39;f&#39;</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">][</span><span class="s">&#39;a&#39;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="GetSpecialCharsTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_metrics.html#namebot.tests.test_metrics.GetSpecialCharsTestCase">[docs]</a><span class="k">class</span> <span class="nc">GetSpecialCharsTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_basic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">get_special_chars</span><span class="p">([</span><span class="s">&#39;de.li.c.ious&#39;</span><span class="p">,</span> <span class="s">&#39;flip-to&#39;</span><span class="p">,</span> <span class="s">&#39;bit.ly&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s">&#39;.&#39;</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">,</span> <span class="s">&#39;-&#39;</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+            <span class="n">res</span><span class="p">[</span><span class="s">&#39;summary&#39;</span><span class="p">],</span>
+            <span class="s">&#39;5 occurrences of special characters were found in 3 words.&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="GetWordTypesTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_metrics.html#namebot.tests.test_metrics.GetWordTypesTestCase">[docs]</a><span class="k">class</span> <span class="nc">GetWordTypesTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_basic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">get_word_types</span><span class="p">([</span><span class="s">&#39;apple&#39;</span><span class="p">,</span> <span class="s">&#39;cat&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s">u&#39;apple/NN&#39;</span><span class="p">,</span> <span class="s">u&#39;cat/NN&#39;</span><span class="p">])</span>
+
+
+<div class="viewcode-block" id="GetNameSpacesTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_metrics.html#namebot.tests.test_metrics.GetNameSpacesTestCase">[docs]</a><span class="k">class</span> <span class="nc">GetNameSpacesTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_basic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">get_name_spaces</span><span class="p">(</span>
+            <span class="p">[</span><span class="s">&#39;Itsy bitsy spider co&#39;</span><span class="p">,</span> <span class="s">&#39;Nifty widgets, Inc&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s">&#39;spaces&#39;</span><span class="p">],</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;spaces&#39;</span><span class="p">],</span> <span class="mi">3</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="GetConsonantRepeatFrequencyTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_metrics.html#namebot.tests.test_metrics.GetConsonantRepeatFrequencyTestCase">[docs]</a><span class="k">class</span> <span class="nc">GetConsonantRepeatFrequencyTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_basic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;cat&#39;</span><span class="p">]</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">get_consonant_repeat_frequency</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="p">{</span>
+            <span class="s">&#39;data&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s">&#39;summary&#39;</span><span class="p">:</span> <span class="bp">None</span>
+        <span class="p">})</span>
+
+    <span class="k">def</span> <span class="nf">test_multiple</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;cat&#39;</span><span class="p">,</span> <span class="s">&#39;foo&#39;</span><span class="p">,</span> <span class="s">&#39;bar&#39;</span><span class="p">,</span> <span class="s">&#39;quux&#39;</span><span class="p">]</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">get_consonant_repeat_frequency</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="p">{</span>
+            <span class="s">&#39;data&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+            <span class="s">&#39;summary&#39;</span><span class="p">:</span> <span class="bp">None</span>
+        <span class="p">})</span>
+
+    <span class="k">def</span> <span class="nf">test_none</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">get_consonant_repeat_frequency</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="p">{</span>
+            <span class="s">&#39;data&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s">&#39;summary&#39;</span><span class="p">:</span> <span class="bp">None</span>
+        <span class="p">})</span>
+
+
+<div class="viewcode-block" id="GetConsonantDuplicateRepeatFrequencyTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_metrics.html#namebot.tests.test_metrics.GetConsonantDuplicateRepeatFrequencyTestCase">[docs]</a><span class="k">class</span> <span class="nc">GetConsonantDuplicateRepeatFrequencyTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_basic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">get_consonant_duplicate_repeat_frequency</span><span class="p">(</span>
+            <span class="p">[</span><span class="s">&#39;cannon&#39;</span><span class="p">,</span> <span class="s">&#39;fodder&#39;</span><span class="p">,</span> <span class="s">&#39;grapple&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">],</span> <span class="mi">3</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="GetVowelRepeatFrequencyTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_metrics.html#namebot.tests.test_metrics.GetVowelRepeatFrequencyTestCase">[docs]</a><span class="k">class</span> <span class="nc">GetVowelRepeatFrequencyTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_basic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">get_consonant_duplicate_repeat_frequency</span><span class="p">(</span>
+            <span class="p">[</span><span class="s">&#39;food&#39;</span><span class="p">,</span> <span class="s">&#39;beef&#39;</span><span class="p">,</span> <span class="s">&#39;cheese&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">],</span> <span class="mi">3</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="GetAdjectiveVerbOrNounTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_metrics.html#namebot.tests.test_metrics.GetAdjectiveVerbOrNounTestCase">[docs]</a><span class="k">class</span> <span class="nc">GetAdjectiveVerbOrNounTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_only_nouns</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">get_adjective_verb_or_noun</span><span class="p">([</span><span class="s">&#39;cat&#39;</span><span class="p">,</span> <span class="s">&#39;dog&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">][</span><span class="s">&#39;nouns&#39;</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">][</span><span class="s">&#39;verbs&#39;</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_only_verbs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">get_adjective_verb_or_noun</span><span class="p">([</span><span class="s">&#39;jumping&#39;</span><span class="p">,</span> <span class="s">&#39;flying&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">][</span><span class="s">&#39;nouns&#39;</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">][</span><span class="s">&#39;verbs&#39;</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_noun_verbs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">get_adjective_verb_or_noun</span><span class="p">([</span><span class="s">&#39;jumping&#39;</span><span class="p">,</span> <span class="s">&#39;dog&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">][</span><span class="s">&#39;nouns&#39;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">][</span><span class="s">&#39;verbs&#39;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="CategorizeWordType"><a class="viewcode-back" href="../../../namebot.tests.test_metrics.html#namebot.tests.test_metrics.CategorizeWordType">[docs]</a><span class="k">class</span> <span class="nc">CategorizeWordType</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;rain&#39;</span><span class="p">,</span> <span class="s">&#39;a lot of sunshine&#39;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">test_not_phrase</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">categorize_word_type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">words</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;real&#39;</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;phrase&#39;</span><span class="p">],</span> <span class="mi">50</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_phrase</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">categorize_word_type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">words</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;real&#39;</span><span class="p">],</span> <span class="mi">50</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;phrase&#39;</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Chris Tabor.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

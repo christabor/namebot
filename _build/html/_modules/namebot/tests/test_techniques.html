@@ -1,0 +1,620 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>namebot.tests.test_techniques &mdash; namebot  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="namebot  documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> namebot
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../namebot.html">namebot package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">namebot</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+    <li>namebot.tests.test_techniques</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for namebot.tests.test_techniques</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;Techniques module tests.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">unittest</span>
+
+<span class="kn">from</span> <span class="nn">namebot</span> <span class="kn">import</span> <span class="n">techniques</span>
+
+
+<div class="viewcode-block" id="DomainifyTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_techniques.html#namebot.tests.test_techniques.DomainifyTestCase">[docs]</a><span class="k">class</span> <span class="nc">DomainifyTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_threeletter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">techniques</span><span class="o">.</span><span class="n">domainify</span><span class="p">([</span><span class="s">&#39;intercom&#39;</span><span class="p">]),</span> <span class="p">[</span><span class="s">&#39;inter.com&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">test_twoletter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+            <span class="n">techniques</span><span class="o">.</span><span class="n">domainify</span><span class="p">([</span><span class="s">&#39;actively&#39;</span><span class="p">],</span> <span class="n">tld</span><span class="o">=</span><span class="s">&#39;.ly&#39;</span><span class="p">),</span> <span class="p">[</span><span class="s">&#39;active.ly&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">test_fourletter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+            <span class="n">techniques</span><span class="o">.</span><span class="n">domainify</span><span class="p">([</span><span class="s">&#39;scamp&#39;</span><span class="p">],</span> <span class="n">tld</span><span class="o">=</span><span class="s">&#39;.camp&#39;</span><span class="p">),</span> <span class="p">[</span><span class="s">&#39;s.camp&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">test_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+            <span class="n">techniques</span><span class="o">.</span><span class="n">domainify</span><span class="p">([</span><span class="s">&#39;intercom&#39;</span><span class="p">],</span> <span class="n">tld</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">),</span> <span class="p">[</span><span class="s">&#39;intercom&#39;</span><span class="p">])</span>
+
+
+<div class="viewcode-block" id="PalindromeTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_techniques.html#namebot.tests.test_techniques.PalindromeTestCase">[docs]</a><span class="k">class</span> <span class="nc">PalindromeTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_simple</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">techniques</span><span class="o">.</span><span class="n">palindrome</span><span class="p">(</span><span class="s">&#39;Fool&#39;</span><span class="p">),</span> <span class="s">&#39;FoollooF&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_complicated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">techniques</span><span class="o">.</span><span class="n">palindrome</span><span class="p">(</span>
+            <span class="s">&#39;Aardvarks&#39;</span><span class="p">),</span> <span class="s">&#39;AardvarksskravdraA&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_spaced</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">techniques</span><span class="o">.</span><span class="n">palindrome</span><span class="p">(</span>
+            <span class="s">&#39;Red Dragon&#39;</span><span class="p">),</span> <span class="s">&#39;Red DragonnogarD deR&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_simple_array</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">techniques</span><span class="o">.</span><span class="n">palindromes</span><span class="p">(</span>
+            <span class="p">[</span><span class="s">&#39;wtf&#39;</span><span class="p">,</span> <span class="s">&#39;omg&#39;</span><span class="p">]),</span> <span class="p">[</span><span class="s">&#39;wtfftw&#39;</span><span class="p">,</span> <span class="s">&#39;omggmo&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">test_simple_array_spaced</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">techniques</span><span class="o">.</span><span class="n">palindromes</span><span class="p">(</span>
+            <span class="p">[</span><span class="s">&#39;wtf omg&#39;</span><span class="p">,</span> <span class="s">&#39;omg wtf&#39;</span><span class="p">]),</span> <span class="p">[</span><span class="s">&#39;wtf omggmo ftw&#39;</span><span class="p">,</span> <span class="s">&#39;omg wtfftw gmo&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">test_single_letter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">techniques</span><span class="o">.</span><span class="n">palindrome</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">),</span> <span class="s">&#39;ff&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="SpoonerismTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_techniques.html#namebot.tests.test_techniques.SpoonerismTestCase">[docs]</a><span class="k">class</span> <span class="nc">SpoonerismTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_simple</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+            <span class="n">techniques</span><span class="o">.</span><span class="n">spoonerism</span><span class="p">([</span><span class="s">&#39;flim&#39;</span><span class="p">,</span> <span class="s">&#39;boom&#39;</span><span class="p">,</span> <span class="s">&#39;dang&#39;</span><span class="p">,</span> <span class="s">&#39;dune&#39;</span><span class="p">]),</span>
+            <span class="p">[</span><span class="s">&#39;blim foom&#39;</span><span class="p">,</span> <span class="s">&#39;doom bang&#39;</span><span class="p">,</span> <span class="s">&#39;dang dune&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">test_single_word</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">techniques</span><span class="o">.</span><span class="n">spoonerism</span><span class="p">([</span><span class="s">&#39;foo&#39;</span><span class="p">]))</span>
+
+
+<div class="viewcode-block" id="KniferismTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_techniques.html#namebot.tests.test_techniques.KniferismTestCase">[docs]</a><span class="k">class</span> <span class="nc">KniferismTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_simple</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+            <span class="n">techniques</span><span class="o">.</span><span class="n">kniferism</span><span class="p">([</span><span class="s">&#39;flim&#39;</span><span class="p">,</span> <span class="s">&#39;boom&#39;</span><span class="p">,</span> <span class="s">&#39;dang&#39;</span><span class="p">,</span> <span class="s">&#39;dune&#39;</span><span class="p">]),</span>
+            <span class="p">[</span><span class="s">&#39;flom boim&#39;</span><span class="p">,</span> <span class="s">&#39;bonm daog&#39;</span><span class="p">,</span> <span class="s">&#39;dang dune&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">test_single_word</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">techniques</span><span class="o">.</span><span class="n">kniferism</span><span class="p">([</span><span class="s">&#39;foo&#39;</span><span class="p">]))</span>
+
+
+<div class="viewcode-block" id="ForkerismTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_techniques.html#namebot.tests.test_techniques.ForkerismTestCase">[docs]</a><span class="k">class</span> <span class="nc">ForkerismTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_simple</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+            <span class="n">techniques</span><span class="o">.</span><span class="n">forkerism</span><span class="p">([</span><span class="s">&#39;flim&#39;</span><span class="p">,</span> <span class="s">&#39;boom&#39;</span><span class="p">,</span> <span class="s">&#39;dang&#39;</span><span class="p">,</span> <span class="s">&#39;dune&#39;</span><span class="p">]),</span>
+            <span class="p">[</span><span class="s">&#39;flim boom&#39;</span><span class="p">,</span> <span class="s">&#39;boog danm&#39;</span><span class="p">,</span> <span class="s">&#39;dane dung&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">test_single_word</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">techniques</span><span class="o">.</span><span class="n">forkerism</span><span class="p">([</span><span class="s">&#39;foo&#39;</span><span class="p">]))</span>
+
+
+<div class="viewcode-block" id="ReduplicationAblautTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_techniques.html#namebot.tests.test_techniques.ReduplicationAblautTestCase">[docs]</a><span class="k">class</span> <span class="nc">ReduplicationAblautTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_vowel_a</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">techniques</span><span class="o">.</span><span class="n">reduplication_ablaut</span><span class="p">(</span>
+            <span class="p">[</span><span class="s">&#39;cat&#39;</span><span class="p">,</span> <span class="s">&#39;dog&#39;</span><span class="p">],</span> <span class="n">random</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">vowel</span><span class="o">=</span><span class="s">&#39;a&#39;</span><span class="p">),</span> <span class="p">[</span><span class="s">&#39;dog dag&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">test_vowel_e</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">techniques</span><span class="o">.</span><span class="n">reduplication_ablaut</span><span class="p">(</span>
+            <span class="p">[</span><span class="s">&#39;cat&#39;</span><span class="p">,</span> <span class="s">&#39;dog&#39;</span><span class="p">],</span> <span class="n">random</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">vowel</span><span class="o">=</span><span class="s">&#39;e&#39;</span><span class="p">),</span>
+            <span class="p">[</span><span class="s">&#39;cat cet&#39;</span><span class="p">,</span> <span class="s">&#39;dog deg&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">test_vowel_i</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">techniques</span><span class="o">.</span><span class="n">reduplication_ablaut</span><span class="p">(</span>
+            <span class="p">[</span><span class="s">&#39;cat&#39;</span><span class="p">,</span> <span class="s">&#39;dog&#39;</span><span class="p">],</span> <span class="n">random</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">vowel</span><span class="o">=</span><span class="s">&#39;i&#39;</span><span class="p">),</span>
+            <span class="p">[</span><span class="s">&#39;cat cit&#39;</span><span class="p">,</span> <span class="s">&#39;dog dig&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">test_vowel_o</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">techniques</span><span class="o">.</span><span class="n">reduplication_ablaut</span><span class="p">(</span>
+            <span class="p">[</span><span class="s">&#39;cat&#39;</span><span class="p">,</span> <span class="s">&#39;dog&#39;</span><span class="p">],</span> <span class="n">random</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">vowel</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">),</span> <span class="p">[</span><span class="s">&#39;cat cot&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">test_vowel_u</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">techniques</span><span class="o">.</span><span class="n">reduplication_ablaut</span><span class="p">(</span>
+            <span class="p">[</span><span class="s">&#39;cat&#39;</span><span class="p">,</span> <span class="s">&#39;dog&#39;</span><span class="p">],</span> <span class="n">random</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">vowel</span><span class="o">=</span><span class="s">&#39;u&#39;</span><span class="p">),</span>
+            <span class="p">[</span><span class="s">&#39;cat cut&#39;</span><span class="p">,</span> <span class="s">&#39;dog dug&#39;</span><span class="p">])</span>
+
+
+<div class="viewcode-block" id="AffixWordsTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_techniques.html#namebot.tests.test_techniques.AffixWordsTestCase">[docs]</a><span class="k">class</span> <span class="nc">AffixWordsTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;shop&#39;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">test_prefix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">techniques</span><span class="o">.</span><span class="n">prefixify</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">words</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">[:</span><span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="s">&#39;ennishop&#39;</span><span class="p">,</span> <span class="s">&#39;epishop&#39;</span><span class="p">,</span> <span class="s">&#39;equishop&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">test_suffix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">techniques</span><span class="o">.</span><span class="n">suffixify</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">words</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">[:</span><span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="s">&#39;shopage&#39;</span><span class="p">,</span> <span class="s">&#39;shopable&#39;</span><span class="p">,</span> <span class="s">&#39;shopible&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">test_duplifix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">techniques</span><span class="o">.</span><span class="n">duplifixify</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">words</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">[:</span><span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="s">&#39;shop ahop&#39;</span><span class="p">,</span> <span class="s">&#39;shop bhop&#39;</span><span class="p">,</span> <span class="s">&#39;shop chop&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">test_duplifix_duplicates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">techniques</span><span class="o">.</span><span class="n">duplifixify</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">words</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="s">&#39;shop shop&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">res</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_disfix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;propagating&#39;</span><span class="p">,</span> <span class="s">&#39;gigantic&#39;</span><span class="p">]</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">techniques</span><span class="o">.</span><span class="n">disfixify</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;pagating&#39;</span><span class="p">,</span> <span class="s">&#39;antic&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">test_disfix_nosingle_pairs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;shop&#39;</span><span class="p">,</span> <span class="s">&#39;prop&#39;</span><span class="p">]</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">techniques</span><span class="o">.</span><span class="n">disfixify</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;shop&#39;</span><span class="p">,</span> <span class="s">&#39;prop&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">test_disfix_novowels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;shp&#39;</span><span class="p">,</span> <span class="s">&#39;prp&#39;</span><span class="p">]</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">techniques</span><span class="o">.</span><span class="n">disfixify</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">words</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_disfix_noconsonants</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;oooaeoa&#39;</span><span class="p">]</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">techniques</span><span class="o">.</span><span class="n">disfixify</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">words</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_infix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;sophisticated&#39;</span><span class="p">]</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">techniques</span><span class="o">.</span><span class="n">infixify</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+        <span class="n">expected</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;sophistiqacated&#39;</span><span class="p">,</span> <span class="s">&#39;sophistiqecated&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;sophistiqicated&#39;</span><span class="p">,</span> <span class="s">&#39;sophistiqocated&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">],</span> <span class="n">expected</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_infix_novowels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;shp&#39;</span><span class="p">,</span> <span class="s">&#39;prp&#39;</span><span class="p">]</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">techniques</span><span class="o">.</span><span class="n">infixify</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">words</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_infix_noconsonants</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;oooaeoa&#39;</span><span class="p">]</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">techniques</span><span class="o">.</span><span class="n">infixify</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">words</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_infix_nosingle_pairs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;shop&#39;</span><span class="p">,</span> <span class="s">&#39;prop&#39;</span><span class="p">]</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">techniques</span><span class="o">.</span><span class="n">infixify</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">words</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_simulfix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">techniques</span><span class="o">.</span><span class="n">simulfixify</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">words</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertGreater</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">res</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">words</span><span class="p">))</span>
+        <span class="c"># Confirm that the pairs were added to each word</span>
+        <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">res</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">test_simulfix_custom_pairs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">techniques</span><span class="o">.</span><span class="n">simulfixify</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">words</span><span class="p">,</span> <span class="n">pairs</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ab&#39;</span><span class="p">,</span> <span class="s">&#39;ec&#39;</span><span class="p">,</span> <span class="s">&#39;oz&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;shabop&#39;</span><span class="p">,</span> <span class="s">&#39;shecop&#39;</span><span class="p">,</span> <span class="s">&#39;shozop&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">test_simulfix_empty_strings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">techniques</span><span class="o">.</span><span class="n">simulfixify</span><span class="p">([</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">],</span> <span class="n">pairs</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ab&#39;</span><span class="p">,</span> <span class="s">&#39;ec&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;ab&#39;</span><span class="p">,</span> <span class="s">&#39;ec&#39;</span><span class="p">,</span> <span class="s">&#39;ab&#39;</span><span class="p">,</span> <span class="s">&#39;ec&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">test_simulfix_short_words</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">techniques</span><span class="o">.</span><span class="n">simulfixify</span><span class="p">([</span><span class="s">&#39;f&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">],</span> <span class="n">pairs</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ab&#39;</span><span class="p">,</span> <span class="s">&#39;ec&#39;</span><span class="p">])</span>
+        <span class="n">expected</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;abf&#39;</span><span class="p">,</span> <span class="s">&#39;ecf&#39;</span><span class="p">,</span> <span class="s">&#39;abb&#39;</span><span class="p">,</span> <span class="s">&#39;ecb&#39;</span><span class="p">,</span> <span class="s">&#39;aba&#39;</span><span class="p">,</span> <span class="s">&#39;eca&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">expected</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="MakeFounderProductNameTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_techniques.html#namebot.tests.test_techniques.MakeFounderProductNameTestCase">[docs]</a><span class="k">class</span> <span class="nc">MakeFounderProductNameTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_simple</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+            <span class="n">techniques</span><span class="o">.</span><span class="n">make_founder_product_name</span><span class="p">(</span>
+                <span class="s">&#39;Foo&#39;</span><span class="p">,</span> <span class="s">&#39;Bar&#39;</span><span class="p">,</span> <span class="s">&#39;Goods&#39;</span><span class="p">),</span> <span class="s">&#39;F &amp; B Goods&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_simple_lowercase</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotEqual</span><span class="p">(</span>
+            <span class="n">techniques</span><span class="o">.</span><span class="n">make_founder_product_name</span><span class="p">(</span>
+                <span class="s">&#39;Foo&#39;</span><span class="p">,</span> <span class="s">&#39;Bar&#39;</span><span class="p">,</span> <span class="s">&#39;Goods&#39;</span><span class="p">),</span> <span class="s">&#39;foo bar &amp; co goods&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="MakeNameAlliterationTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_techniques.html#namebot.tests.test_techniques.MakeNameAlliterationTestCase">[docs]</a><span class="k">class</span> <span class="nc">MakeNameAlliterationTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_simple</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">original</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;jamba&#39;</span><span class="p">,</span> <span class="s">&#39;juice&#39;</span><span class="p">,</span> <span class="s">&#39;dancing&#39;</span><span class="p">,</span> <span class="s">&#39;tornado&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;disco&#39;</span><span class="p">,</span> <span class="s">&#39;wicked&#39;</span><span class="p">,</span> <span class="s">&#39;tomato&#39;</span><span class="p">]</span>
+        <span class="n">updated</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;dancing disco&#39;</span><span class="p">,</span> <span class="s">&#39;disco dancing&#39;</span><span class="p">,</span> <span class="s">&#39;jamba juice&#39;</span><span class="p">,</span>
+                   <span class="s">&#39;juice jamba&#39;</span><span class="p">,</span> <span class="s">&#39;tomato tornado&#39;</span><span class="p">,</span> <span class="s">&#39;tornado tomato&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+            <span class="n">techniques</span><span class="o">.</span><span class="n">make_name_alliteration</span><span class="p">(</span><span class="n">original</span><span class="p">),</span> <span class="n">updated</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_divider</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">original</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;content&#39;</span><span class="p">,</span> <span class="s">&#39;applesauce&#39;</span><span class="p">,</span> <span class="s">&#39;candor&#39;</span><span class="p">,</span> <span class="s">&#39;character&#39;</span><span class="p">]</span>
+        <span class="n">updated</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;candor &amp; character&#39;</span><span class="p">,</span> <span class="s">&#39;candor &amp; content&#39;</span><span class="p">,</span>
+                   <span class="s">&#39;character &amp; candor&#39;</span><span class="p">,</span> <span class="s">&#39;character &amp; content&#39;</span><span class="p">,</span>
+                   <span class="s">&#39;content &amp; candor&#39;</span><span class="p">,</span> <span class="s">&#39;content &amp; character&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+            <span class="n">techniques</span><span class="o">.</span><span class="n">make_name_alliteration</span><span class="p">(</span>
+                <span class="n">original</span><span class="p">,</span> <span class="n">divider</span><span class="o">=</span><span class="s">&#39; &amp; &#39;</span><span class="p">),</span> <span class="n">updated</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="MakeNameAbbreviationTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_techniques.html#namebot.tests.test_techniques.MakeNameAbbreviationTestCase">[docs]</a><span class="k">class</span> <span class="nc">MakeNameAbbreviationTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_simple</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+            <span class="n">techniques</span><span class="o">.</span><span class="n">make_name_abbreviation</span><span class="p">(</span>
+                <span class="p">[</span><span class="s">&#39;Badische&#39;</span><span class="p">,</span> <span class="s">&#39;Anilin&#39;</span><span class="p">,</span> <span class="s">&#39;Soda&#39;</span><span class="p">,</span> <span class="s">&#39;Fabrik&#39;</span><span class="p">]),</span> <span class="s">&#39;BASF&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="MakeVowelTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_techniques.html#namebot.tests.test_techniques.MakeVowelTestCase">[docs]</a><span class="k">class</span> <span class="nc">MakeVowelTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_a</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">techniques</span><span class="o">.</span><span class="n">make_vowel</span><span class="p">(</span>
+            <span class="p">[</span><span class="s">&#39;brad&#39;</span><span class="p">,</span> <span class="s">&#39;angelina&#39;</span><span class="p">],</span> <span class="s">r&#39;a{1}&#39;</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">),</span> <span class="p">[</span><span class="s">&#39;brangelina&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">test_e</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">techniques</span><span class="o">.</span><span class="n">make_vowel</span><span class="p">(</span>
+            <span class="p">[</span><span class="s">&#39;street&#39;</span><span class="p">,</span> <span class="s">&#39;credence&#39;</span><span class="p">],</span> <span class="s">r&#39;e{1}&#39;</span><span class="p">,</span> <span class="s">&#39;e&#39;</span><span class="p">),</span> <span class="p">[</span><span class="s">&#39;stredence&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">test_i</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">techniques</span><span class="o">.</span><span class="n">make_vowel</span><span class="p">(</span>
+            <span class="p">[</span><span class="s">&#39;stripe&#39;</span><span class="p">,</span> <span class="s">&#39;wild&#39;</span><span class="p">],</span> <span class="s">r&#39;i{1}&#39;</span><span class="p">,</span> <span class="s">&#39;i&#39;</span><span class="p">),</span> <span class="p">[</span><span class="s">&#39;strild&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">test_o</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">techniques</span><span class="o">.</span><span class="n">make_vowel</span><span class="p">(</span>
+            <span class="p">[</span><span class="s">&#39;strode&#39;</span><span class="p">,</span> <span class="s">&#39;pork&#39;</span><span class="p">],</span> <span class="s">r&#39;o{1}&#39;</span><span class="p">,</span> <span class="s">&#39;o&#39;</span><span class="p">),</span> <span class="p">[</span><span class="s">&#39;strork&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">test_u</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">techniques</span><span class="o">.</span><span class="n">make_vowel</span><span class="p">(</span>
+            <span class="p">[</span><span class="s">&#39;true&#39;</span><span class="p">,</span> <span class="s">&#39;crude&#39;</span><span class="p">],</span> <span class="s">r&#39;u{1}&#39;</span><span class="p">,</span> <span class="s">&#39;u&#39;</span><span class="p">),</span> <span class="p">[</span><span class="s">&#39;trude&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">test_no_substring</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Check for values that aren&#39;t found in the regex list.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">techniques</span><span class="o">.</span><span class="n">make_vowel</span><span class="p">(</span>
+            <span class="p">[</span><span class="s">&#39;matching&#39;</span><span class="p">,</span> <span class="s">&#39;not&#39;</span><span class="p">],</span> <span class="s">r&#39;a{1}&#39;</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">),</span> <span class="p">[])</span>
+
+
+<div class="viewcode-block" id="MakePortmanteauDefaultVowelTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_techniques.html#namebot.tests.test_techniques.MakePortmanteauDefaultVowelTestCase">[docs]</a><span class="k">class</span> <span class="nc">MakePortmanteauDefaultVowelTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_simple</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+            <span class="n">techniques</span><span class="o">.</span><span class="n">make_portmanteau_default_vowel</span><span class="p">(</span>
+                <span class="p">[</span><span class="s">&#39;sweet&#39;</span><span class="p">,</span> <span class="s">&#39;potato&#39;</span><span class="p">,</span> <span class="s">&#39;nifty&#39;</span><span class="p">,</span> <span class="s">&#39;gadget&#39;</span><span class="p">,</span> <span class="s">&#39;widgets&#39;</span><span class="p">]),</span>
+            <span class="p">[</span><span class="s">&#39;potadget&#39;</span><span class="p">,</span> <span class="s">&#39;gadgeet&#39;</span><span class="p">,</span> <span class="s">&#39;widgeet&#39;</span><span class="p">])</span>
+
+
+<div class="viewcode-block" id="MakemakePortmanteauSplitTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_techniques.html#namebot.tests.test_techniques.MakemakePortmanteauSplitTestCase">[docs]</a><span class="k">class</span> <span class="nc">MakemakePortmanteauSplitTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_2words</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+            <span class="n">techniques</span><span class="o">.</span><span class="n">make_portmanteau_split</span><span class="p">([</span><span class="s">&#39;dad&#39;</span><span class="p">,</span> <span class="s">&#39;cool&#39;</span><span class="p">]),</span>
+            <span class="p">[</span><span class="s">&#39;dadool&#39;</span><span class="p">,</span> <span class="s">&#39;dadool&#39;</span><span class="p">,</span> <span class="s">&#39;datool&#39;</span><span class="p">,</span> <span class="s">&#39;dasool&#39;</span><span class="p">,</span> <span class="s">&#39;dazool&#39;</span><span class="p">,</span>
+             <span class="s">&#39;daxool&#39;</span><span class="p">,</span> <span class="s">&#39;cocad&#39;</span><span class="p">,</span> <span class="s">&#39;coad&#39;</span><span class="p">,</span> <span class="s">&#39;colad&#39;</span><span class="p">,</span> <span class="s">&#39;cotad&#39;</span><span class="p">,</span>
+             <span class="s">&#39;cosad&#39;</span><span class="p">,</span> <span class="s">&#39;cozad&#39;</span><span class="p">,</span> <span class="s">&#39;coxad&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">test_results_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">techniques</span><span class="o">.</span><span class="n">make_portmanteau_split</span><span class="p">(</span>
+                <span class="p">[</span><span class="s">&#39;dad&#39;</span><span class="p">,</span> <span class="s">&#39;neat&#39;</span><span class="p">,</span> <span class="s">&#39;cool&#39;</span><span class="p">])),</span> <span class="mi">40</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">techniques</span><span class="o">.</span><span class="n">make_portmanteau_split</span><span class="p">(</span>
+                <span class="p">[</span><span class="s">&#39;dad&#39;</span><span class="p">,</span> <span class="s">&#39;neat&#39;</span><span class="p">,</span> <span class="s">&#39;cool&#39;</span><span class="p">,</span> <span class="s">&#39;nifty&#39;</span><span class="p">])),</span> <span class="mi">58</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">techniques</span><span class="o">.</span><span class="n">make_portmanteau_split</span><span class="p">(</span>
+                <span class="p">[</span><span class="s">&#39;dad&#39;</span><span class="p">,</span> <span class="s">&#39;neat&#39;</span><span class="p">,</span> <span class="s">&#39;cool&#39;</span><span class="p">,</span> <span class="s">&#39;nifty&#39;</span><span class="p">,</span> <span class="s">&#39;super&#39;</span><span class="p">,</span> <span class="s">&#39;duper&#39;</span><span class="p">])),</span> <span class="mi">166</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="MakePunctuatorTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_techniques.html#namebot.tests.test_techniques.MakePunctuatorTestCase">[docs]</a><span class="k">class</span> <span class="nc">MakePunctuatorTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_simple</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+            <span class="n">techniques</span><span class="o">.</span><span class="n">make_punctuator</span><span class="p">([</span><span class="s">&#39;delicious&#39;</span><span class="p">],</span> <span class="s">&#39;i&#39;</span><span class="p">),</span>
+            <span class="p">[</span><span class="s">&#39;deli-ci-ous&#39;</span><span class="p">,</span> <span class="s">&#39;deli.ci.ous&#39;</span><span class="p">])</span>
+
+
+<div class="viewcode-block" id="MakeVowelifyTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_techniques.html#namebot.tests.test_techniques.MakeVowelifyTestCase">[docs]</a><span class="k">class</span> <span class="nc">MakeVowelifyTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_simple</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+            <span class="n">techniques</span><span class="o">.</span><span class="n">make_vowelify</span><span class="p">(</span>
+                <span class="p">[</span><span class="s">&#39;nautical&#39;</span><span class="p">,</span> <span class="s">&#39;monster&#39;</span><span class="p">]),</span> <span class="p">[</span><span class="s">&#39;nautica&#39;</span><span class="p">,</span> <span class="s">&#39;monste&#39;</span><span class="p">])</span>
+
+
+<div class="viewcode-block" id="MakemisspellingTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_techniques.html#namebot.tests.test_techniques.MakemisspellingTestCase">[docs]</a><span class="k">class</span> <span class="nc">MakemisspellingTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;effects&#39;</span><span class="p">,</span> <span class="s">&#39;phonics&#39;</span><span class="p">,</span> <span class="s">&#39;glee&#39;</span><span class="p">,</span> <span class="s">&#39;cron&#39;</span><span class="p">,</span> <span class="s">&#39;chrono&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">expected</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;phonix&#39;</span><span class="p">,</span> <span class="s">&#39;ephphects&#39;</span><span class="p">,</span> <span class="s">&#39;gly&#39;</span><span class="p">,</span> <span class="s">&#39;crawn&#39;</span><span class="p">,</span> <span class="s">&#39;krono&#39;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">test_simple</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">techniques</span><span class="o">.</span><span class="n">make_misspelling</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">words</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">expected</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">res</span>
+
+
+<div class="viewcode-block" id="PigLatinTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_techniques.html#namebot.tests.test_techniques.PigLatinTestCase">[docs]</a><span class="k">class</span> <span class="nc">PigLatinTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_simple</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Basic test.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+            <span class="n">techniques</span><span class="o">.</span><span class="n">pig_latinize</span><span class="p">([</span><span class="s">&#39;rad&#39;</span><span class="p">]),</span> <span class="p">[</span><span class="s">&#39;adray&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">test_custom_postfix_value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Basic test.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+            <span class="n">techniques</span><span class="o">.</span><span class="n">pig_latinize</span><span class="p">([</span><span class="s">&#39;rad&#39;</span><span class="p">],</span> <span class="n">postfix</span><span class="o">=</span><span class="s">&#39;ey&#39;</span><span class="p">),</span> <span class="p">[</span><span class="s">&#39;adrey&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">test_bad_postfix_value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Basic test.&quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">TypeError</span><span class="p">):</span>
+            <span class="n">techniques</span><span class="o">.</span><span class="n">pig_latinize</span><span class="p">([</span><span class="s">&#39;rad&#39;</span><span class="p">],</span> <span class="n">postfix</span><span class="o">=</span><span class="mi">1223</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="AcronymLastnameTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_techniques.html#namebot.tests.test_techniques.AcronymLastnameTestCase">[docs]</a><span class="k">class</span> <span class="nc">AcronymLastnameTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_simple</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">desc</span> <span class="o">=</span> <span class="s">&#39;Amazingly cool product&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+            <span class="s">&#39;ACP McDonald&#39;</span><span class="p">,</span> <span class="n">techniques</span><span class="o">.</span><span class="n">acronym_lastname</span><span class="p">(</span><span class="n">desc</span><span class="p">,</span> <span class="s">&#39;McDonald&#39;</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">test_simple_nostopwords</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">desc</span> <span class="o">=</span> <span class="s">&#39;A cool product&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+            <span class="s">&#39;CP McDonald&#39;</span><span class="p">,</span> <span class="n">techniques</span><span class="o">.</span><span class="n">acronym_lastname</span><span class="p">(</span><span class="n">desc</span><span class="p">,</span> <span class="s">&#39;McDonald&#39;</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="GetDescriptorsTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_techniques.html#namebot.tests.test_techniques.GetDescriptorsTestCase">[docs]</a><span class="k">class</span> <span class="nc">GetDescriptorsTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_complex</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">techniques</span><span class="o">.</span><span class="n">get_descriptors</span><span class="p">(</span>
+            <span class="p">[</span><span class="s">&#39;Jumping&#39;</span><span class="p">,</span> <span class="s">&#39;Fly&#39;</span><span class="p">,</span> <span class="s">&#39;Monkey&#39;</span><span class="p">,</span> <span class="s">&#39;Dog&#39;</span><span class="p">,</span> <span class="s">&#39;Action&#39;</span><span class="p">]),</span>
+            <span class="p">{</span><span class="s">&#39;VBG&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;Jumping&#39;</span><span class="p">],</span>
+             <span class="s">&#39;NNP&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;Fly&#39;</span><span class="p">,</span> <span class="s">&#39;Monkey&#39;</span><span class="p">,</span> <span class="s">&#39;Dog&#39;</span><span class="p">,</span> <span class="s">&#39;Action&#39;</span><span class="p">]})</span>
+
+
+<div class="viewcode-block" id="MakeDescriptorsTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_techniques.html#namebot.tests.test_techniques.MakeDescriptorsTestCase">[docs]</a><span class="k">class</span> <span class="nc">MakeDescriptorsTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_simple</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">techniques</span><span class="o">.</span><span class="n">make_descriptors</span><span class="p">(</span>
+            <span class="p">{</span><span class="s">&#39;VBG&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;Jumping&#39;</span><span class="p">],</span> <span class="s">&#39;RB&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;Fly&#39;</span><span class="p">],</span>
+             <span class="s">&#39;NNP&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;Monkey&#39;</span><span class="p">,</span> <span class="s">&#39;Dog&#39;</span><span class="p">,</span> <span class="s">&#39;Action&#39;</span><span class="p">]}),</span>
+            <span class="p">[</span><span class="s">&#39;Monkey Fly&#39;</span><span class="p">,</span> <span class="s">&#39;Fly Monkey&#39;</span><span class="p">,</span> <span class="s">&#39;Action Fly&#39;</span><span class="p">,</span> <span class="s">&#39;Dog Fly&#39;</span><span class="p">,</span>
+             <span class="s">&#39;Fly Dog&#39;</span><span class="p">,</span> <span class="s">&#39;Fly Action&#39;</span><span class="p">])</span>
+
+
+<div class="viewcode-block" id="AllPrefixesToFirstVowelTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_techniques.html#namebot.tests.test_techniques.AllPrefixesToFirstVowelTestCase">[docs]</a><span class="k">class</span> <span class="nc">AllPrefixesToFirstVowelTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_simple</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">word</span> <span class="o">=</span> <span class="s">&#39;umbrellas&#39;</span>
+        <span class="n">expected</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s">&#39;Bumbrellas&#39;</span><span class="p">,</span> <span class="s">&#39;Cumbrellas&#39;</span><span class="p">,</span> <span class="s">&#39;Dumbrellas&#39;</span><span class="p">,</span> <span class="s">&#39;Fumbrellas&#39;</span><span class="p">,</span>
+            <span class="s">&#39;Gumbrellas&#39;</span><span class="p">,</span> <span class="s">&#39;Humbrellas&#39;</span><span class="p">,</span> <span class="s">&#39;Jumbrellas&#39;</span><span class="p">,</span> <span class="s">&#39;Kumbrellas&#39;</span><span class="p">,</span>
+            <span class="s">&#39;Lumbrellas&#39;</span><span class="p">,</span> <span class="s">&#39;Mumbrellas&#39;</span><span class="p">,</span> <span class="s">&#39;Numbrellas&#39;</span><span class="p">,</span> <span class="s">&#39;Pumbrellas&#39;</span><span class="p">,</span>
+            <span class="s">&#39;Qumbrellas&#39;</span><span class="p">,</span> <span class="s">&#39;Rumbrellas&#39;</span><span class="p">,</span> <span class="s">&#39;Sumbrellas&#39;</span><span class="p">,</span> <span class="s">&#39;Tumbrellas&#39;</span><span class="p">,</span>
+            <span class="s">&#39;Vumbrellas&#39;</span><span class="p">,</span> <span class="s">&#39;Wumbrellas&#39;</span><span class="p">,</span> <span class="s">&#39;Xumbrellas&#39;</span><span class="p">,</span> <span class="s">&#39;Yumbrellas&#39;</span><span class="p">,</span>
+            <span class="s">&#39;Zumbrellas&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">techniques</span><span class="o">.</span><span class="n">all_prefix_first_vowel</span><span class="p">(</span><span class="n">word</span><span class="p">),</span> <span class="n">expected</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="RecycleTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_techniques.html#namebot.tests.test_techniques.RecycleTestCase">[docs]</a><span class="k">class</span> <span class="nc">RecycleTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_pig_latinize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="n">techniques</span><span class="o">.</span><span class="n">pig_latinize</span><span class="p">([</span><span class="s">&#39;purring&#39;</span><span class="p">,</span> <span class="s">&#39;cats&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">techniques</span><span class="o">.</span><span class="n">recycle</span><span class="p">(</span>
+            <span class="n">words</span><span class="p">,</span> <span class="n">techniques</span><span class="o">.</span><span class="n">pig_latinize</span><span class="p">),</span>
+            <span class="p">[</span><span class="s">&#39;urringpaywayway&#39;</span><span class="p">,</span> <span class="s">&#39;atscaywayway&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">test_portmanteau</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;ratchet&#39;</span><span class="p">,</span> <span class="s">&#39;broccoli&#39;</span><span class="p">,</span> <span class="s">&#39;potato&#39;</span><span class="p">,</span> <span class="s">&#39;gadget&#39;</span><span class="p">,</span> <span class="s">&#39;celery&#39;</span><span class="p">,</span> <span class="s">&#39;hammer&#39;</span><span class="p">]</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">techniques</span><span class="o">.</span><span class="n">recycle</span><span class="p">(</span>
+            <span class="n">words</span><span class="p">,</span> <span class="n">techniques</span><span class="o">.</span><span class="n">make_portmanteau_default_vowel</span><span class="p">)</span>
+        <span class="n">expected</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;potatchelery&#39;</span><span class="p">,</span> <span class="s">&#39;potatchelery&#39;</span><span class="p">,</span> <span class="s">&#39;potadgelery&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;potadgelery&#39;</span><span class="p">,</span> <span class="s">&#39;potammelery&#39;</span><span class="p">,</span> <span class="s">&#39;potammelery&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;ratchelery&#39;</span><span class="p">,</span> <span class="s">&#39;ratchelery&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">expected</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="SuperScrubTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_techniques.html#namebot.tests.test_techniques.SuperScrubTestCase">[docs]</a><span class="k">class</span> <span class="nc">SuperScrubTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_uniq</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;words&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;technique&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;words&#39;</span><span class="p">,</span> <span class="s">&#39;words&#39;</span><span class="p">]}}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+            <span class="n">techniques</span><span class="o">.</span><span class="n">super_scrub</span><span class="p">(</span><span class="n">data</span><span class="p">)[</span><span class="s">&#39;words&#39;</span><span class="p">][</span><span class="s">&#39;technique&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s">&#39;words&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">test_remove_odd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;words&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;technique&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;asdsaasdokokk&#39;</span><span class="p">,</span> <span class="s">&#39;words&#39;</span><span class="p">]}}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+            <span class="n">techniques</span><span class="o">.</span><span class="n">super_scrub</span><span class="p">(</span><span class="n">data</span><span class="p">)[</span><span class="s">&#39;words&#39;</span><span class="p">][</span><span class="s">&#39;technique&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s">&#39;words&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">test_cleansort</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;words&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;technique&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;!!@words&#39;</span><span class="p">,</span> <span class="s">&#39;radio0&#39;</span><span class="p">]}}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+            <span class="n">techniques</span><span class="o">.</span><span class="n">super_scrub</span><span class="p">(</span><span class="n">data</span><span class="p">)[</span><span class="s">&#39;words&#39;</span><span class="p">][</span><span class="s">&#39;technique&#39;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s">&#39;radio&#39;</span><span class="p">,</span> <span class="s">&#39;words&#39;</span><span class="p">])</span>
+
+
+<div class="viewcode-block" id="BackronymTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_techniques.html#namebot.tests.test_techniques.BackronymTestCase">[docs]</a><span class="k">class</span> <span class="nc">BackronymTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_basic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">techniques</span><span class="o">.</span><span class="n">backronym</span><span class="p">(</span><span class="s">&#39;rad&#39;</span><span class="p">,</span> <span class="s">&#39;computer&#39;</span><span class="p">,</span> <span class="n">max_attempts</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span>
+        <span class="n">expected_keys</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;acronym&#39;</span><span class="p">,</span> <span class="s">&#39;backronym&#39;</span><span class="p">,</span> <span class="s">&#39;words&#39;</span><span class="p">,</span>
+                         <span class="s">&#39;success_ratio&#39;</span><span class="p">,</span> <span class="s">&#39;success&#39;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">expected_keys</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">key</span> <span class="ow">in</span> <span class="n">res</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Chris Tabor.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,666 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>namebot.nlp &mdash; namebot  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="namebot  documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> namebot
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../namebot.html">namebot package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">namebot</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>namebot.nlp</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for namebot.nlp</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;Functions that use Natural Language Processing.</span>
+
+<span class="sd">Word relationships found (via NLTK and other libraries)</span>
+<span class="sd">to find and generate related words.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+
+<span class="kn">import</span> <span class="nn">itertools</span>
+
+<span class="c"># from nltk.corpus import (</span>
+<span class="c">#     verbnet,</span>
+<span class="c">#     wordnet,</span>
+<span class="c"># )</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">normalization</span>
+
+
+<span class="k">def</span> <span class="nf">_get_synset_words</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Simple helper wrapping the more involved get_synsets function.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        word (str): The seed word.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        words (list): The list of NLTK words.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">get_synsets</span><span class="p">([</span><span class="n">word</span><span class="p">])[</span><span class="n">word</span><span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">res</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+    <span class="n">words</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">normalization</span><span class="o">.</span><span class="n">flatten</span><span class="p">([</span><span class="n">l</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">res</span> <span class="k">if</span> <span class="n">l</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">words</span>
+
+
+<div class="viewcode-block" id="print_all_synset_categories"><a class="viewcode-back" href="../../namebot.nlp.html#namebot.nlp.print_all_synset_categories">[docs]</a><span class="k">def</span> <span class="nf">print_all_synset_categories</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Print all domains and categories for research purposes.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        categories (list): A list of all wordnet synsets.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">categories</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">synset</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">wordnet</span><span class="o">.</span><span class="n">all_synsets</span><span class="p">(</span><span class="s">&#39;n&#39;</span><span class="p">)):</span>
+        <span class="n">categories</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">synset</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">categories</span></div>
+
+
+<span class="k">def</span> <span class="nf">_get_lemma_names</span><span class="p">(</span><span class="n">sub_synset</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">sub_synset</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">sub_synset</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">lemma_names</span><span class="p">,</span> <span class="s">&#39;__call__&#39;</span><span class="p">):</span>
+                <span class="n">results</span> <span class="o">+=</span> <span class="n">v</span><span class="o">.</span><span class="n">lemma_names</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">results</span> <span class="o">+=</span> <span class="n">v</span><span class="o">.</span><span class="n">lemma_names</span>
+            <span class="k">if</span> <span class="n">use_definitions</span><span class="p">:</span>
+                <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">results</span>
+
+
+<div class="viewcode-block" id="get_hyponyms"><a class="viewcode-back" href="../../namebot.nlp.html#namebot.nlp.get_hyponyms">[docs]</a><span class="k">def</span> <span class="nf">get_hyponyms</span><span class="p">(</span><span class="n">synset</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Extract hyponyms from a synset.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        synset (object): The synset instance.</span>
+<span class="sd">        use_definitions (bool, optional): Extract definitions from the synset.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: The results list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_get_lemma_names</span><span class="p">(</span><span class="n">synset</span><span class="o">.</span><span class="n">hyponyms</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="n">use_definitions</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_inst_hyponyms"><a class="viewcode-back" href="../../namebot.nlp.html#namebot.nlp.get_inst_hyponyms">[docs]</a><span class="k">def</span> <span class="nf">get_inst_hyponyms</span><span class="p">(</span><span class="n">synset</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Extract instance hyponyms from a synset.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        synset (object): The synset instance.</span>
+<span class="sd">        use_definitions (bool, optional): Extract definitions from the synset.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: The results list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_get_lemma_names</span><span class="p">(</span>
+        <span class="n">synset</span><span class="o">.</span><span class="n">instance_hyponyms</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="n">use_definitions</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_member_meronyms"><a class="viewcode-back" href="../../namebot.nlp.html#namebot.nlp.get_member_meronyms">[docs]</a><span class="k">def</span> <span class="nf">get_member_meronyms</span><span class="p">(</span><span class="n">synset</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Extract meronyms from a synset.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        synset (object): The synset instance.</span>
+<span class="sd">        use_definitions (bool, optional): Extract definitions from the synset.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: The results list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_get_lemma_names</span><span class="p">(</span>
+        <span class="n">synset</span><span class="o">.</span><span class="n">member_meronyms</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="n">use_definitions</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_substance_meronyms"><a class="viewcode-back" href="../../namebot.nlp.html#namebot.nlp.get_substance_meronyms">[docs]</a><span class="k">def</span> <span class="nf">get_substance_meronyms</span><span class="p">(</span><span class="n">synset</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Extract substance meronyms from a synset.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        synset (object): The synset instance.</span>
+<span class="sd">        use_definitions (bool, optional): Extract definitions from the synset.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: The results list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_get_lemma_names</span><span class="p">(</span>
+        <span class="n">synset</span><span class="o">.</span><span class="n">substance_meronyms</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="n">use_definitions</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_part_meronyms"><a class="viewcode-back" href="../../namebot.nlp.html#namebot.nlp.get_part_meronyms">[docs]</a><span class="k">def</span> <span class="nf">get_part_meronyms</span><span class="p">(</span><span class="n">synset</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Extract part meronyms from a synset.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        synset (object): The synset instance.</span>
+<span class="sd">        use_definitions (bool, optional): Extract definitions from the synset.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: The results list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_get_lemma_names</span><span class="p">(</span>
+        <span class="n">synset</span><span class="o">.</span><span class="n">part_meronyms</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="n">use_definitions</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_substance_holoynms"><a class="viewcode-back" href="../../namebot.nlp.html#namebot.nlp.get_substance_holoynms">[docs]</a><span class="k">def</span> <span class="nf">get_substance_holoynms</span><span class="p">(</span><span class="n">synset</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Extract substance holoynms from a synset.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        synset (object): The synset instance.</span>
+<span class="sd">        use_definitions (bool, optional): Extract definitions from the synset.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: The results list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_get_lemma_names</span><span class="p">(</span>
+        <span class="n">synset</span><span class="o">.</span><span class="n">substance_holonyms</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="n">use_definitions</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_topic_domains"><a class="viewcode-back" href="../../namebot.nlp.html#namebot.nlp.get_topic_domains">[docs]</a><span class="k">def</span> <span class="nf">get_topic_domains</span><span class="p">(</span><span class="n">synset</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Extract topic domains from a synset.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        synset (object): The synset instance.</span>
+<span class="sd">        use_definitions (bool, optional): Extract definitions from the synset.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: The results list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_get_lemma_names</span><span class="p">(</span>
+        <span class="n">synset</span><span class="o">.</span><span class="n">topic_domains</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="n">use_definitions</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_region_domains"><a class="viewcode-back" href="../../namebot.nlp.html#namebot.nlp.get_region_domains">[docs]</a><span class="k">def</span> <span class="nf">get_region_domains</span><span class="p">(</span><span class="n">synset</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Extract region domains from a synset.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        synset (object): The synset instance.</span>
+<span class="sd">        use_definitions (bool, optional): Extract definitions from the synset.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: The results list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_get_lemma_names</span><span class="p">(</span>
+        <span class="n">synset</span><span class="o">.</span><span class="n">region_domains</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="n">use_definitions</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_usage_domains"><a class="viewcode-back" href="../../namebot.nlp.html#namebot.nlp.get_usage_domains">[docs]</a><span class="k">def</span> <span class="nf">get_usage_domains</span><span class="p">(</span><span class="n">synset</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Extract usage domains from a synset.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        synset (object): The synset instance.</span>
+<span class="sd">        use_definitions (bool, optional): Extract definitions from the synset.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: The results list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_get_lemma_names</span><span class="p">(</span>
+        <span class="n">synset</span><span class="o">.</span><span class="n">usage_domains</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="n">use_definitions</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_attributes"><a class="viewcode-back" href="../../namebot.nlp.html#namebot.nlp.get_attributes">[docs]</a><span class="k">def</span> <span class="nf">get_attributes</span><span class="p">(</span><span class="n">synset</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Extract attributes from a synset.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        synset (object): The synset instance.</span>
+<span class="sd">        use_definitions (bool, optional): Extract definitions from the synset.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: The results list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_get_lemma_names</span><span class="p">(</span>
+        <span class="n">synset</span><span class="o">.</span><span class="n">attributes</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="n">use_definitions</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_entailments"><a class="viewcode-back" href="../../namebot.nlp.html#namebot.nlp.get_entailments">[docs]</a><span class="k">def</span> <span class="nf">get_entailments</span><span class="p">(</span><span class="n">synset</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Extract entailments from a synset.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        synset (object): The synset instance.</span>
+<span class="sd">        use_definitions (bool, optional): Extract definitions from the synset.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: The results list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_get_lemma_names</span><span class="p">(</span>
+        <span class="n">synset</span><span class="o">.</span><span class="n">entailments</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="n">use_definitions</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_causes"><a class="viewcode-back" href="../../namebot.nlp.html#namebot.nlp.get_causes">[docs]</a><span class="k">def</span> <span class="nf">get_causes</span><span class="p">(</span><span class="n">synset</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Extract causes from a synset.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        synset (object): The synset instance.</span>
+<span class="sd">        use_definitions (bool, optional): Extract definitions from the synset.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: The results list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">synset</span><span class="o">.</span><span class="n">causes</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">_get_lemma_names</span><span class="p">(</span>
+            <span class="n">synset</span><span class="o">.</span><span class="n">causes</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="n">use_definitions</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_also_sees"><a class="viewcode-back" href="../../namebot.nlp.html#namebot.nlp.get_also_sees">[docs]</a><span class="k">def</span> <span class="nf">get_also_sees</span><span class="p">(</span><span class="n">synset</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Extract also-sees from a synset.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        synset (object): The synset instance.</span>
+<span class="sd">        use_definitions (bool, optional): Extract definitions from the synset.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: The results list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_get_lemma_names</span><span class="p">(</span>
+        <span class="n">synset</span><span class="o">.</span><span class="n">also_sees</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="n">use_definitions</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_verb_groups"><a class="viewcode-back" href="../../namebot.nlp.html#namebot.nlp.get_verb_groups">[docs]</a><span class="k">def</span> <span class="nf">get_verb_groups</span><span class="p">(</span><span class="n">synset</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Extract verb groups from a synset.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        synset (object): The synset instance.</span>
+<span class="sd">        use_definitions (bool, optional): Extract definitions from the synset.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: The results list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_get_lemma_names</span><span class="p">(</span>
+        <span class="n">synset</span><span class="o">.</span><span class="n">verb_groups</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="n">use_definitions</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_similartos"><a class="viewcode-back" href="../../namebot.nlp.html#namebot.nlp.get_similartos">[docs]</a><span class="k">def</span> <span class="nf">get_similartos</span><span class="p">(</span><span class="n">synset</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Extract similar-tos from a synset.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        synset (object): The synset instance.</span>
+<span class="sd">        use_definitions (bool, optional): Extract definitions from the synset.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: The results list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_get_lemma_names</span><span class="p">(</span>
+        <span class="n">synset</span><span class="o">.</span><span class="n">similar_tos</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="n">use_definitions</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_member_holoynms"><a class="viewcode-back" href="../../namebot.nlp.html#namebot.nlp.get_member_holoynms">[docs]</a><span class="k">def</span> <span class="nf">get_member_holoynms</span><span class="p">(</span><span class="n">synset</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Extract member holonyms from a synset.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        synset (object): The synset instance.</span>
+<span class="sd">        use_definitions (bool, optional): Extract definitions from the synset.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: The results list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_get_lemma_names</span><span class="p">(</span>
+        <span class="n">synset</span><span class="o">.</span><span class="n">member_holonyms</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="n">use_definitions</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_part_holoynms"><a class="viewcode-back" href="../../namebot.nlp.html#namebot.nlp.get_part_holoynms">[docs]</a><span class="k">def</span> <span class="nf">get_part_holoynms</span><span class="p">(</span><span class="n">synset</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Extract part holonyms from a synset.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        synset (object): The synset instance.</span>
+<span class="sd">        use_definitions (bool, optional): Extract definitions from the synset.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: The results list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_get_lemma_names</span><span class="p">(</span>
+        <span class="n">synset</span><span class="o">.</span><span class="n">part_holonyms</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="n">use_definitions</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_instance_hypernyms"><a class="viewcode-back" href="../../namebot.nlp.html#namebot.nlp.get_instance_hypernyms">[docs]</a><span class="k">def</span> <span class="nf">get_instance_hypernyms</span><span class="p">(</span><span class="n">synset</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Extract instance hypernyms from a synset.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        synset (object): The synset instance.</span>
+<span class="sd">        use_definitions (bool, optional): Extract definitions from the synset.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: The results list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_get_lemma_names</span><span class="p">(</span>
+        <span class="n">synset</span><span class="o">.</span><span class="n">instance_hypernyms</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="n">use_definitions</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_hypernyms"><a class="viewcode-back" href="../../namebot.nlp.html#namebot.nlp.get_hypernyms">[docs]</a><span class="k">def</span> <span class="nf">get_hypernyms</span><span class="p">(</span><span class="n">synset</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Extract hypernyms from a synset.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        synset (object): The synset instance.</span>
+<span class="sd">        use_definitions (bool, optional): Extract definitions from the synset.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: The results list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_get_lemma_names</span><span class="p">(</span>
+        <span class="n">synset</span><span class="o">.</span><span class="n">hypernyms</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="n">use_definitions</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_verb_lemmas"><a class="viewcode-back" href="../../namebot.nlp.html#namebot.nlp.get_verb_lemmas">[docs]</a><span class="k">def</span> <span class="nf">get_verb_lemmas</span><span class="p">(</span><span class="n">verbs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return verbnet lemmas for the given verbs.</span>
+
+<span class="sd">    These verbs are stemmed before lookup to prevent empty results.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        verbs (list) - The list of verbs (verbs) to reference.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        lemmas (list) - A list of lemmas for all verbs</span>
+<span class="sd">                        - these are not separated by verb.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">lemmas</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">verb</span> <span class="ow">in</span> <span class="n">normalization</span><span class="o">.</span><span class="n">stem_words</span><span class="p">(</span><span class="n">verbs</span><span class="p">):</span>
+        <span class="n">_lemmas</span> <span class="o">=</span> <span class="n">verbnet</span><span class="o">.</span><span class="n">classids</span><span class="p">(</span><span class="n">lemma</span><span class="o">=</span><span class="n">verb</span><span class="p">)</span>
+        <span class="n">lemmas</span> <span class="o">+=</span> <span class="p">[</span><span class="n">l</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">_lemmas</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">lemmas</span></div>
+
+
+<div class="viewcode-block" id="get_word_synsets"><a class="viewcode-back" href="../../namebot.nlp.html#namebot.nlp.get_word_synsets">[docs]</a><span class="k">def</span> <span class="nf">get_word_synsets</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get all synsets for a word.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        word (str): The word to lookup.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        object: The synset ring instance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">wordnet</span><span class="o">.</span><span class="n">synsets</span><span class="p">(</span><span class="n">word</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;utf-8&#39;</span><span class="p">),</span> <span class="n">pos</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_synset_definitions"><a class="viewcode-back" href="../../namebot.nlp.html#namebot.nlp.get_synset_definitions">[docs]</a><span class="k">def</span> <span class="nf">get_synset_definitions</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return all possible definitions for synsets in a word synset ring.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        word (str): The word to lookup.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        definitions (list): The synset definitions list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">definitions</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">synsets</span> <span class="o">=</span> <span class="n">get_word_synsets</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">_synset</span> <span class="ow">in</span> <span class="n">synsets</span><span class="p">:</span>
+        <span class="n">definitions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_synset</span><span class="o">.</span><span class="n">definition</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">definitions</span></div>
+
+
+<div class="viewcode-block" id="get_synsets_definitions"><a class="viewcode-back" href="../../namebot.nlp.html#namebot.nlp.get_synsets_definitions">[docs]</a><span class="k">def</span> <span class="nf">get_synsets_definitions</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return all possible definitions for all synsets in the synset ring.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (list): The list of words.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        sets (list): The synsets.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">get_synset_definitions</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">words</span> <span class="k">if</span> <span class="n">w</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="get_synsets"><a class="viewcode-back" href="../../namebot.nlp.html#namebot.nlp.get_synsets">[docs]</a><span class="k">def</span> <span class="nf">get_synsets</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Brute force loop on a synset ring to get all related words.</span>
+
+<span class="sd">    You are expected to filter or remove any that are not relevant separately,</span>
+<span class="sd">    if the resultant set is too long.</span>
+<span class="sd">    The scoring module provides tools to filter based on pronunciation,</span>
+<span class="sd">    but you can write your own and extend the functionality.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (list): The list of words.</span>
+<span class="sd">        use_definitions (bool, optional): Determine if definition words</span>
+<span class="sd">            should also be extracted.</span>
+<span class="sd">        clean (bool, optional): Determine if set should be de-duped,</span>
+<span class="sd">            cleaned, etc...</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        results (dict): The results dictionary.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="n">synsets</span> <span class="o">=</span> <span class="n">get_word_synsets</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+
+        <span class="n">key</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;synset_original&#39;</span><span class="p">:</span> <span class="p">[]}</span>
+
+        <span class="k">for</span> <span class="n">synset</span> <span class="ow">in</span> <span class="n">synsets</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">synset</span><span class="o">.</span><span class="n">lemma_names</span><span class="p">,</span> <span class="s">&#39;__call__&#39;</span><span class="p">):</span>
+                <span class="n">key</span><span class="p">[</span><span class="s">&#39;synset_original&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">synset</span><span class="o">.</span><span class="n">lemma_names</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">key</span><span class="p">[</span><span class="s">&#39;synset_original&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">synset</span><span class="o">.</span><span class="n">lemma_names</span><span class="p">)</span>
+
+            <span class="c"># More Specific *nyms (deep)</span>
+            <span class="n">key</span><span class="p">[</span><span class="s">&#39;hyponyms&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_hyponyms</span><span class="p">(</span>
+                <span class="n">synset</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="n">use_definitions</span><span class="p">)</span>
+            <span class="n">key</span><span class="p">[</span><span class="s">&#39;instance_hyponyms&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_inst_hyponyms</span><span class="p">(</span>
+                <span class="n">synset</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="n">use_definitions</span><span class="p">)</span>
+            <span class="n">key</span><span class="p">[</span><span class="s">&#39;member_meronyms&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_member_meronyms</span><span class="p">(</span>
+                <span class="n">synset</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="n">use_definitions</span><span class="p">)</span>
+            <span class="n">key</span><span class="p">[</span><span class="s">&#39;substance_meronyms&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_substance_meronyms</span><span class="p">(</span>
+                <span class="n">synset</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="n">use_definitions</span><span class="p">)</span>
+            <span class="n">key</span><span class="p">[</span><span class="s">&#39;part_meronyms&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_part_meronyms</span><span class="p">(</span>
+                <span class="n">synset</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="n">use_definitions</span><span class="p">)</span>
+            <span class="n">key</span><span class="p">[</span><span class="s">&#39;substance_holonyms&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_substance_holoynms</span><span class="p">(</span>
+                <span class="n">synset</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="n">use_definitions</span><span class="p">)</span>
+
+            <span class="c"># More Generic *nyms (shallow)</span>
+            <span class="n">key</span><span class="p">[</span><span class="s">&#39;member_holonyms&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_member_holoynms</span><span class="p">(</span>
+                <span class="n">synset</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="n">use_definitions</span><span class="p">)</span>
+            <span class="n">key</span><span class="p">[</span><span class="s">&#39;part_holonyms&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_part_holoynms</span><span class="p">(</span>
+                <span class="n">synset</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="n">use_definitions</span><span class="p">)</span>
+            <span class="n">key</span><span class="p">[</span><span class="s">&#39;instance_hypernyms&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_instance_hypernyms</span><span class="p">(</span>
+                <span class="n">synset</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="n">use_definitions</span><span class="p">)</span>
+            <span class="n">key</span><span class="p">[</span><span class="s">&#39;hypernyms&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_hypernyms</span><span class="p">(</span>
+                <span class="n">synset</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="n">use_definitions</span><span class="p">)</span>
+
+            <span class="c"># Other types</span>
+            <span class="n">key</span><span class="p">[</span><span class="s">&#39;topic_domains&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_topic_domains</span><span class="p">(</span>
+                <span class="n">synset</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="n">use_definitions</span><span class="p">)</span>
+            <span class="n">key</span><span class="p">[</span><span class="s">&#39;region_domains&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_region_domains</span><span class="p">(</span>
+                <span class="n">synset</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="n">use_definitions</span><span class="p">)</span>
+            <span class="n">key</span><span class="p">[</span><span class="s">&#39;usage_domains&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_usage_domains</span><span class="p">(</span>
+                <span class="n">synset</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="n">use_definitions</span><span class="p">)</span>
+            <span class="n">key</span><span class="p">[</span><span class="s">&#39;attributes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_attributes</span><span class="p">(</span>
+                <span class="n">synset</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="n">use_definitions</span><span class="p">)</span>
+            <span class="n">key</span><span class="p">[</span><span class="s">&#39;entailments&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_entailments</span><span class="p">(</span>
+                <span class="n">synset</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="n">use_definitions</span><span class="p">)</span>
+            <span class="n">key</span><span class="p">[</span><span class="s">&#39;causes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_causes</span><span class="p">(</span>
+                <span class="n">synset</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="n">use_definitions</span><span class="p">)</span>
+            <span class="n">key</span><span class="p">[</span><span class="s">&#39;also_sees&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_also_sees</span><span class="p">(</span>
+                <span class="n">synset</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="n">use_definitions</span><span class="p">)</span>
+            <span class="n">key</span><span class="p">[</span><span class="s">&#39;verb_groups&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_verb_groups</span><span class="p">(</span>
+                <span class="n">synset</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="n">use_definitions</span><span class="p">)</span>
+            <span class="n">key</span><span class="p">[</span><span class="s">&#39;similar_tos&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_similartos</span><span class="p">(</span>
+                <span class="n">synset</span><span class="p">,</span> <span class="n">use_definitions</span><span class="o">=</span><span class="n">use_definitions</span><span class="p">)</span>
+
+        <span class="n">results</span><span class="p">[</span><span class="n">word</span><span class="p">]</span> <span class="o">=</span> <span class="n">key</span>
+
+    <span class="c"># 1. get words back</span>
+    <span class="c"># 2. flatten nested array</span>
+    <span class="c"># 3. split up words</span>
+    <span class="c"># 4. filter, clean, stem, uniquify</span>
+
+    <span class="k">for</span> <span class="n">nlp_type</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">clean</span><span class="p">:</span>
+            <span class="n">results</span><span class="p">[</span><span class="n">nlp_type</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+                <span class="n">normalization</span><span class="o">.</span><span class="n">uniquify</span><span class="p">(</span>
+                    <span class="n">normalization</span><span class="o">.</span><span class="n">clean_sort</span><span class="p">(</span>
+                        <span class="n">normalization</span><span class="o">.</span><span class="n">remove_stop_words</span><span class="p">(</span>
+                            <span class="n">normalization</span><span class="o">.</span><span class="n">stem_words</span><span class="p">(</span>
+                                <span class="n">normalization</span><span class="o">.</span><span class="n">remove_bad_words</span><span class="p">(</span>
+                                    <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span>
+                                        <span class="o">*</span><span class="n">results</span><span class="p">[</span><span class="n">nlp_type</span><span class="p">]))))))))</span>
+
+    <span class="k">return</span> <span class="n">results</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Chris Tabor.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

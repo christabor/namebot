@@ -1,0 +1,306 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>namebot.tests.test_scoring &mdash; namebot  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="namebot  documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> namebot
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../namebot.html">namebot package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">namebot</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+    <li>namebot.tests.test_scoring</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for namebot.tests.test_scoring</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">from</span> <span class="nn">namebot</span> <span class="kn">import</span> <span class="n">scoring</span> <span class="k">as</span> <span class="n">sc</span>
+
+
+<div class="viewcode-block" id="ScoringTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_scoring.html#namebot.tests.test_scoring.ScoringTestCase">[docs]</a><span class="k">class</span> <span class="nc">ScoringTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">setUpClass</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+        <span class="n">cls</span><span class="o">.</span><span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;cat&#39;</span><span class="p">,</span> <span class="s">&#39;dog&#39;</span><span class="p">,</span> <span class="s">&#39;rabbit&#39;</span><span class="p">,</span> <span class="s">&#39;giraffe&#39;</span><span class="p">,</span> <span class="s">&#39;potato&#39;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">test_score_dmetaphone_basic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">score_dmetaphone</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">words</span><span class="p">),</span> <span class="nb">list</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_score_nysiis_basic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">score_nysiis</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">words</span><span class="p">),</span> <span class="nb">list</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_score_soundex_basic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># TODO</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">test_generate_all_scoring_basic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># TODO</span>
+        <span class="k">pass</span>
+
+
+<div class="viewcode-block" id="ScoringLengthTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_scoring.html#namebot.tests.test_scoring.ScoringLengthTestCase">[docs]</a><span class="k">class</span> <span class="nc">ScoringLengthTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_score_length1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">score_length</span><span class="p">(</span><span class="s">&#39;a really long company name&#39;</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_score_length2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">score_length</span><span class="p">(</span><span class="s">&#39;somewhat long name&#39;</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_score_length3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">score_length</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_score_length4</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">score_length</span><span class="p">(</span><span class="s">&#39;western digital&#39;</span><span class="p">),</span> <span class="mi">4</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_score_length5</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">score_length</span><span class="p">(</span><span class="s">&#39;facebook&#39;</span><span class="p">),</span> <span class="mi">5</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_score_length_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">score_length</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_score_length_none</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">score_length</span><span class="p">(</span><span class="bp">None</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="ScoringPronounceabilityTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_scoring.html#namebot.tests.test_scoring.ScoringPronounceabilityTestCase">[docs]</a><span class="k">class</span> <span class="nc">ScoringPronounceabilityTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_score_pronounce_no_vowels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">score_pronounceability</span><span class="p">(</span><span class="s">&#39;vry bd wrd&#39;</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_score_pronounce1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">score_pronounceability</span><span class="p">(</span><span class="s">&#39;ths vry bad wrd&#39;</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_score_pronounce2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">score_pronounceability</span><span class="p">(</span><span class="s">&#39;bd word&#39;</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_score_pronounce3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">score_pronounceability</span><span class="p">(</span><span class="s">&#39;CVS health&#39;</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_score_pronounce4</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">score_pronounceability</span><span class="p">(</span><span class="s">&#39;chevron&#39;</span><span class="p">),</span> <span class="mi">4</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_score_pronounce5</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">score_pronounceability</span><span class="p">(</span><span class="s">&#39;google&#39;</span><span class="p">),</span> <span class="mi">5</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_score_pronounce_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">score_pronounceability</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_score_pronounce_none</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">score_pronounceability</span><span class="p">(</span><span class="bp">None</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="ScoringSimplicityTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_scoring.html#namebot.tests.test_scoring.ScoringSimplicityTestCase">[docs]</a><span class="k">class</span> <span class="nc">ScoringSimplicityTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_score_simple1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">score_simplicity</span><span class="p">(</span><span class="s">&#39;a very poor name indeed&#39;</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_score_simple2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">score_simplicity</span><span class="p">(</span><span class="s">&#39;not all that great&#39;</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_score_simple3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">score_simplicity</span><span class="p">(</span><span class="s">&#39;not so perfect&#39;</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_score_simple4</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">score_simplicity</span><span class="p">(</span><span class="s">&#39;not perfect&#39;</span><span class="p">),</span> <span class="mi">4</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_score_simple5</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">score_simplicity</span><span class="p">(</span><span class="s">&#39;perfect&#39;</span><span class="p">),</span> <span class="mi">5</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_score_simple_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">score_simplicity</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_score_simple_none</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">score_simplicity</span><span class="p">(</span><span class="bp">None</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="ScoringOverallTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_scoring.html#namebot.tests.test_scoring.ScoringOverallTestCase">[docs]</a><span class="k">class</span> <span class="nc">ScoringOverallTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_score_overall_low</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">score_name_overall</span><span class="p">(</span><span class="s">&#39;not vry grt n4m3&#39;</span><span class="p">),</span> <span class="mf">40.0</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_score_overall_mid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">score_name_overall</span><span class="p">(</span><span class="s">&#39;CVS Health&#39;</span><span class="p">),</span> <span class="mf">80.0</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_score_overall_high</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">score_name_overall</span><span class="p">(</span><span class="s">&#39;google&#39;</span><span class="p">),</span> <span class="mf">100.0</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_score_overall_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">score_simplicity</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_score_overall_none</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">score_simplicity</span><span class="p">(</span><span class="bp">None</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_scores_overall</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">score_names_overall</span><span class="p">(</span>
+            <span class="p">[</span><span class="s">&#39;google&#39;</span><span class="p">,</span> <span class="s">&#39;microsoft&#39;</span><span class="p">,</span> <span class="s">&#39;apple&#39;</span><span class="p">]),</span> <span class="nb">list</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Chris Tabor.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

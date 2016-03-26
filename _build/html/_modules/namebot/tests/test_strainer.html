@@ -1,0 +1,327 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>namebot.tests.test_strainer &mdash; namebot  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="namebot  documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> namebot
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../namebot.html">namebot package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">namebot</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+    <li>namebot.tests.test_strainer</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for namebot.tests.test_strainer</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">from</span> <span class="nn">namebot</span> <span class="kn">import</span> <span class="n">strainer</span> <span class="k">as</span> <span class="n">strain</span>
+
+
+<div class="viewcode-block" id="FilterLengthTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_strainer.html#namebot.tests.test_strainer.FilterLengthTestCase">[docs]</a><span class="k">class</span> <span class="nc">FilterLengthTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">setUpClass</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+        <span class="n">cls</span><span class="o">.</span><span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;reallylongwordnojoke&#39;</span><span class="p">,</span> <span class="s">&#39;reallylongword&#39;</span><span class="p">,</span>
+                     <span class="s">&#39;foo&#39;</span><span class="p">,</span> <span class="s">&#39;bar&#39;</span><span class="p">,</span> <span class="s">&#39;baz&#39;</span><span class="p">,</span> <span class="s">&#39;regular&#39;</span><span class="p">,</span>
+                     <span class="s">&#39;words&#39;</span><span class="p">,</span> <span class="s">&#39;are&#39;</span><span class="p">,</span> <span class="s">&#39;good&#39;</span><span class="p">,</span> <span class="s">&#39;for&#39;</span><span class="p">,</span> <span class="s">&#39;you&#39;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">test_no_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Basic sanity test - no filtering should be done.&quot;&quot;&quot;</span>
+        <span class="n">strained</span> <span class="o">=</span> <span class="p">[</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">words</span>
+                    <span class="k">if</span> <span class="n">strain</span><span class="o">.</span><span class="n">filter_length</span><span class="p">(</span>
+                        <span class="n">word</span><span class="p">,</span> <span class="n">min_length</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">99999</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">words</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">strained</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">test_min_length</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Tests filtering function for length&quot;&quot;&quot;</span>
+        <span class="n">strained</span> <span class="o">=</span> <span class="p">[</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">words</span>
+                    <span class="k">if</span> <span class="n">strain</span><span class="o">.</span><span class="n">filter_length</span><span class="p">(</span>
+                        <span class="n">word</span><span class="p">,</span> <span class="n">min_length</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">999</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">strained</span><span class="p">),</span> <span class="mi">5</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_max_length</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Tests filtering function for length&quot;&quot;&quot;</span>
+        <span class="n">strained</span> <span class="o">=</span> <span class="p">[</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">words</span>
+                    <span class="k">if</span> <span class="n">strain</span><span class="o">.</span><span class="n">filter_length</span><span class="p">(</span>
+                        <span class="n">word</span><span class="p">,</span> <span class="n">min_length</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">3</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">strained</span><span class="p">),</span> <span class="mi">6</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="FilterStartsEndsWithTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_strainer.html#namebot.tests.test_strainer.FilterStartsEndsWithTestCase">[docs]</a><span class="k">class</span> <span class="nc">FilterStartsEndsWithTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="FilterStartsEndsWithTestCase.setUpClass"><a class="viewcode-back" href="../../../namebot.tests.test_strainer.html#namebot.tests.test_strainer.FilterStartsEndsWithTestCase.setUpClass">[docs]</a>    <span class="k">def</span> <span class="nf">setUpClass</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+        <span class="n">cls</span><span class="o">.</span><span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;banana&#39;</span><span class="p">,</span> <span class="s">&#39;baseball&#39;</span><span class="p">,</span> <span class="s">&#39;brain&#39;</span><span class="p">,</span>
+                     <span class="s">&#39;cat&#39;</span><span class="p">,</span> <span class="s">&#39;phone&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;grape&#39;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="FilterStartsEndsWithTestCase.test_startswith"><a class="viewcode-back" href="../../../namebot.tests.test_strainer.html#namebot.tests.test_strainer.FilterStartsEndsWithTestCase.test_startswith">[docs]</a>    <span class="k">def</span> <span class="nf">test_startswith</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Test if a word starts with a specific letter&quot;&quot;&quot;</span>
+        <span class="n">strained</span> <span class="o">=</span> <span class="p">[</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">words</span>
+                    <span class="k">if</span> <span class="n">strain</span><span class="o">.</span><span class="n">filter_startswith</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">beginning</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">strained</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FilterStartsEndsWithTestCase.test_endswith"><a class="viewcode-back" href="../../../namebot.tests.test_strainer.html#namebot.tests.test_strainer.FilterStartsEndsWithTestCase.test_endswith">[docs]</a>    <span class="k">def</span> <span class="nf">test_endswith</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Test if a word ends with a specific letter&quot;&quot;&quot;</span>
+        <span class="n">strained</span> <span class="o">=</span> <span class="p">[</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">words</span>
+                    <span class="k">if</span> <span class="n">strain</span><span class="o">.</span><span class="n">filter_endswith</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">ending</span><span class="o">=</span><span class="s">&#39;e&#39;</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">strained</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="FilterEndsTLDTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_strainer.html#namebot.tests.test_strainer.FilterEndsTLDTestCase">[docs]</a><span class="k">class</span> <span class="nc">FilterEndsTLDTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_endswithtld</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;sitcom&#39;</span><span class="p">,</span> <span class="s">&#39;telecom&#39;</span><span class="p">,</span> <span class="s">&#39;intercom&#39;</span><span class="p">,</span> <span class="s">&#39;rabbit&#39;</span><span class="p">,</span> <span class="s">&#39;elephant&#39;</span><span class="p">]</span>
+        <span class="n">strained</span> <span class="o">=</span> <span class="p">[</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span>
+                    <span class="k">if</span> <span class="n">strain</span><span class="o">.</span><span class="n">filter_tld</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">tld</span><span class="o">=</span><span class="s">&#39;.com&#39;</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">strained</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="FilterVowelConsTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_strainer.html#namebot.tests.test_strainer.FilterVowelConsTestCase">[docs]</a><span class="k">class</span> <span class="nc">FilterVowelConsTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">setUpClass</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+        <span class="n">cls</span><span class="o">.</span><span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;chrysanthemum&#39;</span><span class="p">,</span> <span class="s">&#39;younker&#39;</span><span class="p">,</span> <span class="s">&#39;overalcoholizing&#39;</span><span class="p">,</span>
+                     <span class="s">&#39;refrigeration&#39;</span><span class="p">,</span> <span class="s">&#39;bagpiped&#39;</span><span class="p">,</span> <span class="s">&#39;ossianic&#39;</span><span class="p">,</span> <span class="s">&#39;intermittence&#39;</span><span class="p">,</span>
+                     <span class="s">&#39;huneker&#39;</span><span class="p">,</span> <span class="s">&#39;cherty&#39;</span><span class="p">,</span> <span class="s">&#39;sustainingly&#39;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_getfunc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ratio</span><span class="p">):</span>
+        <span class="c"># Partially apply the argument for use with `filter`</span>
+        <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">strain</span><span class="o">.</span><span class="n">filter_vowel_cons_ratio</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">ratio</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">func</span>
+
+    <span class="k">def</span> <span class="nf">test_no_divbyzero_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
+            <span class="n">ratio</span> <span class="o">=</span> <span class="n">n</span> <span class="o">*</span> <span class="mf">0.1</span>
+            <span class="n">func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getfunc</span><span class="p">(</span><span class="n">ratio</span><span class="p">)</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">words</span><span class="p">)</span>
+        <span class="c"># Assert this was filtered, to some degre</span>
+        <span class="c"># (except 0.0, which is no filtering.)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertLess</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">res</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">words</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_nofilter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getfunc</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">words</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">res</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">words</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="FilterDoubleMetaphoneTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_strainer.html#namebot.tests.test_strainer.FilterDoubleMetaphoneTestCase">[docs]</a><span class="k">class</span> <span class="nc">FilterDoubleMetaphoneTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;3foo33&#39;</span><span class="p">,</span> <span class="s">&#39;bar&#39;</span><span class="p">,</span> <span class="s">&#39;baz&#39;</span><span class="p">,</span> <span class="s">&#39;quux&#39;</span><span class="p">,</span> <span class="s">&#39;what&#39;</span><span class="p">,</span> <span class="s">&#39;improbable&#39;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">test_none</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">words</span> <span class="k">if</span> <span class="n">strain</span><span class="o">.</span><span class="n">filter_soundex</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="bp">None</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">words</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_filter_one</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">words</span>
+               <span class="k">if</span> <span class="n">strain</span><span class="o">.</span><span class="n">filter_dmetaphone</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="s">&#39;AMPR&#39;</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;improbable&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">test_filter_double</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">words</span> <span class="o">+</span> <span class="p">[</span><span class="s">&#39;improbable&#39;</span><span class="p">]</span>
+               <span class="k">if</span> <span class="n">strain</span><span class="o">.</span><span class="n">filter_dmetaphone</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="s">&#39;AMPR&#39;</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;improbable&#39;</span><span class="p">,</span> <span class="s">&#39;improbable&#39;</span><span class="p">])</span>
+
+
+<div class="viewcode-block" id="FilterSoundexTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_strainer.html#namebot.tests.test_strainer.FilterSoundexTestCase">[docs]</a><span class="k">class</span> <span class="nc">FilterSoundexTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;foo&#39;</span><span class="p">,</span> <span class="s">&#39;bar&#39;</span><span class="p">,</span> <span class="s">&#39;baz&#39;</span><span class="p">,</span> <span class="s">&#39;quux&#39;</span><span class="p">,</span> <span class="s">&#39;what&#39;</span><span class="p">,</span> <span class="s">&#39;improbable&#39;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">test_none</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">words</span> <span class="k">if</span> <span class="n">strain</span><span class="o">.</span><span class="n">filter_soundex</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="bp">None</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">words</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_filter_one</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">words</span>
+               <span class="k">if</span> <span class="n">strain</span><span class="o">.</span><span class="n">filter_soundex</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="s">&#39;b600&#39;</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;bar&#39;</span><span class="p">])</span>
+
+
+<div class="viewcode-block" id="FilterNysiisTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_strainer.html#namebot.tests.test_strainer.FilterNysiisTestCase">[docs]</a><span class="k">class</span> <span class="nc">FilterNysiisTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;foo&#39;</span><span class="p">,</span> <span class="s">&#39;bar&#39;</span><span class="p">,</span> <span class="s">&#39;baz&#39;</span><span class="p">,</span> <span class="s">&#39;quux&#39;</span><span class="p">,</span> <span class="s">&#39;what&#39;</span><span class="p">,</span> <span class="s">&#39;improbable&#39;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">test_none</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">words</span> <span class="k">if</span> <span class="n">strain</span><span class="o">.</span><span class="n">filter_nysiis</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="bp">None</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">words</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_filter_one</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">words</span>
+               <span class="k">if</span> <span class="n">strain</span><span class="o">.</span><span class="n">filter_nysiis</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="s">&#39;INPRABABL&#39;</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;improbable&#39;</span><span class="p">])</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Chris Tabor.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

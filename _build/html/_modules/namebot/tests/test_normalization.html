@@ -1,0 +1,330 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>namebot.tests.test_normalization &mdash; namebot  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="namebot  documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> namebot
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../namebot.html">namebot package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">namebot</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+    <li>namebot.tests.test_normalization</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for namebot.tests.test_normalization</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;Normalization module tests.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">unittest</span>
+
+<span class="kn">from</span> <span class="nn">namebot</span> <span class="kn">import</span> <span class="n">normalization</span> <span class="k">as</span> <span class="n">norm</span>
+
+
+<div class="viewcode-block" id="RemoveOddWordTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_normalization.html#namebot.tests.test_normalization.RemoveOddWordTestCase">[docs]</a><span class="k">class</span> <span class="nc">RemoveOddWordTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="RemoveOddWordTestCase.test_remove_odd_sounding_words"><a class="viewcode-back" href="../../../namebot.tests.test_normalization.html#namebot.tests.test_normalization.RemoveOddWordTestCase.test_remove_odd_sounding_words">[docs]</a>    <span class="k">def</span> <span class="nf">test_remove_odd_sounding_words</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Test four nonsense inputs that should get</span>
+<span class="sd">        captured by the regexes.&quot;&quot;&quot;</span>
+        <span class="n">original</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;bking&#39;</span><span class="p">,</span> <span class="s">&#39;aaaeee&#39;</span><span class="p">,</span> <span class="s">&#39;flower&#39;</span><span class="p">,</span> <span class="s">&#39;rabbit&#39;</span><span class="p">]</span>
+        <span class="n">original_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">original</span><span class="p">)</span>
+        <span class="n">updated</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">remove_odd_sounding_words</span><span class="p">(</span><span class="n">original</span><span class="p">)</span>
+        <span class="n">new_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">updated</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">new_count</span><span class="p">,</span> <span class="n">original_count</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RemoveOddWordTestCase.test_no_remove_odd_sounding_words"><a class="viewcode-back" href="../../../namebot.tests.test_normalization.html#namebot.tests.test_normalization.RemoveOddWordTestCase.test_no_remove_odd_sounding_words">[docs]</a>    <span class="k">def</span> <span class="nf">test_no_remove_odd_sounding_words</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Test bad inputs should not get removed.&quot;&quot;&quot;</span>
+        <span class="n">original</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;flower&#39;</span><span class="p">,</span> <span class="s">&#39;rabbit&#39;</span><span class="p">]</span>
+        <span class="n">original_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">original</span><span class="p">)</span>
+        <span class="n">updated</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">remove_odd_sounding_words</span><span class="p">(</span><span class="n">original</span><span class="p">)</span>
+        <span class="n">new_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">updated</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">new_count</span><span class="p">,</span> <span class="n">original_count</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RemoveOddWordTestCase.test_none_remove_odd_sounding_words"><a class="viewcode-back" href="../../../namebot.tests.test_normalization.html#namebot.tests.test_normalization.RemoveOddWordTestCase.test_none_remove_odd_sounding_words">[docs]</a>    <span class="k">def</span> <span class="nf">test_none_remove_odd_sounding_words</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Test that no input is returned without looping&quot;&quot;&quot;</span>
+        <span class="n">original</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">updated</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">remove_odd_sounding_words</span><span class="p">(</span><span class="n">original</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">updated</span><span class="p">,</span> <span class="n">original</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RemoveOddWordTestCase.test_empty_remove_odd_sounding_words"><a class="viewcode-back" href="../../../namebot.tests.test_normalization.html#namebot.tests.test_normalization.RemoveOddWordTestCase.test_empty_remove_odd_sounding_words">[docs]</a>    <span class="k">def</span> <span class="nf">test_empty_remove_odd_sounding_words</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Test that empty list is returned without looping&quot;&quot;&quot;</span>
+        <span class="n">original</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">updated</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">remove_odd_sounding_words</span><span class="p">(</span><span class="n">original</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">original</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">original</span><span class="p">,</span> <span class="n">updated</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="StemWordsTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_normalization.html#namebot.tests.test_normalization.StemWordsTestCase">[docs]</a><span class="k">class</span> <span class="nc">StemWordsTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="StemWordsTestCase.test_stem_words"><a class="viewcode-back" href="../../../namebot.tests.test_normalization.html#namebot.tests.test_normalization.StemWordsTestCase.test_stem_words">[docs]</a>    <span class="k">def</span> <span class="nf">test_stem_words</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Test stemmer is working&quot;&quot;&quot;</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;running&#39;</span><span class="p">,</span> <span class="s">&#39;jumping&#39;</span><span class="p">]</span>
+        <span class="n">stemmed</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">stem_words</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">([</span><span class="s">&#39;run&#39;</span><span class="p">,</span> <span class="s">&#39;jump&#39;</span><span class="p">],</span> <span class="n">stemmed</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="StemWordsTestCase.test_no_stem_words"><a class="viewcode-back" href="../../../namebot.tests.test_normalization.html#namebot.tests.test_normalization.StemWordsTestCase.test_no_stem_words">[docs]</a>    <span class="k">def</span> <span class="nf">test_no_stem_words</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Test stemmer is not stemming root words&quot;&quot;&quot;</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;run&#39;</span><span class="p">,</span> <span class="s">&#39;jump&#39;</span><span class="p">]</span>
+        <span class="n">stemmed</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">stem_words</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">stemmed</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="RemoveBadWordsTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_normalization.html#namebot.tests.test_normalization.RemoveBadWordsTestCase">[docs]</a><span class="k">class</span> <span class="nc">RemoveBadWordsTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="RemoveBadWordsTestCase.test_stem_words"><a class="viewcode-back" href="../../../namebot.tests.test_normalization.html#namebot.tests.test_normalization.RemoveBadWordsTestCase.test_stem_words">[docs]</a>    <span class="k">def</span> <span class="nf">test_stem_words</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Test bad words are getting filtered out.&quot;&quot;&quot;</span>
+        <span class="n">bad_words</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;fuck&#39;</span><span class="p">,</span> <span class="s">&#39;pussy&#39;</span><span class="p">,</span> <span class="s">&#39;cunt&#39;</span><span class="p">]</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="n">bad_words</span> <span class="o">+</span> <span class="p">[</span><span class="s">&#39;cool&#39;</span><span class="p">,</span> <span class="s">&#39;neat&#39;</span><span class="p">,</span> <span class="s">&#39;rad&#39;</span><span class="p">]</span>
+        <span class="n">cleaned</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">remove_bad_words</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotEqual</span><span class="p">(</span><span class="n">bad_words</span><span class="p">,</span> <span class="n">cleaned</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">bad_word</span> <span class="ow">in</span> <span class="n">bad_words</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="n">bad_word</span> <span class="ow">in</span> <span class="n">cleaned</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="RemoveStopWordsTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_normalization.html#namebot.tests.test_normalization.RemoveStopWordsTestCase">[docs]</a><span class="k">class</span> <span class="nc">RemoveStopWordsTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="RemoveStopWordsTestCase.test_filter_long_words"><a class="viewcode-back" href="../../../namebot.tests.test_normalization.html#namebot.tests.test_normalization.RemoveStopWordsTestCase.test_filter_long_words">[docs]</a>    <span class="k">def</span> <span class="nf">test_filter_long_words</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Test that no stop words were kept&quot;&quot;&quot;</span>
+        <span class="n">stop_words</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;the&#39;</span><span class="p">,</span> <span class="s">&#39;is&#39;</span><span class="p">,</span> <span class="s">&#39;are&#39;</span><span class="p">,</span> <span class="s">&#39;am&#39;</span><span class="p">,</span> <span class="s">&#39;but&#39;</span><span class="p">]</span>
+        <span class="n">filtered</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">remove_stop_words</span><span class="p">(</span><span class="n">stop_words</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">filtered</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="FilterWordsTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_normalization.html#namebot.tests.test_normalization.FilterWordsTestCase">[docs]</a><span class="k">class</span> <span class="nc">FilterWordsTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="FilterWordsTestCase.test_filter_normal_words"><a class="viewcode-back" href="../../../namebot.tests.test_normalization.html#namebot.tests.test_normalization.FilterWordsTestCase.test_filter_normal_words">[docs]</a>    <span class="k">def</span> <span class="nf">test_filter_normal_words</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Test that normal words are not filtered out&quot;&quot;&quot;</span>
+        <span class="n">long_words</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;notlong&#39;</span><span class="p">,</span> <span class="s">&#39;short&#39;</span><span class="p">]</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="n">long_words</span> <span class="o">+</span> <span class="p">[</span><span class="s">&#39;normal&#39;</span><span class="p">,</span> <span class="s">&#39;words&#39;</span><span class="p">]</span>
+        <span class="n">filtered</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">filter_words</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">filtered</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FilterWordsTestCase.test_filter_long_words"><a class="viewcode-back" href="../../../namebot.tests.test_normalization.html#namebot.tests.test_normalization.FilterWordsTestCase.test_filter_long_words">[docs]</a>    <span class="k">def</span> <span class="nf">test_filter_long_words</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Test that very long words are filtered out&quot;&quot;&quot;</span>
+        <span class="n">long_words</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;areallyverylongword&#39;</span><span class="p">,</span> <span class="s">&#39;anextrareallyverylongword&#39;</span><span class="p">]</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="n">long_words</span> <span class="o">+</span> <span class="p">[</span><span class="s">&#39;normal&#39;</span><span class="p">,</span> <span class="s">&#39;words&#39;</span><span class="p">]</span>
+        <span class="n">filtered</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">filter_words</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">long_word</span> <span class="ow">in</span> <span class="n">long_words</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="n">long_word</span> <span class="ow">in</span> <span class="n">filtered</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="UniquifyTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_normalization.html#namebot.tests.test_normalization.UniquifyTestCase">[docs]</a><span class="k">class</span> <span class="nc">UniquifyTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="UniquifyTestCase.test_uniquify"><a class="viewcode-back" href="../../../namebot.tests.test_normalization.html#namebot.tests.test_normalization.UniquifyTestCase.test_uniquify">[docs]</a>    <span class="k">def</span> <span class="nf">test_uniquify</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;cool&#39;</span><span class="p">,</span> <span class="s">&#39;neat&#39;</span><span class="p">,</span> <span class="s">&#39;cool&#39;</span><span class="p">,</span> <span class="s">&#39;cool&#39;</span><span class="p">,</span> <span class="s">&#39;neat&#39;</span><span class="p">]</span>
+        <span class="n">updated</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">uniquify</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">updated</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="CleanSortTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_normalization.html#namebot.tests.test_normalization.CleanSortTestCase">[docs]</a><span class="k">class</span> <span class="nc">CleanSortTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="CleanSortTestCase.test_clean_sort"><a class="viewcode-back" href="../../../namebot.tests.test_normalization.html#namebot.tests.test_normalization.CleanSortTestCase.test_clean_sort">[docs]</a>    <span class="k">def</span> <span class="nf">test_clean_sort</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;!@foobar!#&#39;</span><span class="p">,</span> <span class="s">&#39;ba3z!@#33_&#39;</span><span class="p">,</span> <span class="s">&#39;bam!333____#33&#39;</span><span class="p">]</span>
+        <span class="n">cleaned</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">clean_sort</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">cleaned</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;foobar&#39;</span><span class="p">,</span> <span class="s">&#39;baz&#39;</span><span class="p">,</span> <span class="s">&#39;bam&#39;</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="CleanSortTestCase.test_clean_string"><a class="viewcode-back" href="../../../namebot.tests.test_normalization.html#namebot.tests.test_normalization.CleanSortTestCase.test_clean_string">[docs]</a>    <span class="k">def</span> <span class="nf">test_clean_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="s">&#39;!@foobar!#&#39;</span>
+        <span class="n">cleaned</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">clean_sort</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">cleaned</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="ChopDuplicateEndsTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_normalization.html#namebot.tests.test_normalization.ChopDuplicateEndsTestCase">[docs]</a><span class="k">class</span> <span class="nc">ChopDuplicateEndsTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_basic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">chopped</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">chop_duplicate_ends</span><span class="p">(</span><span class="s">&#39;aabracadabraa&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">chopped</span><span class="p">,</span> <span class="s">&#39;abracadabra&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_one_end</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">chopped1</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">chop_duplicate_ends</span><span class="p">(</span><span class="s">&#39;aabracadabra&#39;</span><span class="p">)</span>
+        <span class="n">chopped2</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">chop_duplicate_ends</span><span class="p">(</span><span class="s">&#39;abracadabraa&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">chopped1</span><span class="p">,</span> <span class="s">&#39;abracadabra&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">chopped2</span><span class="p">,</span> <span class="s">&#39;abracadabra&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="KeyWordsByPosTagTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_normalization.html#namebot.tests.test_normalization.KeyWordsByPosTagTestCase">[docs]</a><span class="k">class</span> <span class="nc">KeyWordsByPosTagTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_basic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="s">&#39;Monkey&#39;</span><span class="p">,</span> <span class="s">&#39;NNP&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;Fly&#39;</span><span class="p">,</span> <span class="s">&#39;VBG&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;Fly&#39;</span><span class="p">,</span> <span class="s">&#39;RB&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s">&#39;Dog&#39;</span><span class="p">,</span> <span class="s">&#39;NNP&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;Cat&#39;</span><span class="p">,</span> <span class="s">&#39;NNP&#39;</span><span class="p">)]</span>
+        <span class="n">keyed</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">key_words_by_pos_tag</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">expected</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&#39;RB&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;Fly&#39;</span><span class="p">],</span>
+            <span class="s">&#39;NNP&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;Monkey&#39;</span><span class="p">,</span> <span class="s">&#39;Dog&#39;</span><span class="p">,</span> <span class="s">&#39;Cat&#39;</span><span class="p">],</span>
+            <span class="s">&#39;VBG&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;Fly&#39;</span><span class="p">]</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">keyed</span><span class="p">),</span> <span class="n">expected</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="FlattenTestCase"><a class="viewcode-back" href="../../../namebot.tests.test_normalization.html#namebot.tests.test_normalization.FlattenTestCase">[docs]</a><span class="k">class</span> <span class="nc">FlattenTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span></div>
+
+    <span class="k">def</span> <span class="nf">test_basic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">norm</span><span class="o">.</span><span class="n">flatten</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])),</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">test_nested</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">nested</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="p">[</span><span class="mi">7</span><span class="p">]]],</span> <span class="p">[</span><span class="mi">8</span><span class="p">]]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">norm</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">nested</span><span class="p">)),</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Chris Tabor.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
