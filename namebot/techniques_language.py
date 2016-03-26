@@ -11,6 +11,7 @@ def lookup_latin_word(word):
 
     Args:
         word (str) - The word to search for
+
     Returns:
         results (list) - A nested list with each matching definition(s) group.
     """

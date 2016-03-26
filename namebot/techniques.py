@@ -32,6 +32,9 @@ def domainify(words, tld='com'):
 
     Returns:
         list: The modified list of words.
+
+    >>> domanify(['radio'], tld='.io')
+    >>> ['rad.io']
     """
     _words = []
     if tld.startswith('.'):
@@ -339,6 +342,9 @@ def palindrome(word):
 
     Returns:
         str: The updated palindrome.
+
+    >>> palindrome('cool')
+    >>> 'coollooc'
     """
     return '{}{}'.format(word, word[::-1])
 
@@ -351,19 +357,34 @@ def palindromes(words):
 
     Returns:
         list: The list of palindromes.
+
+    >>> palindrome(['cool', 'neat'])
+    >>> ['coollooc', 'neattaen']
     """
     return [palindrome(word) for word in words]
 
 
 def make_founder_product_name(founder1, founder2, product):
-    """Get the name of two people forming a company and combine it."""
+    """Get the name of two people forming a company and combine it.
+
+    Args:
+        founder1 (str): Your founder name 1.
+        founder2 (str): Your founder name 2.
+        product (str): Your product/feature/service name.
+
+    Returns:
+        str: The updated name.
+
+    >>> make_founder_product_name('chris', 'ella', 'widgets')
+    >>> 'chris & ella widgets'
+    """
     return '{} & {} {}'.format(
         founder1[0].upper(),
         founder2[0].upper(),
         product)
 
 
-def make_name_alliteration(word_array, divider=' '):
+def make_name_alliteration(words, divider=' '):
     """Make an alliteration with a set of words, if applicable.
 
     Examples:
@@ -377,10 +398,10 @@ def make_name_alliteration(word_array, divider=' '):
     3. combine them and return to new array
     """
     new_arr = []
-    word_array = sorted(word_array)
+    words = sorted(words)
 
-    for word1 in word_array:
-        for word2 in word_array:
+    for word1 in words:
+        for word2 in words:
             if word1[:1] is word2[:1] and word1 is not word2:
                 new_arr.append(word1 + divider + word2)
     return new_arr
