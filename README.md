@@ -12,6 +12,8 @@ This project is ongoing, but feel free to contribute! It's a full-fledged suite 
 
 ## Modules:
 
+[See the docs](http://christabor.github.io/namebot/)
+
 ### Metrics
 A class of utilities for generating all kinds of linguistic metrics for a set of words.
 
@@ -32,6 +34,8 @@ Techniques that involve the use of language translation for stylistic name use, 
 
 ### Strainer
 Similar to normalization, but for filtering based on rules, like length, count, etc... good for mapping 1:1 with UI inputs or just calling from the functions directly.
+
+[See the docs for more](http://christabor.github.io/namebot/)
 
 ## How to setup server and test:
 
