@@ -52,7 +52,7 @@ See [requirements.txt](requirements.txt) and [Makefile](Makefile) for details.
 ## Tests
 
 ```
-sudo make install
+make install
 make tests
 ```
 
