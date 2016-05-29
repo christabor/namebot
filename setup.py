@@ -10,7 +10,7 @@ except ImportError:
 
 
 PACKAGE = 'namebot'
-VERSION = '3.4.3'
+VERSION = '3.4.4'
 
 
 def _get_requires(filepath):
