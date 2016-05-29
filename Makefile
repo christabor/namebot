@@ -19,3 +19,5 @@ docs:
 	cd docs && make html
 clean: cleanpyc
 	rm -r docs
+testdocs:
+	rm -r docs && make docs && open docs/_build/html/index.html
