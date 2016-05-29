@@ -1,4 +1,7 @@
+"""Strainer tests."""
+
 import unittest
+
 from namebot import strainer as strain
 
 
@@ -18,14 +21,14 @@ class FilterLengthTestCase(unittest.TestCase):
         self.assertEqual(len(self.words), len(strained))
 
     def test_min_length(self):
-        """Tests filtering function for length"""
+        """Test filtering function for length"""
         strained = [word for word in self.words
                     if strain.filter_length(
                         word, min_length=4, max_length=999)]
         self.assertEqual(len(strained), 5)
 
     def test_max_length(self):
-        """Tests filtering function for length"""
+        """Test filtering function for length"""
         strained = [word for word in self.words
                     if strain.filter_length(
                         word, min_length=0, max_length=3)]
@@ -139,3 +142,39 @@ class FilterNysiisTestCase(unittest.TestCase):
         res = [w for w in self.words
                if strain.filter_nysiis(w, code='INPRABABL')]
         self.assertEqual(res, ['improbable'])
+
+
+class FilterVowelEndingTestCase(unittest.TestCase):
+
+    def test_filter_none(self):
+        words = ['bar', 'baz']
+        res = [w for w in words if strain.filter_vowel_ending(w)]
+        self.assertEqual(res, [])
+
+    def test_filter_all(self):
+        words = ['care', 'rare', 'share']
+        res = [w for w in words if strain.filter_vowel_ending(w)]
+        self.assertEqual(res, words)
+
+    def test_filter_some(self):
+        words = ['care', 'rare', 'baz']
+        res = [w for w in words if strain.filter_vowel_ending(w)]
+        self.assertEqual(res, ['care', 'rare'])
+
+
+class FilterConsonantEndingTestCase(unittest.TestCase):
+
+    def test_filter_none(self):
+        words = ['foo', 'neato']
+        res = [w for w in words if strain.filter_consonant_ending(w)]
+        self.assertEqual(res, [])
+
+    def test_filter_all(self):
+        words = ['bar', 'baz', 'quux']
+        res = [w for w in words if strain.filter_consonant_ending(w)]
+        self.assertEqual(res, words)
+
+    def test_filter_some(self):
+        words = ['bar', 'baz', 'foo']
+        res = [w for w in words if strain.filter_consonant_ending(w)]
+        self.assertEqual(res, ['bar', 'baz'])

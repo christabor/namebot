@@ -11,6 +11,8 @@ from pattern.vector import stem
 
 import settings as namebot_settings
 
+_regexes = namebot_settings.regexes
+
 
 def flatten(lst):
     """Flatten a list with arbitrary levels of nesting.

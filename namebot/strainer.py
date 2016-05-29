@@ -10,11 +10,12 @@ filtered = [word for word in words if
             filter_endswith(word, ending='e') ...]
 """
 
+from __future__ import absolute_import
+
 import re
 
-import scoring
-
-import settings as namebot_settings
+from . import scoring
+from . import settings as namebot_settings
 
 
 def filter_vowel_cons_ratio(word, ratio=0.5):
@@ -136,3 +137,29 @@ def filter_nysiis(word, code=None):
         return True
     retcode = scoring.score_nysiis([word])[0].split(':')[1].strip().lower()
     return retcode == code.lower()
+
+
+def filter_consonant_ending(word):
+    """Filter words that end in consonants.
+
+    Args:
+        word (str): The word to filter.
+
+    Returns:
+        match (bool): An re.MatchObject or None.
+    """
+    cons = namebot_settings.regexes['consonant_ending']
+    return re.search(cons, word[-1]) is not None
+
+
+def filter_vowel_ending(word):
+    """Filter words that end in vowels.
+
+    Args:
+        word (str): The word to filter.
+
+    Returns:
+        match (bool): A re.MatchObject or None.
+    """
+    vowels = namebot_settings.regexes['vowel_ending']
+    return re.match(vowels, word[-1]) is not None

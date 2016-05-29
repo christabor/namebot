@@ -33,4 +33,6 @@ regexes = {
     'all_vowels': re.compile(r'a|e|i|o|u', re.IGNORECASE),
     'vowels': re.compile(r'[a-zA-Z][a|e|i|o|u]', re.IGNORECASE),
     'consonants': re.compile(r'[a-zA-Z][^a|e|i|o|u]', re.IGNORECASE),
+    'consonant_ending': re.compile(r'[^a|e|i|o|u]', re.IGNORECASE),
+    'vowel_ending': re.compile(r'[a|e|i|o|u]', re.IGNORECASE),
 }
