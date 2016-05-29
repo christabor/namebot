@@ -3,7 +3,8 @@
 Recommended usage: filtered results using a list comprehension
 of all filters 'anded' together.
 e.g:
-filtered = [word for word in words if
+
+>>> filtered = [word for word in words if
             filter_length(word, max_length=7) and
             filter_startswith(word, beginning='c') and
             filter_startswith(word, beginning='c') and
@@ -22,6 +23,10 @@ def filter_vowel_cons_ratio(word, ratio=0.5):
     """Return True if the ratio of vowels to consonants is > `ratio`.
 
     This can be used as an ad-hoc pronunciation filter.
+
+    :param word (str): The word
+    :param ratio (float, optional): The ratio
+    :rtype: int
     """
     vowels = re.compile(r'[aeiouy]')
     consonants = re.compile(r'[^aeyiuo]')
@@ -36,13 +41,10 @@ def filter_length(word,
                   max_length=namebot_settings.MAX_LENGTH):
     """Filter based on min and max lengths.
 
-    Args:
-        word (str): The word.
-        min_length (int, optional): The minimum allowed length.
-        max_length (int, optional): The maximum allowed length.
-
-    Returns:
-        bool: The resulting check.
+    :param word (str): The word.
+    :param min_length (int, optional): The minimum allowed length.
+    :param max_length (int, optional): The maximum allowed length.
+    :rtype: bool: The resulting check.
     """
     return len(word) >= min_length and len(word) <= max_length
 
@@ -50,12 +52,9 @@ def filter_length(word,
 def filter_startswith(word, beginning=None):
     """Filter a word starting with specified string.
 
-    Args:
-        word (str): The word.
-        beginning (str, optional): The beginning string to check.
-
-    Returns:
-        bool: The resulting check.
+    :param word (str): The word.
+    :param beginning (str, optional): The beginning string to check.
+    :rtype: bool: The resulting check.
     """
     return word.lower().startswith(beginning)
 
@@ -63,12 +62,9 @@ def filter_startswith(word, beginning=None):
 def filter_endswith(word, ending=None):
     """Filter words ending with a specified suffix.
 
-    Args:
-        word (str): A word.
-        ending (str, optional): The optional ending to check.
-
-    Returns:
-        bool: The resulting check.
+    :param word (str): A word.
+    :param ending (str, optional): The optional ending to check.
+    :rtype bool: The resulting check.
     """
     return word.lower().endswith(ending)
 
@@ -76,12 +72,10 @@ def filter_endswith(word, ending=None):
 def filter_tld(word, tld='.com'):
     """Check if a word ends with a TLD suffix (can be used to make a valid TLD).
 
-    Args:
-        word (str): The wor.d
-        tld (str, optional): The TLD to check against, with or without a dot.
-
-    Returns:
-        bool: The resulting check.
+    :param word (str): The wor.d
+    :param tld (str, optional): The TLD to check against,
+        with or without a dot.
+    :rtype bool: The resulting check.
     """
     if tld.startswith('.'):
         tld = tld.replace('.', '')
@@ -93,12 +87,10 @@ def filter_dmetaphone(word, code=None):
 
     Where second key being None, an easy pronunciation is unlikely.
 
-    Args:
-        word (str): The word.
-        code (str, optional): The double metaphone pronunciation code.
+    :param word (str): The word.
+    :param code (str, optional): The double metaphone pronunciation code.
 
-    Returns:
-        bool: The resulting check.
+    :rtype bool: The resulting check.
     """
     score = scoring.score_dmetaphone([word])[0]
     _, pronunciation, dmcode = score.split(':')
@@ -110,12 +102,10 @@ def filter_dmetaphone(word, code=None):
 def filter_soundex(word, code=None):
     """Get soundex value, checking result against a given code.
 
-    Args:
-        word (str): The word.
-        code (str, optional): The soundex pronunciation code.
+    :param word (str): The word.
+    :param code (str, optional): The soundex pronunciation code.
 
-    Returns:
-        bool: The resulting check.
+    :rtype bool: The resulting check.
     """
     if code is None:
         return True
@@ -126,12 +116,9 @@ def filter_soundex(word, code=None):
 def filter_nysiis(word, code=None):
     """Get nysiis value, checking score.
 
-    Args:
-        word (str): The word.
-        code (str, optional): The nysiis pronunciation code.
-
-    Returns:
-        bool: The resulting check.
+    :param word (str): The word.
+    :param code (str, optional): The nysiis pronunciation code.
+    :rtype bool: The resulting check.
     """
     if code is None:
         return True
@@ -142,11 +129,8 @@ def filter_nysiis(word, code=None):
 def filter_consonant_ending(word):
     """Filter words that end in consonants.
 
-    Args:
-        word (str): The word to filter.
-
-    Returns:
-        match (bool): An re.MatchObject or None.
+    :param word (str): The word to filter.
+    :rtype match (bool): An re.MatchObject or None.
     """
     cons = namebot_settings.regexes['consonant_ending']
     return re.search(cons, word[-1]) is not None
@@ -155,11 +139,8 @@ def filter_consonant_ending(word):
 def filter_vowel_ending(word):
     """Filter words that end in vowels.
 
-    Args:
-        word (str): The word to filter.
-
-    Returns:
-        match (bool): A re.MatchObject or None.
+    :param word (str): The word to filter.
+    :rtype match (bool): A re.MatchObject or None.
     """
     vowels = namebot_settings.regexes['vowel_ending']
     return re.match(vowels, word[-1]) is not None
