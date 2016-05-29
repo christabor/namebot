@@ -3,3 +3,5 @@ updatedocs:
 	git add .
 	git commit -m "Updating docs..."
 	git push
+	git checkout master
+
