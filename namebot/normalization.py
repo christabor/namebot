@@ -73,11 +73,7 @@ def stem_words(words):
     Returns:
         list: An updated word list with words stemmed.
     """
-    new = []
-    for val in words:
-        val = stem(val, stemmer=PORTER)
-        new.append(val)
-    return new
+    return [stem(word, stemmer=PORTER) for word in words]
 
 
 def remove_stop_words(words):
@@ -89,12 +85,9 @@ def remove_stop_words(words):
     Returns:
         list: An updated word list with stopwords removed.
     """
-    stop_words = stopwords.words('english')
     # http://stackoverflow.com/questions/5486337/
     # how-to-remove-stop-words-using-nltk-or-python
-    newdata = [w for w in words if w.lower() not in stop_words]
-    # newdata = set(stopwords.words('english'))
-    return newdata
+    return [w for w in words if w.lower() not in stopwords.words('english')]
 
 
 def remove_bad_words(words):
@@ -109,9 +102,7 @@ def remove_bad_words(words):
     bad_words = ["nigger", "wop",
                  "kike", "faggot",
                  "fuck", "pussy", "cunt"]
-
-    newdata = [word for word in words if word.lower() not in bad_words]
-    return newdata
+    return [word for word in words if word.lower() not in bad_words]
 
 
 def filter_words(words):
