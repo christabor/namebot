@@ -1,0 +1,623 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>namebot.metrics &mdash; namebot  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="namebot  documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> namebot
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../namebot.html">namebot package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">namebot</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>namebot.metrics</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for namebot.metrics</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;Metrics for measuring various aspects of words.</span>
+
+<span class="sd">Conventions used in this utility:</span>
+<span class="sd">1.  All functions return a dictionary,</span>
+<span class="sd">    with key &#39;data&#39; and/or &#39;summary&#39;:</span>
+<span class="sd">    return {</span>
+<span class="sd">        &#39;data&#39;: data,</span>
+<span class="sd">        &#39;summary&#39;: summary or None</span>
+<span class="sd">    }</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="kn">from</span> <span class="nn">nltk</span> <span class="kn">import</span> <span class="n">pos_tag</span>
+<span class="kn">from</span> <span class="nn">pattern.en</span> <span class="kn">import</span> <span class="n">parse</span>
+
+
+<div class="viewcode-block" id="prep_file"><a class="viewcode-back" href="../../namebot.metrics.html#namebot.metrics.prep_file">[docs]</a><span class="k">def</span> <span class="nf">prep_file</span><span class="p">(</span><span class="n">file_name</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Take a file, extracts items line-by-line, and returns a list of them.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        file_name (str): The file name to open</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        items (list): A list of items extracted from the file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span> <span class="k">as</span> <span class="n">files</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">newline</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+            <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">newline</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">items</span></div>
+
+
+<div class="viewcode-block" id="get_named_numbers_1_10"><a class="viewcode-back" href="../../namebot.metrics.html#namebot.metrics.get_named_numbers_1_10">[docs]</a><span class="k">def</span> <span class="nf">get_named_numbers_1_10</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return a summary of words spelled out (e.g. one, two).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (list): A list of words</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: The data and summary results.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">matches</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">numbers</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+        <span class="s">r&#39;\Aone |two |three |four |five |six |seven |eight |nine |ten&#39;</span><span class="p">,</span>
+        <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">numbers</span><span class="p">,</span> <span class="n">word</span><span class="p">):</span>
+            <span class="n">matches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s">&#39;data&#39;</span><span class="p">:</span> <span class="n">matches</span><span class="p">,</span>
+        <span class="s">&#39;summary&#39;</span><span class="p">:</span> <span class="s">&#39;Of {} words, {} matched&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">matches</span><span class="p">))</span>
+    <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="name_length"><a class="viewcode-back" href="../../namebot.metrics.html#namebot.metrics.name_length">[docs]</a><span class="k">def</span> <span class="nf">name_length</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check the length of each word and an average.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (list): A list of words</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: The data and summary results.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">names_length</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="n">names_length</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>
+    <span class="n">summary</span> <span class="o">=</span> <span class="s">&#39;Of {} words, the average length of names is...{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">),</span>
+        <span class="nb">round</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">names_length</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">names_length</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s">&#39;data&#39;</span><span class="p">:</span> <span class="n">names_length</span><span class="p">,</span>
+        <span class="s">&#39;summary&#39;</span><span class="p">:</span> <span class="n">summary</span>
+    <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="name_vowel_count"><a class="viewcode-back" href="../../namebot.metrics.html#namebot.metrics.name_vowel_count">[docs]</a><span class="k">def</span> <span class="nf">name_vowel_count</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check the number of times vowels occurs, and total the results.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (list): A list of words</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: The data and summary results.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">num_count</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#39;e&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#39;i&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#39;o&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#39;u&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+            <span class="n">num_count</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">word</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
+            <span class="n">num_count</span><span class="p">[</span><span class="s">&#39;e&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">word</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s">&#39;e&#39;</span><span class="p">)</span>
+            <span class="n">num_count</span><span class="p">[</span><span class="s">&#39;i&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">word</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s">&#39;i&#39;</span><span class="p">)</span>
+            <span class="n">num_count</span><span class="p">[</span><span class="s">&#39;o&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">word</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s">&#39;o&#39;</span><span class="p">)</span>
+            <span class="n">num_count</span><span class="p">[</span><span class="s">&#39;u&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">word</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s">&#39;u&#39;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s">&#39;data&#39;</span><span class="p">:</span> <span class="n">num_count</span><span class="p">,</span>
+            <span class="s">&#39;summary&#39;</span><span class="p">:</span> <span class="bp">None</span>
+        <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="name_starts_with_vowel"><a class="viewcode-back" href="../../namebot.metrics.html#namebot.metrics.name_starts_with_vowel">[docs]</a><span class="k">def</span> <span class="nf">name_starts_with_vowel</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check the number of times a list of words starts with a vowel.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (list): A list of words</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: The data and summary results.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">vowelcount</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">vowels</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&#39;\A[aeiou]&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">vowels</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+            <span class="n">vowelcount</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">summary</span> <span class="o">=</span> <span class="s">&#39;Of {} words, {} or {}% are vowels as the first letter.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">),</span> <span class="n">vowelcount</span><span class="p">,</span>
+        <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">vowelcount</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span><span class="p">))</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s">&#39;data&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+        <span class="s">&#39;summary&#39;</span><span class="p">:</span> <span class="n">summary</span>
+    <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="get_digits_frequency"><a class="viewcode-back" href="../../namebot.metrics.html#namebot.metrics.get_digits_frequency">[docs]</a><span class="k">def</span> <span class="nf">get_digits_frequency</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Look for and count the digits in names, e.g. 7-11, 3M, etc...</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (list): A list of words</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: The data and summary results.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">new_words</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">digits</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&#39;[0-9]+&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">digits</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+            <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">matches</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">digits</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="n">new_words</span> <span class="o">+=</span> <span class="n">matches</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s">&#39;data&#39;</span><span class="p">:</span> <span class="n">new_words</span><span class="p">,</span>
+        <span class="s">&#39;summary&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;Of {} words, {} have numbers in them, &#39;</span>
+                    <span class="s">&#39;with a total of {} numbers found.&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">),</span> <span class="n">count</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_words</span><span class="p">))</span>
+    <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="get_first_letter_frequency"><a class="viewcode-back" href="../../namebot.metrics.html#namebot.metrics.get_first_letter_frequency">[docs]</a><span class="k">def</span> <span class="nf">get_first_letter_frequency</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Add the frequency of first letters e.g. [C]at, [C]law, c = 2.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (list): A list of words</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: The data and summary results.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">letters</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="c"># populate keys</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="n">letters</span><span class="p">[</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="c"># add counts</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="n">letters</span><span class="p">[</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s">&#39;data&#39;</span><span class="p">:</span> <span class="n">letters</span><span class="p">,</span>
+        <span class="s">&#39;summary&#39;</span><span class="p">:</span> <span class="bp">None</span>
+    <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="get_special_chars"><a class="viewcode-back" href="../../namebot.metrics.html#namebot.metrics.get_special_chars">[docs]</a><span class="k">def</span> <span class="nf">get_special_chars</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Find occurrences of special characters (non-alphabetical characters).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (list): A list of words</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: The data and summary results.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">chars</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&#39;[^a-z]&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">chars</span><span class="p">,</span> <span class="n">word</span><span class="p">):</span>
+            <span class="n">data</span> <span class="o">+=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">chars</span><span class="p">,</span> <span class="n">word</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s">&#39;data&#39;</span><span class="p">:</span> <span class="n">data</span><span class="p">,</span>
+        <span class="s">&#39;summary&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;{} occurrences of special characters were&#39;</span>
+                    <span class="s">&#39; found in {} words.&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">))</span>
+    <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="get_word_types"><a class="viewcode-back" href="../../namebot.metrics.html#namebot.metrics.get_word_types">[docs]</a><span class="k">def</span> <span class="nf">get_word_types</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Determine the occurrences of pos types.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (list): A list of words</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: The data and summary results.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">new_arr</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="n">parse</span><span class="p">(</span>
+                <span class="n">val</span><span class="p">,</span>
+                <span class="n">encoding</span><span class="o">=</span><span class="s">&#39;utf-8&#39;</span><span class="p">,</span>
+                <span class="n">tokenize</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                <span class="n">light</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                <span class="n">tags</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                <span class="n">chunks</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                <span class="n">relations</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                <span class="n">lemmata</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+            <span class="n">new_arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+            <span class="k">continue</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s">&#39;data&#39;</span><span class="p">:</span> <span class="n">new_arr</span><span class="p">,</span>
+        <span class="s">&#39;summary&#39;</span><span class="p">:</span> <span class="bp">None</span>
+    <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="get_name_spaces"><a class="viewcode-back" href="../../namebot.metrics.html#namebot.metrics.get_name_spaces">[docs]</a><span class="k">def</span> <span class="nf">get_name_spaces</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check number of spaces for a given set of words.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (list): A list of words</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: The data and summary results.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[{</span><span class="s">&#39;word&#39;</span><span class="p">:</span> <span class="n">word</span><span class="p">,</span> <span class="s">&#39;spaces&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">r&#39; &#39;</span><span class="p">))}</span>
+               <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">]</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s">&#39;data&#39;</span><span class="p">:</span> <span class="n">results</span><span class="p">,</span>
+        <span class="s">&#39;summary&#39;</span><span class="p">:</span> <span class="bp">None</span>
+    <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="get_consonant_repeat_frequency"><a class="viewcode-back" href="../../namebot.metrics.html#namebot.metrics.get_consonant_repeat_frequency">[docs]</a><span class="k">def</span> <span class="nf">get_consonant_repeat_frequency</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check for repeating consonant frequency for a given set of words.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (list): A list of words</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: The data and summary results.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">cons</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&#39;[^a|e|i|o|u{6}]&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">cons</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+            <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s">&#39;data&#39;</span><span class="p">:</span> <span class="n">count</span><span class="p">,</span>
+        <span class="s">&#39;summary&#39;</span><span class="p">:</span> <span class="bp">None</span>
+    <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="get_consonant_duplicate_repeat_frequency"><a class="viewcode-back" href="../../namebot.metrics.html#namebot.metrics.get_consonant_duplicate_repeat_frequency">[docs]</a><span class="k">def</span> <span class="nf">get_consonant_duplicate_repeat_frequency</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check for duplicate repeating consonant frequency.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (list): A list of words</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: The data and summary results.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">cons_dup</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&#39;[^a|e|i|o|u]{1,}&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">cons_dup</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+            <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s">&#39;data&#39;</span><span class="p">:</span> <span class="n">count</span><span class="p">,</span>
+        <span class="s">&#39;summary&#39;</span><span class="p">:</span> <span class="bp">None</span>
+    <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="get_vowel_repeat_frequency"><a class="viewcode-back" href="../../namebot.metrics.html#namebot.metrics.get_vowel_repeat_frequency">[docs]</a><span class="k">def</span> <span class="nf">get_vowel_repeat_frequency</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check for repeating vowel frequency for a given set of words.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (list): A list of words</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: The data and summary results.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">cons_vowel</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&#39;[aeiou{3}]&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">cons_vowel</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+            <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s">&#39;data&#39;</span><span class="p">:</span> <span class="n">count</span><span class="p">,</span>
+        <span class="s">&#39;summary&#39;</span><span class="p">:</span> <span class="bp">None</span>
+    <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="get_adjective_verb_or_noun"><a class="viewcode-back" href="../../namebot.metrics.html#namebot.metrics.get_adjective_verb_or_noun">[docs]</a><span class="k">def</span> <span class="nf">get_adjective_verb_or_noun</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get the number of words that are classified as verbs or nouns.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (TYPE): Description</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: The data and summary results.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;verbs&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#39;nouns&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+    <span class="n">verby</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;VBP&#39;</span><span class="p">,</span> <span class="s">&#39;VB&#39;</span><span class="p">,</span> <span class="s">&#39;RB&#39;</span><span class="p">,</span> <span class="s">&#39;VBG&#39;</span><span class="p">]</span>
+    <span class="n">nouns</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;NN&#39;</span><span class="p">,</span> <span class="s">&#39;NNP&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">word</span><span class="p">,</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">pos_tag</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">nouns</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="s">&#39;nouns&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">verby</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="s">&#39;verbs&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">remainder</span> <span class="o">=</span> <span class="n">total</span> <span class="o">-</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;verbs&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;nouns&#39;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s">&#39;data&#39;</span><span class="p">:</span> <span class="n">data</span><span class="p">,</span>
+        <span class="s">&#39;summary&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;Of {0} words, {1} were nouns, {2} were verbs, &#39;</span>
+                    <span class="s">&#39;and {3} were everything else.&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">total</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;nouns&#39;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;verbs&#39;</span><span class="p">],</span> <span class="n">remainder</span><span class="p">)</span>
+    <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="categorize_word_type"><a class="viewcode-back" href="../../namebot.metrics.html#namebot.metrics.categorize_word_type">[docs]</a><span class="k">def</span> <span class="nf">categorize_word_type</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get the common naming strategy &#39;category&#39; of a name, based on precedence.</span>
+
+<span class="sd">    Categories are derived from</span>
+<span class="sd">    http://www.thenameinspector.com/10-name-types/,</span>
+<span class="sd">    so it is important to note there is no agreed upon standard,</span>
+<span class="sd">    meaning it is ultimately a little arbitrary.</span>
+
+<span class="sd">    Since it is a bit challenging to actually determine its type,</span>
+<span class="sd">    we give a weighting for each word based on a few known metrics.</span>
+<span class="sd">    This can be updated in the future so that weightings are binary</span>
+<span class="sd">    (e.g. 0.0 and 100.0), giving traditional False/True.</span>
+
+<span class="sd">    Categories ====</span>
+
+<span class="sd">    1. Real Words</span>
+<span class="sd">     1a. Misspelled words</span>
+<span class="sd">     1b. Foreign words</span>
+<span class="sd">    2. Compounds</span>
+<span class="sd">    3. Phrases</span>
+<span class="sd">    4. Blends</span>
+<span class="sd">    5. Tweaked</span>
+<span class="sd">    6. Affixed</span>
+<span class="sd">    7. Fake/obscure</span>
+<span class="sd">    8. Puns</span>
+<span class="sd">    9. People&#39;s names</span>
+<span class="sd">    10. Initials and Acronyms</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (list): A list of words</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        new_words (list) - A list of lists, with each word</span>
+<span class="sd">                           and its distribution by word &quot;type&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">new_words</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">_get_distribution</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+        <span class="c"># TODO:</span>
+        <span class="c"># misspelled, foreign, tweaked, affixed, fake_obscure,</span>
+        <span class="c"># initials_acronym, blend, puns, person, compound</span>
+        <span class="sd">&quot;&quot;&quot;Return the distribution for all categories, given a single word.&quot;&quot;&quot;</span>
+        <span class="n">categories</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&#39;real&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s">&#39;misspelled&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s">&#39;foreign&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s">&#39;compound&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s">&#39;phrase&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s">&#39;blend&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s">&#39;tweaked&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s">&#39;affixed&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s">&#39;fake_obscure&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s">&#39;puns&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s">&#39;person&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s">&#39;initials_acronym&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c"># Real words are single</span>
+            <span class="n">categories</span><span class="p">[</span><span class="s">&#39;real&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">50</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c"># Phrases are not</span>
+            <span class="n">categories</span><span class="p">[</span><span class="s">&#39;phrase&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">50</span>
+        <span class="c"># If word cannot be tagged,</span>
+        <span class="c"># it&#39;s very likely fake_obscure</span>
+        <span class="k">if</span> <span class="n">pos_tag</span><span class="p">([</span><span class="n">word</span><span class="p">])[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;-NONE-&#39;</span><span class="p">:</span>
+            <span class="n">categories</span><span class="p">[</span><span class="s">&#39;real&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">categories</span><span class="p">[</span><span class="s">&#39;fake_obscure&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">75</span>
+        <span class="k">return</span> <span class="n">categories</span>
+
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="n">new_words</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">word</span><span class="p">,</span> <span class="n">_get_distribution</span><span class="p">(</span><span class="n">word</span><span class="p">)])</span>
+    <span class="k">return</span> <span class="n">new_words</span></div>
+
+
+<div class="viewcode-block" id="generate_all_metrics"><a class="viewcode-back" href="../../namebot.metrics.html#namebot.metrics.generate_all_metrics">[docs]</a><span class="k">def</span> <span class="nf">generate_all_metrics</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">words</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Generate all metrics in this module in one place.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        filename (str, optional): A filename to load words from.</span>
+<span class="sd">        words (TYPE, optional): Words to use, if file is not specified.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: All metrics results, keyed by name.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">filename</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">words</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">None</span>
+    <span class="k">if</span> <span class="n">filename</span><span class="p">:</span>
+        <span class="n">allnames</span> <span class="o">=</span> <span class="n">prep_file</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">allnames</span> <span class="o">=</span> <span class="n">words</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s">&#39;names&#39;</span><span class="p">:</span> <span class="n">allnames</span><span class="p">,</span>
+        <span class="s">&#39;metrics&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;digits_freq&#39;</span><span class="p">:</span> <span class="n">get_digits_frequency</span><span class="p">(</span><span class="n">allnames</span><span class="p">),</span>
+            <span class="s">&#39;length&#39;</span><span class="p">:</span> <span class="n">name_length</span><span class="p">(</span><span class="n">allnames</span><span class="p">),</span>
+            <span class="s">&#39;vowel_beginning&#39;</span><span class="p">:</span> <span class="n">name_starts_with_vowel</span><span class="p">(</span><span class="n">allnames</span><span class="p">),</span>
+            <span class="s">&#39;vowel_count&#39;</span><span class="p">:</span> <span class="n">name_vowel_count</span><span class="p">(</span><span class="n">allnames</span><span class="p">),</span>
+            <span class="s">&#39;name_length&#39;</span><span class="p">:</span> <span class="n">name_length</span><span class="p">(</span><span class="n">allnames</span><span class="p">),</span>
+            <span class="s">&#39;name_spaces&#39;</span><span class="p">:</span> <span class="n">get_name_spaces</span><span class="p">(</span><span class="n">allnames</span><span class="p">),</span>
+            <span class="s">&#39;consonant_repeat_freq&#39;</span><span class="p">:</span> <span class="n">get_consonant_repeat_frequency</span><span class="p">(</span><span class="n">allnames</span><span class="p">),</span>
+            <span class="s">&#39;consonant_dup_repeat_freq&#39;</span><span class="p">:</span> <span class="n">get_consonant_duplicate_repeat_frequency</span><span class="p">(</span><span class="n">allnames</span><span class="p">),</span>
+            <span class="s">&#39;vowel_repeat_freq&#39;</span><span class="p">:</span> <span class="n">get_vowel_repeat_frequency</span><span class="p">(</span><span class="n">allnames</span><span class="p">),</span>
+            <span class="s">&#39;special_characters&#39;</span><span class="p">:</span> <span class="n">get_special_chars</span><span class="p">(</span><span class="n">allnames</span><span class="p">),</span>
+            <span class="s">&#39;name_numbers&#39;</span><span class="p">:</span> <span class="n">get_named_numbers_1_10</span><span class="p">(</span><span class="n">allnames</span><span class="p">),</span>
+            <span class="s">&#39;adj_verb_noun&#39;</span><span class="p">:</span> <span class="n">get_adjective_verb_or_noun</span><span class="p">(</span><span class="n">allnames</span><span class="p">),</span>
+            <span class="s">&#39;first_letter_freq&#39;</span><span class="p">:</span> <span class="n">get_first_letter_frequency</span><span class="p">(</span><span class="n">allnames</span><span class="p">),</span>
+            <span class="s">&#39;word_types&#39;</span><span class="p">:</span> <span class="n">get_word_types</span><span class="p">(</span><span class="n">allnames</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Chris Tabor.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

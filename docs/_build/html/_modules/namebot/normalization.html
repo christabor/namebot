@@ -1,0 +1,389 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>namebot.normalization &mdash; namebot  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="namebot  documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> namebot
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../namebot.html">namebot package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">namebot</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>namebot.normalization</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for namebot.normalization</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;Helpers to normalize inputs and text.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">string</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+
+<span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>
+
+<span class="kn">from</span> <span class="nn">pattern.vector</span> <span class="kn">import</span> <span class="n">PORTER</span>
+<span class="kn">from</span> <span class="nn">pattern.vector</span> <span class="kn">import</span> <span class="n">stem</span>
+
+<span class="kn">import</span> <span class="nn">settings</span> <span class="kn">as</span> <span class="nn">namebot_settings</span>
+
+<span class="n">_regexes</span> <span class="o">=</span> <span class="n">namebot_settings</span><span class="o">.</span><span class="n">regexes</span>
+
+
+<div class="viewcode-block" id="flatten"><a class="viewcode-back" href="../../namebot.normalization.html#namebot.normalization.flatten">[docs]</a><span class="k">def</span> <span class="nf">flatten</span><span class="p">(</span><span class="n">lst</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Flatten a list with arbitrary levels of nesting.</span>
+
+<span class="sd">    CREDIT: http://stackoverflow.com/questions/10823877/</span>
+<span class="sd">        what-is-the-fastest-way-to-flatten-arbitrarily-nested-lists-in-python</span>
+<span class="sd">    Changes made include:</span>
+<span class="sd">        1. Adding error handling,</span>
+<span class="sd">        2. Renaming variables,</span>
+<span class="sd">        3. Using `any` instead of `or`.</span>
+<span class="sd">    See http://creativecommons.org/licenses/by-sa/3.0/ for specific details.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        lst (list): The nested list.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        (generator): The new flattened list of words.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">lst</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">yield</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">lst</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">list</span><span class="p">),</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)]):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">flatten</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+                <span class="k">yield</span> <span class="n">j</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">i</span></div>
+
+
+<div class="viewcode-block" id="remove_odd_sounding_words"><a class="viewcode-back" href="../../namebot.normalization.html#namebot.normalization.remove_odd_sounding_words">[docs]</a><span class="k">def</span> <span class="nf">remove_odd_sounding_words</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Remove random odd sounding word combinations via regular expressions.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (list): The list of words</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: An updated word list with words cleaned.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">odd_regexes</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&#39;^a|e|i|o|u|y{3,6}&#39;</span><span class="p">),</span>
+        <span class="c"># bk, ck, dk, gk, etc...</span>
+        <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&#39;\b[^aeiouys]k|zt|ksd|kd|zhr&#39;</span><span class="p">),</span>
+        <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&#39;\bzt|ksd|kd|zhr&#39;</span><span class="p">)</span>
+    <span class="p">]</span>
+    <span class="n">cleaned</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">words</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">words</span>
+    <span class="c"># Loop through any number of</span>
+    <span class="c"># regexes and add only if no matches exist</span>
+    <span class="p">[</span><span class="n">cleaned</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span>
+        <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">regex</span><span class="p">,</span> <span class="n">word</span><span class="p">)</span> <span class="k">for</span> <span class="n">regex</span> <span class="ow">in</span> <span class="n">odd_regexes</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">cleaned</span></div>
+
+
+<div class="viewcode-block" id="stem_words"><a class="viewcode-back" href="../../namebot.normalization.html#namebot.normalization.stem_words">[docs]</a><span class="k">def</span> <span class="nf">stem_words</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Stem words to their base linguistic stem to remove redundancy.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (list): The list of words</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: An updated word list with words stemmed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">stem</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">stemmer</span><span class="o">=</span><span class="n">PORTER</span><span class="p">)</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="remove_stop_words"><a class="viewcode-back" href="../../namebot.normalization.html#namebot.normalization.remove_stop_words">[docs]</a><span class="k">def</span> <span class="nf">remove_stop_words</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Remove all stop words.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (list): The list of words</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: An updated word list with stopwords removed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c"># http://stackoverflow.com/questions/5486337/</span>
+    <span class="c"># how-to-remove-stop-words-using-nltk-or-python</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">words</span> <span class="k">if</span> <span class="n">w</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s">&#39;english&#39;</span><span class="p">)]</span></div>
+
+
+<div class="viewcode-block" id="remove_bad_words"><a class="viewcode-back" href="../../namebot.normalization.html#namebot.normalization.remove_bad_words">[docs]</a><span class="k">def</span> <span class="nf">remove_bad_words</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Remove naughty words that might come from wordnet synsets and lemmata.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (list): The list of words</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: An updated word list with bad words removed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">bad_words</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;nigger&quot;</span><span class="p">,</span> <span class="s">&quot;wop&quot;</span><span class="p">,</span>
+                 <span class="s">&quot;kike&quot;</span><span class="p">,</span> <span class="s">&quot;faggot&quot;</span><span class="p">,</span>
+                 <span class="s">&quot;fuck&quot;</span><span class="p">,</span> <span class="s">&quot;pussy&quot;</span><span class="p">,</span> <span class="s">&quot;cunt&quot;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span> <span class="k">if</span> <span class="n">word</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">bad_words</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="filter_words"><a class="viewcode-back" href="../../namebot.normalization.html#namebot.normalization.filter_words">[docs]</a><span class="k">def</span> <span class="nf">filter_words</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Filter words by default min/max settings in the settings module.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (list): The list of words</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: The filtered words</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">new_arr</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">,</span> <span class="n">word</span><span class="p">):</span>
+            <span class="n">lte</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">namebot_settings</span><span class="o">.</span><span class="n">MAX_LENGTH</span>
+            <span class="n">gte</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">namebot_settings</span><span class="o">.</span><span class="n">MIN_LENGTH</span>
+            <span class="k">if</span> <span class="nb">all</span><span class="p">([</span><span class="n">lte</span><span class="p">,</span> <span class="n">gte</span><span class="p">]):</span>
+                <span class="n">new_arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">,</span> <span class="n">word</span><span class="p">):</span>
+            <span class="n">split</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">,</span> <span class="n">word</span><span class="p">)</span>
+            <span class="n">split_join</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">chunks</span> <span class="ow">in</span> <span class="n">split</span><span class="p">:</span>
+                <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">chunks</span><span class="p">)</span>
+                <span class="n">lte</span> <span class="o">=</span> <span class="n">length</span> <span class="o">&lt;=</span> <span class="n">namebot_settings</span><span class="o">.</span><span class="n">SPACED_MAX_LENGTH</span>
+                <span class="n">gte</span> <span class="o">=</span> <span class="n">length</span> <span class="o">&gt;=</span> <span class="n">namebot_settings</span><span class="o">.</span><span class="n">MIN_LENGTH</span>
+                <span class="k">if</span> <span class="nb">all</span><span class="p">([</span><span class="n">lte</span><span class="p">,</span> <span class="n">gte</span><span class="p">]):</span>
+                    <span class="n">split_join</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chunks</span><span class="p">)</span>
+            <span class="n">new_arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">split_join</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">new_arr</span></div>
+
+
+<div class="viewcode-block" id="uniquify"><a class="viewcode-back" href="../../namebot.normalization.html#namebot.normalization.uniquify">[docs]</a><span class="k">def</span> <span class="nf">uniquify</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Remove duplicates from a list.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (list): The list of words</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: An updated word list with duplicates removed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">{}</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="n">words</span><span class="p">)</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">if</span> <span class="n">words</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="n">words</span></div>
+
+
+<div class="viewcode-block" id="clean_sort"><a class="viewcode-back" href="../../namebot.normalization.html#namebot.normalization.clean_sort">[docs]</a><span class="k">def</span> <span class="nf">clean_sort</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A function for cleaning and prepping words for techniques.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (list): The list of words</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: An updated word list with words cleaned and sorted.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">words</span>
+    <span class="n">chars</span> <span class="o">=</span> <span class="s">&#39;!&quot;#$%</span><span class="se">\&#39;</span><span class="s">()*+,._/:;&lt;=&gt;?@[</span><span class="se">\\</span><span class="s">]^`{|}~01234567890&#39;</span>
+    <span class="k">if</span> <span class="n">words</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="n">word</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span>
+                <span class="n">string</span><span class="o">.</span><span class="n">maketrans</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">),</span>
+                <span class="n">chars</span><span class="p">)</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+            <span class="k">pass</span>
+    <span class="k">return</span> <span class="n">words</span></div>
+
+
+<div class="viewcode-block" id="chop_duplicate_ends"><a class="viewcode-back" href="../../namebot.normalization.html#namebot.normalization.chop_duplicate_ends">[docs]</a><span class="k">def</span> <span class="nf">chop_duplicate_ends</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Remove duplicate letters on either end, if the are adjacent.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (list): The list of words</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: An updated word list with duplicate ends removed for each word.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">word</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">word</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">word</span> <span class="o">=</span> <span class="n">word</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="k">if</span> <span class="n">word</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">word</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">:]:</span>
+        <span class="n">word</span> <span class="o">=</span> <span class="n">word</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">word</span></div>
+
+
+<div class="viewcode-block" id="key_words_by_pos_tag"><a class="viewcode-back" href="../../namebot.normalization.html#namebot.normalization.key_words_by_pos_tag">[docs]</a><span class="k">def</span> <span class="nf">key_words_by_pos_tag</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Key words by the pos tag name, given when using pos_tag on a list.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (list): The list of words, where each item is a 2-tuple.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: An updated dictionary keyed by pos tag,</span>
+<span class="sd">            with values as a list of matching pos matching words.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">alltags</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">word</span><span class="p">,</span> <span class="n">pos</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="n">alltags</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">alltags</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Chris Tabor.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

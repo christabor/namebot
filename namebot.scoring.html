@@ -80,7 +80,6 @@
             
                 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="namebot.html">namebot package</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="namebot.html#subpackages">Subpackages</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="namebot.html#submodules">Submodules</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="namebot.examples.html">namebot.examples module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="namebot.latin_words.html">namebot.latin_words module</a></li>
@@ -150,38 +149,57 @@
 <dt id="namebot.scoring.bounded">
 <code class="descclassname">namebot.scoring.</code><code class="descname">bounded</code><span class="sig-paren">(</span><em>num</em>, <em>start</em>, <em>end</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/scoring.html#bounded"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.scoring.bounded" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determine if a number is within the bounds of <cite>start</cite> and <cite>end</cite>.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>num (int): An integer.
-start (int): A start minimum.
-end (int): An end maximum.</dd>
-<dt>Returns:</dt>
-<dd>is_bounded (bool): Whether number is bounded by start and end.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>(int)</strong> (<em>end</em>) &#8211; An integer.</li>
+<li><strong>(int)</strong> &#8211; A start minimum.</li>
+<li><strong>(int)</strong> &#8211; An end maximum.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Rtype is_bounded (bool):</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last">Whether number is bounded by start and end.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="namebot.scoring.generate_all_scoring">
 <code class="descclassname">namebot.scoring.</code><code class="descname">generate_all_scoring</code><span class="sig-paren">(</span><em>words</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/scoring.html#generate_all_scoring"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.scoring.generate_all_scoring" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return all scoring methods for a set of words.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>words (list) - the list of words.</dd>
-<dt>Returns:</dt>
-<dd>words (dict) - the scores, keyed by scoring name.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>(list)</strong> (<em>words</em>) &#8211; the list of words.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Rtype words (dict):</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">the scores, keyed by scoring name.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="namebot.scoring.score_dmetaphone">
 <code class="descclassname">namebot.scoring.</code><code class="descname">score_dmetaphone</code><span class="sig-paren">(</span><em>words</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/scoring.html#score_dmetaphone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.scoring.score_dmetaphone" title="Permalink to this definition">¶</a></dt>
 <dd><p>Score words using the double metaphone algorithm.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>words (list) - the list of words.</dd>
-<dt>Returns:</dt>
-<dd>scores (list) - the scored words</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>(list)</strong> (<em>words</em>) &#8211; the list of words.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Rtype scores (list):</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">the scored words</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -191,12 +209,17 @@ end (int): An end maximum.</dd>
 <p>Really long, or really short words get a lower score.
 There is no hard science, but popular opinion suggests
 that a word somewhere between 8-15 letters is optimal.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>word (str): The word to score.</dd>
-<dt>Returns:</dt>
-<dd>score (int): The resulting score.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>(str)</strong> (<em>word</em>) &#8211; The word to score.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Rtype score (int):</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">The resulting score.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -205,36 +228,51 @@ that a word somewhere between 8-15 letters is optimal.</p>
 <dd><p>Score the name using separate scoring functions, then normalize to 100.</p>
 <p>This method gives an overall intuitive score.
 The closer to 100%, the better.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>word (string) - the name</dd>
-<dt>Returns:</dt>
-<dd>score (float) - the final name score</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>(string)</strong> (<em>word</em>) &#8211; the name</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Rtype score (float):</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">the final name score</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="namebot.scoring.score_names_overall">
 <code class="descclassname">namebot.scoring.</code><code class="descname">score_names_overall</code><span class="sig-paren">(</span><em>words</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/scoring.html#score_names_overall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.scoring.score_names_overall" title="Permalink to this definition">¶</a></dt>
 <dd><p>Score all names.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>words (list) - the list of words.</dd>
-<dt>Returns:</dt>
-<dd>words (list) - a list of tuples, with the score and word.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>(list)</strong> (<em>words</em>) &#8211; the list of words.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Rtype words (list):</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">a list of tuples, with the score and word.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="namebot.scoring.score_nysiis">
 <code class="descclassname">namebot.scoring.</code><code class="descname">score_nysiis</code><span class="sig-paren">(</span><em>words</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/scoring.html#score_nysiis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.scoring.score_nysiis" title="Permalink to this definition">¶</a></dt>
 <dd><p>Score words using the nysiis algorithm.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>words (list) - the list of words.</dd>
-<dt>Returns:</dt>
-<dd>scores (list) - the scored words</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>(list)</strong> (<em>words</em>) &#8211; the list of words.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Rtype scores (list):</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">the scored words</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -243,12 +281,19 @@ The closer to 100%, the better.</p>
 <dd><p>Get the ratio of vowels to consonants, a very basic measurement.</p>
 <p>Half vowels and half consonants indicates a highly pronounceable word.
 For example, 0.5 / 0.5 = 1.0, so one is perfect, and lower is worse.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>word (string) - the name</dd>
-<dt>Returns:</dt>
-<dd>score (int) - the final pronounceability score</dd>
-</dl>
+<p>The 1-5 scale translation:</p>
+<p>0.0   0.1   0.2   0.3   0.4   0.5   0.6   0.7   0.8   0.9   1.0
+0      1     2     3     4     5     4     3     2     1      5</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>(string)</strong> (<em>word</em>) &#8211; The name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Rtype (int):</th><td class="field-body">The final pronounceability score</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -257,12 +302,17 @@ For example, 0.5 / 0.5 = 1.0, so one is perfect, and lower is worse.</p>
 <dd><p>Determine how simple the word is.</p>
 <p>Simple is defined as the number of separate words.
 In this case, higher is better, indicating a better score.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>word (string) - the name</dd>
-<dt>Returns:</dt>
-<dd>score (int) - the final simplicity score</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>(string)</strong> (<em>word</em>) &#8211; the name</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Rtype score (int):</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">the final simplicity score</td>
+</tr>
+</tbody>
+</table>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">score_simplicity</span><span class="p">(</span><span class="s">&#39;the cat in the hat&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="mi">1</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">score_simplicity</span><span class="p">(</span><span class="s">&#39;facebook&#39;</span><span class="p">)</span>
@@ -275,12 +325,17 @@ In this case, higher is better, indicating a better score.</p>
 <dt id="namebot.scoring.score_soundex">
 <code class="descclassname">namebot.scoring.</code><code class="descname">score_soundex</code><span class="sig-paren">(</span><em>words</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/scoring.html#score_soundex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.scoring.score_soundex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Score words using the soundex algorithm.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>words (list) - the list of words.</dd>
-<dt>Returns:</dt>
-<dd>scores (list) - the scored words</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>(list)</strong> (<em>words</em>) &#8211; the list of words.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Rtype scores (list):</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">the scored words</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

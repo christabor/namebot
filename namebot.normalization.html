@@ -80,7 +80,6 @@
             
                 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="namebot.html">namebot package</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="namebot.html#subpackages">Subpackages</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="namebot.html#submodules">Submodules</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="namebot.examples.html">namebot.examples module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="namebot.latin_words.html">namebot.latin_words module</a></li>
@@ -143,8 +142,145 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="namebot-normalization-module">
-<h1>namebot.normalization module<a class="headerlink" href="#namebot-normalization-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-namebot.normalization">
+<span id="namebot-normalization-module"></span><h1>namebot.normalization module<a class="headerlink" href="#module-namebot.normalization" title="Permalink to this headline">¶</a></h1>
+<p>Helpers to normalize inputs and text.</p>
+<dl class="function">
+<dt id="namebot.normalization.chop_duplicate_ends">
+<code class="descclassname">namebot.normalization.</code><code class="descname">chop_duplicate_ends</code><span class="sig-paren">(</span><em>word</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/normalization.html#chop_duplicate_ends"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.normalization.chop_duplicate_ends" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove duplicate letters on either end, if the are adjacent.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>words (list): The list of words</dd>
+<dt>Returns:</dt>
+<dd>list: An updated word list with duplicate ends removed for each word.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.normalization.clean_sort">
+<code class="descclassname">namebot.normalization.</code><code class="descname">clean_sort</code><span class="sig-paren">(</span><em>words</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/normalization.html#clean_sort"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.normalization.clean_sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function for cleaning and prepping words for techniques.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>words (list): The list of words</dd>
+<dt>Returns:</dt>
+<dd>list: An updated word list with words cleaned and sorted.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.normalization.filter_words">
+<code class="descclassname">namebot.normalization.</code><code class="descname">filter_words</code><span class="sig-paren">(</span><em>words</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/normalization.html#filter_words"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.normalization.filter_words" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filter words by default min/max settings in the settings module.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>words (list): The list of words</dd>
+<dt>Returns:</dt>
+<dd>list: The filtered words</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.normalization.flatten">
+<code class="descclassname">namebot.normalization.</code><code class="descname">flatten</code><span class="sig-paren">(</span><em>lst</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/normalization.html#flatten"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.normalization.flatten" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flatten a list with arbitrary levels of nesting.</p>
+<dl class="docutils">
+<dt>CREDIT: <a class="reference external" href="http://stackoverflow.com/questions/10823877/">http://stackoverflow.com/questions/10823877/</a></dt>
+<dd>what-is-the-fastest-way-to-flatten-arbitrarily-nested-lists-in-python</dd>
+<dt>Changes made include:</dt>
+<dd><ol class="first last arabic simple">
+<li>Adding error handling,</li>
+<li>Renaming variables,</li>
+<li>Using <cite>any</cite> instead of <cite>or</cite>.</li>
+</ol>
+</dd>
+</dl>
+<p>See <a class="reference external" href="http://creativecommons.org/licenses/by-sa/3.0/">http://creativecommons.org/licenses/by-sa/3.0/</a> for specific details.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>lst (list): The nested list.</dd>
+<dt>Returns:</dt>
+<dd>(generator): The new flattened list of words.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.normalization.key_words_by_pos_tag">
+<code class="descclassname">namebot.normalization.</code><code class="descname">key_words_by_pos_tag</code><span class="sig-paren">(</span><em>words</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/normalization.html#key_words_by_pos_tag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.normalization.key_words_by_pos_tag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Key words by the pos tag name, given when using pos_tag on a list.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>words (list): The list of words, where each item is a 2-tuple.</dd>
+<dt>Returns:</dt>
+<dd><dl class="first last docutils">
+<dt>dict: An updated dictionary keyed by pos tag,</dt>
+<dd>with values as a list of matching pos matching words.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.normalization.remove_bad_words">
+<code class="descclassname">namebot.normalization.</code><code class="descname">remove_bad_words</code><span class="sig-paren">(</span><em>words</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/normalization.html#remove_bad_words"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.normalization.remove_bad_words" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove naughty words that might come from wordnet synsets and lemmata.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>words (list): The list of words</dd>
+<dt>Returns:</dt>
+<dd>list: An updated word list with bad words removed.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.normalization.remove_odd_sounding_words">
+<code class="descclassname">namebot.normalization.</code><code class="descname">remove_odd_sounding_words</code><span class="sig-paren">(</span><em>words</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/normalization.html#remove_odd_sounding_words"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.normalization.remove_odd_sounding_words" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove random odd sounding word combinations via regular expressions.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>words (list): The list of words</dd>
+<dt>Returns:</dt>
+<dd>list: An updated word list with words cleaned.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.normalization.remove_stop_words">
+<code class="descclassname">namebot.normalization.</code><code class="descname">remove_stop_words</code><span class="sig-paren">(</span><em>words</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/normalization.html#remove_stop_words"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.normalization.remove_stop_words" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove all stop words.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>words (list): The list of words</dd>
+<dt>Returns:</dt>
+<dd>list: An updated word list with stopwords removed.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.normalization.stem_words">
+<code class="descclassname">namebot.normalization.</code><code class="descname">stem_words</code><span class="sig-paren">(</span><em>words</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/normalization.html#stem_words"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.normalization.stem_words" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stem words to their base linguistic stem to remove redundancy.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>words (list): The list of words</dd>
+<dt>Returns:</dt>
+<dd>list: An updated word list with words stemmed.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="namebot.normalization.uniquify">
+<code class="descclassname">namebot.normalization.</code><code class="descname">uniquify</code><span class="sig-paren">(</span><em>words</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/normalization.html#uniquify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.normalization.uniquify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove duplicates from a list.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>words (list): The list of words</dd>
+<dt>Returns:</dt>
+<dd>list: An updated word list with duplicates removed.</dd>
+</dl>
+</dd></dl>
+
 </div>
 
 

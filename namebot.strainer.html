@@ -80,7 +80,6 @@
             
                 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="namebot.html">namebot package</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="namebot.html#subpackages">Subpackages</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="namebot.html#submodules">Submodules</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="namebot.examples.html">namebot.examples module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="namebot.latin_words.html">namebot.latin_words module</a></li>
@@ -148,23 +147,29 @@
 <p>Provides filtering functions for reducing large sets of generated words.</p>
 <p>Recommended usage: filtered results using a list comprehension
 of all filters &#8216;anded&#8217; together.
-e.g:
-filtered = [word for word in words if</p>
-<blockquote>
-<div>filter_length(word, max_length=7) and
-filter_startswith(word, beginning=&#8217;c&#8217;) and
-filter_startswith(word, beginning=&#8217;c&#8217;) and
-filter_endswith(word, ending=&#8217;e&#8217;) ...]</div></blockquote>
+e.g:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">filtered</span> <span class="o">=</span> <span class="p">[</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span> <span class="k">if</span>
+<span class="go">            filter_length(word, max_length=7) and</span>
+<span class="go">            filter_startswith(word, beginning=&#39;c&#39;) and</span>
+<span class="go">            filter_startswith(word, beginning=&#39;c&#39;) and</span>
+<span class="go">            filter_endswith(word, ending=&#39;e&#39;) ...]</span>
+</pre></div>
+</div>
 <dl class="function">
 <dt id="namebot.strainer.filter_consonant_ending">
 <code class="descclassname">namebot.strainer.</code><code class="descname">filter_consonant_ending</code><span class="sig-paren">(</span><em>word</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/strainer.html#filter_consonant_ending"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.strainer.filter_consonant_ending" title="Permalink to this definition">¶</a></dt>
 <dd><p>Filter words that end in consonants.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>word (str): The word to filter.</dd>
-<dt>Returns:</dt>
-<dd>match (bool): An re.MatchObject or None.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>(str)</strong> (<em>word</em>) &#8211; The word to filter.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Rtype match (bool):</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">An re.MatchObject or None.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -172,92 +177,149 @@ filter_endswith(word, ending=&#8217;e&#8217;) ...]</div></blockquote>
 <code class="descclassname">namebot.strainer.</code><code class="descname">filter_dmetaphone</code><span class="sig-paren">(</span><em>word</em>, <em>code=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/strainer.html#filter_dmetaphone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.strainer.filter_dmetaphone" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get double metaphone value, checking score.</p>
 <p>Where second key being None, an easy pronunciation is unlikely.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>word (str): The word.
-code (str, optional): The double metaphone pronunciation code.</dd>
-<dt>Returns:</dt>
-<dd>bool: The resulting check.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>(str)</strong> (<em>word</em>) &#8211; The word.</li>
+<li><strong>(str, optional)</strong> (<em>code</em>) &#8211; The double metaphone pronunciation code.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Rtype bool:</th><td class="field-body"><p class="first last">The resulting check.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="namebot.strainer.filter_endswith">
 <code class="descclassname">namebot.strainer.</code><code class="descname">filter_endswith</code><span class="sig-paren">(</span><em>word</em>, <em>ending=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/strainer.html#filter_endswith"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.strainer.filter_endswith" title="Permalink to this definition">¶</a></dt>
 <dd><p>Filter words ending with a specified suffix.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>word (str): A word.
-ending (str, optional): The optional ending to check.</dd>
-<dt>Returns:</dt>
-<dd>bool: The resulting check.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>(str)</strong> (<em>word</em>) &#8211; A word.</li>
+<li><strong>(str, optional)</strong> (<em>ending</em>) &#8211; The optional ending to check.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Rtype bool:</th><td class="field-body"><p class="first last">The resulting check.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="namebot.strainer.filter_length">
 <code class="descclassname">namebot.strainer.</code><code class="descname">filter_length</code><span class="sig-paren">(</span><em>word</em>, <em>min_length=4</em>, <em>max_length=13</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/strainer.html#filter_length"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.strainer.filter_length" title="Permalink to this definition">¶</a></dt>
 <dd><p>Filter based on min and max lengths.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>word (str): The word.
-min_length (int, optional): The minimum allowed length.
-max_length (int, optional): The maximum allowed length.</dd>
-<dt>Returns:</dt>
-<dd>bool: The resulting check.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>(str)</strong> (<em>word</em>) &#8211; The word.</li>
+<li><strong>(int, optional)</strong> (<em>max_length</em>) &#8211; The minimum allowed length.</li>
+<li><strong>(int, optional)</strong> &#8211; The maximum allowed length.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool: The resulting check.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="namebot.strainer.filter_nysiis">
 <code class="descclassname">namebot.strainer.</code><code class="descname">filter_nysiis</code><span class="sig-paren">(</span><em>word</em>, <em>code=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/strainer.html#filter_nysiis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.strainer.filter_nysiis" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get nysiis value, checking score.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>word (str): The word.
-code (str, optional): The nysiis pronunciation code.</dd>
-<dt>Returns:</dt>
-<dd>bool: The resulting check.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>(str)</strong> (<em>word</em>) &#8211; The word.</li>
+<li><strong>(str, optional)</strong> (<em>code</em>) &#8211; The nysiis pronunciation code.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Rtype bool:</th><td class="field-body"><p class="first last">The resulting check.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="namebot.strainer.filter_soundex">
 <code class="descclassname">namebot.strainer.</code><code class="descname">filter_soundex</code><span class="sig-paren">(</span><em>word</em>, <em>code=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/strainer.html#filter_soundex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.strainer.filter_soundex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get soundex value, checking result against a given code.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>word (str): The word.
-code (str, optional): The soundex pronunciation code.</dd>
-<dt>Returns:</dt>
-<dd>bool: The resulting check.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>(str)</strong> (<em>word</em>) &#8211; The word.</li>
+<li><strong>(str, optional)</strong> (<em>code</em>) &#8211; The soundex pronunciation code.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Rtype bool:</th><td class="field-body"><p class="first last">The resulting check.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="namebot.strainer.filter_startswith">
 <code class="descclassname">namebot.strainer.</code><code class="descname">filter_startswith</code><span class="sig-paren">(</span><em>word</em>, <em>beginning=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/strainer.html#filter_startswith"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.strainer.filter_startswith" title="Permalink to this definition">¶</a></dt>
 <dd><p>Filter a word starting with specified string.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>word (str): The word.
-beginning (str, optional): The beginning string to check.</dd>
-<dt>Returns:</dt>
-<dd>bool: The resulting check.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>(str)</strong> (<em>word</em>) &#8211; The word.</li>
+<li><strong>(str, optional)</strong> (<em>beginning</em>) &#8211; The beginning string to check.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool: The resulting check.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="namebot.strainer.filter_tld">
 <code class="descclassname">namebot.strainer.</code><code class="descname">filter_tld</code><span class="sig-paren">(</span><em>word</em>, <em>tld='.com'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/strainer.html#filter_tld"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.strainer.filter_tld" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check if a word ends with a TLD suffix (can be used to make a valid TLD).</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>word (str): The wor.d
-tld (str, optional): The TLD to check against, with or without a dot.</dd>
-<dt>Returns:</dt>
-<dd>bool: The resulting check.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>(str)</strong> (<em>word</em>) &#8211; The wor.d</li>
+<li><strong>(str, optional)</strong> (<em>tld</em>) &#8211; The TLD to check against,
+with or without a dot.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Rtype bool:</th><td class="field-body"><p class="first last">The resulting check.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -265,18 +327,38 @@ tld (str, optional): The TLD to check against, with or without a dot.</dd>
 <code class="descclassname">namebot.strainer.</code><code class="descname">filter_vowel_cons_ratio</code><span class="sig-paren">(</span><em>word</em>, <em>ratio=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/strainer.html#filter_vowel_cons_ratio"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.strainer.filter_vowel_cons_ratio" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return True if the ratio of vowels to consonants is &gt; <cite>ratio</cite>.</p>
 <p>This can be used as an ad-hoc pronunciation filter.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>(str)</strong> (<em>word</em>) &#8211; The word</li>
+<li><strong>(float, optional)</strong> (<em>ratio</em>) &#8211; The ratio</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">int</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="namebot.strainer.filter_vowel_ending">
 <code class="descclassname">namebot.strainer.</code><code class="descname">filter_vowel_ending</code><span class="sig-paren">(</span><em>word</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/namebot/strainer.html#filter_vowel_ending"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#namebot.strainer.filter_vowel_ending" title="Permalink to this definition">¶</a></dt>
 <dd><p>Filter words that end in vowels.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>word (str): The word to filter.</dd>
-<dt>Returns:</dt>
-<dd>match (bool): A re.MatchObject or None.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>(str)</strong> (<em>word</em>) &#8211; The word to filter.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Rtype match (bool):</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">A re.MatchObject or None.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

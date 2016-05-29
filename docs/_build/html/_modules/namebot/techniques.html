@@ -1,0 +1,1089 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>namebot.techniques &mdash; namebot  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="namebot  documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> namebot
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../namebot.html">namebot package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">namebot</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>namebot.techniques</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for namebot.techniques</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;Primary techniques for the core functionality of namebot.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">choice</span>
+<span class="kn">from</span> <span class="nn">string</span> <span class="kn">import</span> <span class="n">ascii_uppercase</span>
+
+<span class="kn">import</span> <span class="nn">nltk</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">nlp</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">normalization</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">settings</span> <span class="k">as</span> <span class="n">namebot_settings</span>
+
+
+<span class="n">_prefixes</span> <span class="o">=</span> <span class="n">namebot_settings</span><span class="o">.</span><span class="n">PREFIXES</span>
+<span class="n">_suffixes</span> <span class="o">=</span> <span class="n">namebot_settings</span><span class="o">.</span><span class="n">SUFFIXES</span>
+<span class="n">_alphabet</span> <span class="o">=</span> <span class="n">namebot_settings</span><span class="o">.</span><span class="n">ALPHABET</span>
+<span class="n">_consonants</span> <span class="o">=</span> <span class="n">namebot_settings</span><span class="o">.</span><span class="n">CONSONANTS</span>
+<span class="n">_vowels</span> <span class="o">=</span> <span class="n">namebot_settings</span><span class="o">.</span><span class="n">VOWELS</span>
+<span class="n">_regexes</span> <span class="o">=</span> <span class="n">namebot_settings</span><span class="o">.</span><span class="n">regexes</span>
+
+
+<div class="viewcode-block" id="domainify"><a class="viewcode-back" href="../../namebot.techniques.html#namebot.techniques.domainify">[docs]</a><span class="k">def</span> <span class="nf">domainify</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">tld</span><span class="o">=</span><span class="s">&#39;com&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert words into a domain format for testing domains.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (list): List of words</span>
+<span class="sd">        tld (str, optional): The TLD (top-level domain) to use.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: The modified list of words.</span>
+
+<span class="sd">    &gt;&gt;&gt; domanify([&#39;radio&#39;], tld=&#39;.io&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; [&#39;rad.io&#39;]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_words</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">tld</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">):</span>
+        <span class="n">tld</span> <span class="o">=</span> <span class="n">tld</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">word</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">tld</span><span class="p">)</span> <span class="ow">and</span> <span class="n">tld</span> <span class="o">!=</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
+            <span class="n">word</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">tld</span><span class="p">,</span> <span class="s">&#39;.{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tld</span><span class="p">))</span>
+        <span class="n">_words</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_words</span></div>
+
+
+<div class="viewcode-block" id="spoonerism"><a class="viewcode-back" href="../../namebot.techniques.html#namebot.techniques.spoonerism">[docs]</a><span class="k">def</span> <span class="nf">spoonerism</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert a list of words formatted with the spoonerism technique.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (list) - The list of words to operate on</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        words (list) - The updated list of words</span>
+
+<span class="sd">    &gt;&gt;&gt; spoonerism([&#39;foo&#39;, &#39;bar&#39;])</span>
+<span class="sd">    &gt;&gt;&gt; [&#39;boo&#39;, &#39;far&#39;]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="s">&quot;First: [f]oo [b]ar =&gt; boo far&quot;</span>
+    <span class="n">new_words</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Need more than one word to combine&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">word</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">new_words</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;{}{} {}{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">words</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>  <span class="c"># 2nd word, 1st letter</span>
+                <span class="n">word</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span>  <span class="c"># 1st word, 2nd letter to end</span>
+                <span class="n">word</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>  <span class="c"># 1st word, 1st letter</span>
+                <span class="n">words</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">:]))</span>  <span class="c"># 2nd word, 2nd letter to end</span>
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+            <span class="k">continue</span>
+    <span class="k">return</span> <span class="n">new_words</span></div>
+
+
+<div class="viewcode-block" id="kniferism"><a class="viewcode-back" href="../../namebot.techniques.html#namebot.techniques.kniferism">[docs]</a><span class="k">def</span> <span class="nf">kniferism</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert a list of words formatted with the kniferism technique.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (list) - The list of words to operate on</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        words (list) - The updated list of words</span>
+
+<span class="sd">    &gt;&gt;&gt; kniferism([&#39;foo&#39;, &#39;bar&#39;])</span>
+<span class="sd">    &gt;&gt;&gt; [&#39;fao&#39;, &#39;bor&#39;]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="s">&quot;Mid: f[o]o b[a]r =&gt; fao bor&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Need more than one word to combine&#39;</span><span class="p">)</span>
+    <span class="n">new_words</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">word</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">middle_second</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">middle_first</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">new_words</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;{}{}{} {}{}{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">word</span><span class="p">[:</span><span class="n">middle_first</span><span class="p">],</span>
+                <span class="n">words</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">middle_second</span><span class="p">],</span>
+                <span class="n">word</span><span class="p">[</span><span class="n">middle_first</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:],</span>
+                <span class="n">words</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][:</span><span class="n">middle_second</span><span class="p">],</span>
+                <span class="n">word</span><span class="p">[</span><span class="n">middle_first</span><span class="p">],</span>
+                <span class="n">words</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">middle_second</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]))</span>
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+            <span class="k">continue</span>
+    <span class="k">return</span> <span class="n">new_words</span></div>
+
+
+<div class="viewcode-block" id="forkerism"><a class="viewcode-back" href="../../namebot.techniques.html#namebot.techniques.forkerism">[docs]</a><span class="k">def</span> <span class="nf">forkerism</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert a list of words formatted with the forkerism technique.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (list) - The list of words to operate on</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        words (list) - The updated list of words</span>
+
+<span class="sd">    &gt;&gt;&gt; forkerism([&#39;foo&#39;, &#39;bar&#39;])</span>
+<span class="sd">    &gt;&gt;&gt; [&#39;for&#39;, &#39;bao&#39;]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="s">&quot;Last: fo[o] ba[r] =&gt; for bao&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Need more than one word to combine&#39;</span><span class="p">)</span>
+    <span class="n">new_words</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">word</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">s_word</span> <span class="o">=</span> <span class="n">words</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">s_word_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s_word</span><span class="p">)</span>
+            <span class="n">f_word_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+            <span class="n">f_w_last_letter</span> <span class="o">=</span> <span class="n">word</span><span class="p">[</span><span class="n">f_word_len</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">s_w_last_letter</span> <span class="o">=</span> <span class="n">words</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">s_word_len</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">new_words</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;{}{} {}{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">word</span><span class="p">[:</span><span class="n">f_word_len</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span>  <span class="c"># 1st word, 1st letter to last - 1</span>
+                <span class="n">s_w_last_letter</span><span class="p">,</span>  <span class="c"># 2nd word, last letter</span>
+                <span class="n">s_word</span><span class="p">[:</span><span class="n">s_word_len</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span>  <span class="c"># 2nd word, 1st letter to last - 1</span>
+                <span class="n">f_w_last_letter</span><span class="p">))</span>  <span class="c"># 1st word, last letter</span>
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+            <span class="k">continue</span>
+    <span class="k">return</span> <span class="n">new_words</span></div>
+
+
+<div class="viewcode-block" id="reduplication_ablaut"><a class="viewcode-back" href="../../namebot.techniques.html#namebot.techniques.reduplication_ablaut">[docs]</a><span class="k">def</span> <span class="nf">reduplication_ablaut</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">random</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">vowel</span><span class="o">=</span><span class="s">&#39;e&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A technique to combine words and altering the vowels.</span>
+
+<span class="sd">    e.g ch[i]t-ch[a]t, d[i]lly, d[a]lly.</span>
+<span class="sd">    See http://phrases.org.uk/meanings/reduplication.html.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Need more than one word to combine&#39;</span><span class="p">)</span>
+    <span class="n">new_words</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">substitution</span> <span class="o">=</span> <span class="n">choice</span><span class="p">(</span><span class="n">_vowels</span><span class="p">)</span> <span class="k">if</span> <span class="n">random</span> <span class="k">else</span> <span class="n">vowel</span>
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="n">second</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s">r&#39;a|e|i|o|u&#39;</span><span class="p">,</span> <span class="n">substitution</span><span class="p">,</span> <span class="n">word</span><span class="p">,</span> <span class="n">count</span><span class="o">=</span><span class="n">count</span><span class="p">)</span>
+        <span class="c"># Only append if the first and second are different.</span>
+        <span class="k">if</span> <span class="n">word</span> <span class="o">!=</span> <span class="n">second</span><span class="p">:</span>
+            <span class="n">new_words</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;{} {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">second</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">new_words</span></div>
+
+
+<div class="viewcode-block" id="prefixify"><a class="viewcode-back" href="../../namebot.techniques.html#namebot.techniques.prefixify">[docs]</a><span class="k">def</span> <span class="nf">prefixify</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Apply a prefix technique to a set of words.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (list) - The list of words to operate on.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        new_arr (list): the updated *fixed words</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">new_arr</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">word</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="k">for</span> <span class="n">prefix</span> <span class="ow">in</span> <span class="n">_prefixes</span><span class="p">:</span>
+            <span class="n">first_prefix_no_vowel</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+                <span class="n">_regexes</span><span class="p">[</span><span class="s">&#39;no_vowels&#39;</span><span class="p">],</span> <span class="n">word</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">second_prefix_no_vowel</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+                <span class="n">_regexes</span><span class="p">[</span><span class="s">&#39;no_vowels&#39;</span><span class="p">],</span> <span class="n">prefix</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">first_prefix_no_vowel</span> <span class="ow">or</span> <span class="n">second_prefix_no_vowel</span><span class="p">:</span>
+                <span class="c"># if there&#39;s a vowel at the end of</span>
+                <span class="c"># prefix but not at the beginning</span>
+                <span class="c"># of the word (or vice versa)</span>
+                <span class="n">vowel_beginning</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">r&#39;a|e|i|o|u&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">:])</span>
+                <span class="n">vowel_end</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">r&#39;^a|e|i|o|u&#39;</span><span class="p">,</span> <span class="n">word</span><span class="p">[:</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">vowel_beginning</span> <span class="ow">or</span> <span class="n">vowel_end</span><span class="p">:</span>
+                    <span class="n">new_arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;{}{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">word</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">new_arr</span></div>
+
+
+<div class="viewcode-block" id="suffixify"><a class="viewcode-back" href="../../namebot.techniques.html#namebot.techniques.suffixify">[docs]</a><span class="k">def</span> <span class="nf">suffixify</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Apply a suffix technique to a set of words.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (list) - The list of words to operate on.</span>
+<span class="sd">            (e.g -&gt; chard + ard = chardard -&gt; chard)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        new_arr (list): the updated *fixed words</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">new_arr</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">word</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="k">for</span> <span class="n">suffix</span> <span class="ow">in</span> <span class="n">_suffixes</span><span class="p">:</span>
+            <span class="n">prefix_start_vowel</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">_regexes</span><span class="p">[</span><span class="s">&#39;all_vowels&#39;</span><span class="p">],</span> <span class="n">word</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">suffix_start_vowel</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">_regexes</span><span class="p">[</span><span class="s">&#39;all_vowels&#39;</span><span class="p">],</span> <span class="n">suffix</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">prefix_start_vowel</span> <span class="ow">or</span> <span class="n">suffix_start_vowel</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">suffix</span> <span class="ow">is</span> <span class="s">&#39;ify&#39;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">word</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="ow">is</span> <span class="s">&#39;e&#39;</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">word</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="s">&#39;i&#39;</span><span class="p">:</span>
+                            <span class="n">new_arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;{}{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">word</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="n">suffix</span><span class="p">))</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">new_arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;{}{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">word</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">suffix</span><span class="p">))</span>
+                    <span class="n">new_arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">word</span> <span class="o">+</span> <span class="n">suffix</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">new_arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">word</span> <span class="o">+</span> <span class="n">suffix</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">new_arr</span></div>
+
+
+<div class="viewcode-block" id="duplifixify"><a class="viewcode-back" href="../../namebot.techniques.html#namebot.techniques.duplifixify">[docs]</a><span class="k">def</span> <span class="nf">duplifixify</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Apply a duplifix technique to a set of words (e.g: teeny weeny, etc...).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (list) - The list of words to operate on.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        new_arr (list): the updated *fixed words</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">new_arr</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">word</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="k">for</span> <span class="n">letter</span> <span class="ow">in</span> <span class="n">_alphabet</span><span class="p">:</span>
+            <span class="c"># check if the first letter is NOT the same as the second letter,</span>
+            <span class="c"># or the combined word is not a duplicate of the first.</span>
+            <span class="n">duplicate_word</span> <span class="o">=</span> <span class="s">&#39;{}{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">letter</span><span class="p">,</span> <span class="n">word</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">==</span> <span class="n">word</span>
+            <span class="k">if</span> <span class="n">word</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">letter</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">duplicate_word</span><span class="p">:</span>
+                <span class="n">new_arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;{} {}{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">letter</span><span class="p">,</span> <span class="n">word</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
+    <span class="k">return</span> <span class="n">new_arr</span></div>
+
+
+<div class="viewcode-block" id="disfixify"><a class="viewcode-back" href="../../namebot.techniques.html#namebot.techniques.disfixify">[docs]</a><span class="k">def</span> <span class="nf">disfixify</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">replaces</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Apply a disfix technique to a set of words.</span>
+
+<span class="sd">    Disfixing is done by removing the first set of vowel-consonant pairs.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (list) - The list of words to operate on.</span>
+<span class="sd">        replaces (int, optional): Number of replacements</span>
+<span class="sd">            to make on this string.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        new_arr (list): the updated *fixed words</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">new_arr</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">vc_combo</span> <span class="o">=</span> <span class="s">r&#39;[a-zA-Z][aeiou]{1}[qwrtypsdfghjklzxcvbnm]{1}&#39;</span>
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">vc_combo</span><span class="p">,</span> <span class="n">word</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">new_arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">vc_combo</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">word</span><span class="p">,</span> <span class="n">replaces</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">new_arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">new_arr</span></div>
+
+
+<div class="viewcode-block" id="infixify"><a class="viewcode-back" href="../../namebot.techniques.html#namebot.techniques.infixify">[docs]</a><span class="k">def</span> <span class="nf">infixify</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Apply a infix technique to a set of words.</span>
+
+<span class="sd">    Adds all consonant+vowel pairs to all inner matching vowel+consonant pairs</span>
+<span class="sd">    of a word, giving all combinations for each word.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (list) - The list of words to operate on.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        new_arr (list): the updated *fixed words</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">new_arr</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">vc_combo_pair</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+        <span class="s">r&#39;[a-zA-Z][aeiou]{1}[qwrtypsdfghjklzxcvbnm]{1}[aeiou]&#39;</span>
+        <span class="s">&#39;{1}[qwrtypsdfghjklzxcvbnm]{1}&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="n">matches</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">vc_combo_pair</span><span class="p">,</span> <span class="n">word</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">matches</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">infix_pair</span> <span class="ow">in</span> <span class="n">namebot_settings</span><span class="o">.</span><span class="n">CV_TL_PAIRS</span><span class="p">:</span>
+                    <span class="c"># Get midpoint of this string.</span>
+                    <span class="n">mid</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">match</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
+                    <span class="c"># Get the left and right substrings to join with.</span>
+                    <span class="n">first</span><span class="p">,</span> <span class="n">second</span> <span class="o">=</span> <span class="n">match</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">mid</span><span class="p">],</span> <span class="n">match</span><span class="p">[</span><span class="n">mid</span><span class="p">:]</span>
+                    <span class="c"># Check if the infix_pair is the same as start, or end.</span>
+                    <span class="n">bad_matches</span> <span class="o">=</span> <span class="p">[</span>
+                        <span class="c"># Duplicates joined is bad.</span>
+                        <span class="n">infix_pair</span> <span class="o">==</span> <span class="n">first</span><span class="p">,</span> <span class="n">infix_pair</span> <span class="o">==</span> <span class="n">second</span><span class="p">,</span>
+                        <span class="c"># Matching letters on start/end joining substrings</span>
+                        <span class="c"># is bad.</span>
+                        <span class="n">first</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">infix_pair</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                        <span class="c"># Matching letters on end/start joining substrings</span>
+                        <span class="c"># is also bad.</span>
+                        <span class="n">first</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">infix_pair</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="p">]</span>
+                    <span class="c"># Skip bad &#39;fusings&#39;</span>
+                    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">bad_matches</span><span class="p">):</span>
+                        <span class="k">continue</span>
+                    <span class="n">replacer</span> <span class="o">=</span> <span class="s">&#39;{}{}{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">first</span><span class="p">,</span> <span class="n">infix_pair</span><span class="p">,</span> <span class="n">second</span><span class="p">)</span>
+                    <span class="n">new_arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">word</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">match</span><span class="p">,</span> <span class="n">replacer</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">new_arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">new_arr</span></div>
+
+
+<div class="viewcode-block" id="simulfixify"><a class="viewcode-back" href="../../namebot.techniques.html#namebot.techniques.simulfixify">[docs]</a><span class="k">def</span> <span class="nf">simulfixify</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">pairs</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Generate simulfixed words.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (list) - List of words to operate on.</span>
+<span class="sd">        pairs (list, optional) - Simulfix pairs to use for each word.</span>
+<span class="sd">                                 If not specified, these will be generated</span>
+<span class="sd">                                 randomly as vowel + consonant strings.</span>
+<span class="sd">        max (int, optional): The number of simulfix pairs to generate</span>
+<span class="sd">                             (if pairs is not specified.)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        results (list) - The simulfix version of each word,</span>
+<span class="sd">                         for each simulfix pair.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">pairs</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">pairs</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;{}{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">choice</span><span class="p">(</span><span class="n">_vowels</span><span class="p">),</span> <span class="n">choice</span><span class="p">(</span><span class="n">_consonants</span><span class="p">))</span>
+                 <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">max</span><span class="p">)]</span>
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">combo</span> <span class="ow">in</span> <span class="n">pairs</span><span class="p">:</span>
+            <span class="n">mid</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
+            <span class="n">_word</span> <span class="o">=</span> <span class="s">&#39;{}{}{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">word</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">mid</span><span class="p">],</span> <span class="n">combo</span><span class="p">,</span> <span class="n">word</span><span class="p">[</span><span class="n">mid</span><span class="p">:])</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_word</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">results</span></div>
+
+
+<div class="viewcode-block" id="palindrome"><a class="viewcode-back" href="../../namebot.techniques.html#namebot.techniques.palindrome">[docs]</a><span class="k">def</span> <span class="nf">palindrome</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create a palindrome from a word.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        word (str): The word.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: The updated palindrome.</span>
+
+<span class="sd">    &gt;&gt;&gt; palindrome(&#39;cool&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; &#39;coollooc&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="s">&#39;{}{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">word</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="palindromes"><a class="viewcode-back" href="../../namebot.techniques.html#namebot.techniques.palindromes">[docs]</a><span class="k">def</span> <span class="nf">palindromes</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert a list of words into their palindromic form.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (list): The words.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: The list of palindromes.</span>
+
+<span class="sd">    &gt;&gt;&gt; palindrome([&#39;cool&#39;, &#39;neat&#39;])</span>
+<span class="sd">    &gt;&gt;&gt; [&#39;coollooc&#39;, &#39;neattaen&#39;]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">palindrome</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="make_founder_product_name"><a class="viewcode-back" href="../../namebot.techniques.html#namebot.techniques.make_founder_product_name">[docs]</a><span class="k">def</span> <span class="nf">make_founder_product_name</span><span class="p">(</span><span class="n">founder1</span><span class="p">,</span> <span class="n">founder2</span><span class="p">,</span> <span class="n">product</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get the name of two people forming a company and combine it.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        founder1 (str): Your founder name 1.</span>
+<span class="sd">        founder2 (str): Your founder name 2.</span>
+<span class="sd">        product (str): Your product/feature/service name.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: The updated name.</span>
+
+<span class="sd">    &gt;&gt;&gt; make_founder_product_name(&#39;chris&#39;, &#39;ella&#39;, &#39;widgets&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; &#39;chris &amp; ella widgets&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="s">&#39;{} &amp; {} {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">founder1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span>
+        <span class="n">founder2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span>
+        <span class="n">product</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="make_name_alliteration"><a class="viewcode-back" href="../../namebot.techniques.html#namebot.techniques.make_name_alliteration">[docs]</a><span class="k">def</span> <span class="nf">make_name_alliteration</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">divider</span><span class="o">=</span><span class="s">&#39; &#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Make an alliteration with a set of words, if applicable.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">    java jacket</span>
+<span class="sd">    singing sally</span>
+<span class="sd">    earth engines</span>
+<span class="sd">    ...etc</span>
+
+<span class="sd">    1. Loop through a given array of words</span>
+<span class="sd">    2. group by words with the same first letter</span>
+<span class="sd">    3. combine them and return to new array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">new_arr</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">words</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">word1</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">word2</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">word1</span><span class="p">[:</span><span class="mi">1</span><span class="p">]</span> <span class="ow">is</span> <span class="n">word2</span><span class="p">[:</span><span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="n">word1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">word2</span><span class="p">:</span>
+                <span class="n">new_arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">word1</span> <span class="o">+</span> <span class="n">divider</span> <span class="o">+</span> <span class="n">word2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">new_arr</span></div>
+
+
+<div class="viewcode-block" id="make_name_abbreviation"><a class="viewcode-back" href="../../namebot.techniques.html#namebot.techniques.make_name_abbreviation">[docs]</a><span class="k">def</span> <span class="nf">make_name_abbreviation</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Will make some kind of company acronym.</span>
+
+<span class="sd">    eg: BASF, AT&amp;T, A&amp;W</span>
+<span class="sd">    Returns a single string of the new word combined.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">word</span><span class="p">[:</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="make_vowel"><a class="viewcode-back" href="../../namebot.techniques.html#namebot.techniques.make_vowel">[docs]</a><span class="k">def</span> <span class="nf">make_vowel</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">vowel_type</span><span class="p">,</span> <span class="n">vowel_index</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Primary for all Portmanteau generators.</span>
+
+<span class="sd">    This creates the portmanteau based on :vowel_index, and :vowel_type.</span>
+
+<span class="sd">    The algorithm works as following:</span>
+
+<span class="sd">    It looks for the first occurrence of a specified vowel in the first word,</span>
+<span class="sd">    then gets the matching occurrence (if any) of the second word,</span>
+<span class="sd">    then determines which should be first or second position, based on</span>
+<span class="sd">    the ratio of letters (for each word) divided by the position of the vowel</span>
+<span class="sd">    in question (e.g. c[a]t (2/3) vs. cr[a]te (3/5)).</span>
+
+<span class="sd">    The higher number is ordered first, and the two words are then fused</span>
+<span class="sd">    together by the single matching vowel.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">new_arr</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+            <span class="n">is_match_i</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">vowel_type</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+            <span class="n">is_match_j</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">vowel_type</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">j</span> <span class="ow">and</span> <span class="n">is_match_i</span> <span class="ow">and</span> <span class="n">is_match_j</span><span class="p">:</span>
+                <span class="c"># get the indices and lengths to use in finding the ratio</span>
+                <span class="n">pos_i</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">vowel_index</span><span class="p">)</span>
+                <span class="n">len_i</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="n">pos_j</span> <span class="o">=</span> <span class="n">j</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">vowel_index</span><span class="p">)</span>
+                <span class="n">len_j</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+
+                <span class="c"># If starting index is 0,</span>
+                <span class="c"># add 1 to it so we&#39;re not dividing by zero</span>
+                <span class="k">if</span> <span class="n">pos_i</span> <span class="ow">is</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">pos_i</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">pos_j</span> <span class="ow">is</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">pos_j</span> <span class="o">=</span> <span class="mi">1</span>
+
+                <span class="c"># Decide which word should be the</span>
+                <span class="c"># prefix and which should be suffix</span>
+                <span class="k">if</span> <span class="nb">round</span><span class="p">(</span><span class="n">pos_i</span> <span class="o">/</span> <span class="n">len_i</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">round</span><span class="p">(</span><span class="n">pos_j</span> <span class="o">/</span> <span class="n">len_j</span><span class="p">):</span>
+                    <span class="n">p</span> <span class="o">=</span> <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span> <span class="n">pos_i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+                    <span class="n">p2</span> <span class="o">=</span> <span class="n">j</span><span class="p">[</span><span class="n">pos_j</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">j</span><span class="p">)]</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">p2</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+                            <span class="n">_regexes</span><span class="p">[</span><span class="s">&#39;all_vowels&#39;</span><span class="p">],</span> <span class="n">p</span><span class="p">)</span> <span class="ow">or</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+                                <span class="n">_regexes</span><span class="p">[</span><span class="s">&#39;all_vowels&#39;</span><span class="p">],</span> <span class="n">p2</span><span class="p">):</span>
+                                    <span class="k">if</span> <span class="n">p</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="ow">is</span> <span class="n">p2</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                                        <span class="n">new_arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">p2</span><span class="p">)</span>
+                                    <span class="k">else</span><span class="p">:</span>
+                                        <span class="n">new_arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span> <span class="o">+</span> <span class="n">p2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">new_arr</span></div>
+
+
+<div class="viewcode-block" id="make_portmanteau_default_vowel"><a class="viewcode-back" href="../../namebot.techniques.html#namebot.techniques.make_portmanteau_default_vowel">[docs]</a><span class="k">def</span> <span class="nf">make_portmanteau_default_vowel</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Make a portmanteau based on vowel matches.</span>
+
+<span class="sd">    E.g. (ala Brad+Angelina = Brangelina)</span>
+<span class="sd">    Only matches for second to last letter</span>
+<span class="sd">    in first word and matching vowel in second word.</span>
+
+<span class="sd">    This defers to the make_vowel function for all the internal</span>
+<span class="sd">    magic, but is a helper in that it provides all types of vowel</span>
+<span class="sd">    combinations in one function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">new_arr</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">vowel_a_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&#39;a{1}&#39;</span><span class="p">)</span>
+    <span class="n">vowel_e_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&#39;e{1}&#39;</span><span class="p">)</span>
+    <span class="n">vowel_i_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&#39;i{1}&#39;</span><span class="p">)</span>
+    <span class="n">vowel_o_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&#39;o{1}&#39;</span><span class="p">)</span>
+    <span class="n">vowel_u_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&#39;u{1}&#39;</span><span class="p">)</span>
+
+    <span class="n">new_arr</span> <span class="o">+=</span> <span class="n">make_vowel</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">vowel_a_re</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+    <span class="n">new_arr</span> <span class="o">+=</span> <span class="n">make_vowel</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">vowel_e_re</span><span class="p">,</span> <span class="s">&#39;e&#39;</span><span class="p">)</span>
+    <span class="n">new_arr</span> <span class="o">+=</span> <span class="n">make_vowel</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">vowel_i_re</span><span class="p">,</span> <span class="s">&#39;i&#39;</span><span class="p">)</span>
+    <span class="n">new_arr</span> <span class="o">+=</span> <span class="n">make_vowel</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">vowel_o_re</span><span class="p">,</span> <span class="s">&#39;o&#39;</span><span class="p">)</span>
+    <span class="n">new_arr</span> <span class="o">+=</span> <span class="n">make_vowel</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">vowel_u_re</span><span class="p">,</span> <span class="s">&#39;u&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">new_arr</span></div>
+
+
+<div class="viewcode-block" id="make_portmanteau_split"><a class="viewcode-back" href="../../namebot.techniques.html#namebot.techniques.make_portmanteau_split">[docs]</a><span class="k">def</span> <span class="nf">make_portmanteau_split</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Make a portmeanteau, split by vowel/consonant combos.</span>
+
+<span class="sd">    Based on the word formation of nikon: [ni]pp[on] go[k]aku,</span>
+<span class="sd">    which is comprised of Nippon + Gokaku.</span>
+
+<span class="sd">    We get the first C+V in the first word,</span>
+<span class="sd">    then last V+C in the first word,</span>
+<span class="sd">    then all C in the second word.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">new_arr</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">j</span><span class="p">:</span>
+                    <span class="n">l1</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">r&#39;[^a|e|i|o|u{1}]+[a|e|i|o|u{1}]&#39;</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                    <span class="n">l2</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">r&#39;[a|e|i|o|u{1}]+[^a|e|i|o|u{1}]$&#39;</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">i</span> <span class="ow">and</span> <span class="n">l1</span> <span class="ow">and</span> <span class="n">l2</span><span class="p">:</span>
+                        <span class="c"># Third letter used for</span>
+                        <span class="c"># consonant middle splits only</span>
+                        <span class="n">l3</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">r&#39;[a|e|i|o|u{1}]&#39;</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                        <span class="n">l1</span> <span class="o">=</span> <span class="n">l1</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                        <span class="n">l2</span> <span class="o">=</span> <span class="n">l2</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">l3</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">l3</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                            <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">l3</span><span class="p">:</span>
+                                <span class="n">new_arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">l1</span> <span class="o">+</span> <span class="n">v</span> <span class="o">+</span> <span class="n">l2</span><span class="p">)</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">new_arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;{}{}{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">l1</span><span class="p">,</span> <span class="s">&#39;t&#39;</span><span class="p">,</span> <span class="n">l2</span><span class="p">))</span>
+                                <span class="n">new_arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;{}{}{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">l1</span><span class="p">,</span> <span class="s">&#39;s&#39;</span><span class="p">,</span> <span class="n">l2</span><span class="p">))</span>
+                                <span class="n">new_arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;{}{}{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">l1</span><span class="p">,</span> <span class="s">&#39;z&#39;</span><span class="p">,</span> <span class="n">l2</span><span class="p">))</span>
+                                <span class="n">new_arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;{}{}{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">l1</span><span class="p">,</span> <span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="n">l2</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">new_arr</span></div>
+
+
+<div class="viewcode-block" id="make_punctuator"><a class="viewcode-back" href="../../namebot.techniques.html#namebot.techniques.make_punctuator">[docs]</a><span class="k">def</span> <span class="nf">make_punctuator</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">replace</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Put some hyphens or dots, or a given punctutation.</span>
+
+<span class="sd">    Works via :replace in the word, but only around vowels ala &quot;del.ic.ious&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">_replace</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">replace</span><span class="p">,</span> <span class="n">replace_type</span><span class="o">=</span><span class="s">&#39;.&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">word</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+            <span class="n">replace</span><span class="p">,</span> <span class="n">replace</span> <span class="o">+</span> <span class="n">replace_type</span><span class="p">)</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">]</span>
+
+    <span class="n">hyphens</span> <span class="o">=</span> <span class="n">_replace</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">replace</span><span class="p">,</span> <span class="n">replace_type</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">)</span>
+    <span class="n">periods</span> <span class="o">=</span> <span class="n">_replace</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">replace</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">hyphens</span> <span class="o">+</span> <span class="n">periods</span></div>
+
+
+<div class="viewcode-block" id="make_punctuator_vowels"><a class="viewcode-back" href="../../namebot.techniques.html#namebot.techniques.make_punctuator_vowels">[docs]</a><span class="k">def</span> <span class="nf">make_punctuator_vowels</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Helper function that combines all possible combinations for vowels.&quot;&quot;&quot;</span>
+    <span class="n">new_words</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">new_words</span> <span class="o">+=</span> <span class="n">make_punctuator</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+    <span class="n">new_words</span> <span class="o">+=</span> <span class="n">make_punctuator</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="s">&#39;e&#39;</span><span class="p">)</span>
+    <span class="n">new_words</span> <span class="o">+=</span> <span class="n">make_punctuator</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="s">&#39;i&#39;</span><span class="p">)</span>
+    <span class="n">new_words</span> <span class="o">+=</span> <span class="n">make_punctuator</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="s">&#39;o&#39;</span><span class="p">)</span>
+    <span class="n">new_words</span> <span class="o">+=</span> <span class="n">make_punctuator</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="s">&#39;u&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">new_words</span></div>
+
+
+<div class="viewcode-block" id="make_vowelify"><a class="viewcode-back" href="../../namebot.techniques.html#namebot.techniques.make_vowelify">[docs]</a><span class="k">def</span> <span class="nf">make_vowelify</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Chop off consonant ala nautica if second to last letter is a vowel.&quot;&quot;&quot;</span>
+    <span class="n">new_arr</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">_regexes</span><span class="p">[</span><span class="s">&#39;all_vowels&#39;</span><span class="p">],</span> <span class="n">word</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]):</span>
+            <span class="n">new_arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">word</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">new_arr</span></div>
+
+
+<div class="viewcode-block" id="make_misspelling"><a class="viewcode-back" href="../../namebot.techniques.html#namebot.techniques.make_misspelling">[docs]</a><span class="k">def</span> <span class="nf">make_misspelling</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Misspell a word in numerous ways, to create interesting results.&quot;&quot;&quot;</span>
+    <span class="n">token_groups</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="s">&#39;ics&#39;</span><span class="p">,</span> <span class="s">&#39;ix&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;ph&#39;</span><span class="p">,</span> <span class="s">&#39;f&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;kew&#39;</span><span class="p">,</span> <span class="s">&#39;cue&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span> <span class="s">&#39;ph&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;o&#39;</span><span class="p">,</span> <span class="s">&#39;ough&#39;</span><span class="p">),</span>
+        <span class="c"># these seem to have</span>
+        <span class="c"># sucked in practice</span>
+        <span class="p">(</span><span class="s">&#39;o&#39;</span><span class="p">,</span> <span class="s">&#39;off&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;ow&#39;</span><span class="p">,</span> <span class="s">&#39;o&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;ecks&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;za&#39;</span><span class="p">,</span> <span class="s">&#39;xa&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;xa&#39;</span><span class="p">,</span> <span class="s">&#39;za&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;ze&#39;</span><span class="p">,</span> <span class="s">&#39;xe&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;xe&#39;</span><span class="p">,</span> <span class="s">&#39;ze&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;zi&#39;</span><span class="p">,</span> <span class="s">&#39;xi&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;xi&#39;</span><span class="p">,</span> <span class="s">&#39;zi&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;zo&#39;</span><span class="p">,</span> <span class="s">&#39;xo&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;xo&#39;</span><span class="p">,</span> <span class="s">&#39;zo&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;zu&#39;</span><span class="p">,</span> <span class="s">&#39;xu&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;xu&#39;</span><span class="p">,</span> <span class="s">&#39;zu&#39;</span><span class="p">),</span>
+        <span class="c"># number based</span>
+        <span class="p">(</span><span class="s">&#39;one&#39;</span><span class="p">,</span> <span class="s">&#39;1&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;1&#39;</span><span class="p">,</span> <span class="s">&#39;one&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;two&#39;</span><span class="p">,</span> <span class="s">&#39;2&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;2&#39;</span><span class="p">,</span> <span class="s">&#39;two&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;three&#39;</span><span class="p">,</span> <span class="s">&#39;3&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;3&#39;</span><span class="p">,</span> <span class="s">&#39;three&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;four&#39;</span><span class="p">,</span> <span class="s">&#39;4&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;4&#39;</span><span class="p">,</span> <span class="s">&#39;four&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;five&#39;</span><span class="p">,</span> <span class="s">&#39;5&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;5&#39;</span><span class="p">,</span> <span class="s">&#39;five&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;six&#39;</span><span class="p">,</span> <span class="s">&#39;6&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;6&#39;</span><span class="p">,</span> <span class="s">&#39;six&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;seven&#39;</span><span class="p">,</span> <span class="s">&#39;7&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;7&#39;</span><span class="p">,</span> <span class="s">&#39;seven&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;eight&#39;</span><span class="p">,</span> <span class="s">&#39;8&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;8&#39;</span><span class="p">,</span> <span class="s">&#39;eight&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;nine&#39;</span><span class="p">,</span> <span class="s">&#39;9&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;9&#39;</span><span class="p">,</span> <span class="s">&#39;nine&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;ten&#39;</span><span class="p">,</span> <span class="s">&#39;10&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;10&#39;</span><span class="p">,</span> <span class="s">&#39;ten&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;ecks&#39;</span><span class="p">,</span> <span class="s">&#39;x&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;spir&#39;</span><span class="p">,</span> <span class="s">&#39;speer&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;speer&#39;</span><span class="p">,</span> <span class="s">&#39;spir&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;ex&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;on&#39;</span><span class="p">,</span> <span class="s">&#39;awn&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;ow&#39;</span><span class="p">,</span> <span class="s">&#39;owoo&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;awn&#39;</span><span class="p">,</span> <span class="s">&#39;on&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;awf&#39;</span><span class="p">,</span> <span class="s">&#39;off&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span> <span class="s">&#39;z&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;ce&#39;</span><span class="p">,</span> <span class="s">&#39;ze&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;ss&#39;</span><span class="p">,</span> <span class="s">&#39;zz&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;ku&#39;</span><span class="p">,</span> <span class="s">&#39;koo&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;trate&#39;</span><span class="p">,</span> <span class="s">&#39;trait&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;trait&#39;</span><span class="p">,</span> <span class="s">&#39;trate&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;ance&#39;</span><span class="p">,</span> <span class="s">&#39;anz&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;il&#39;</span><span class="p">,</span> <span class="s">&#39;yll&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;ice&#39;</span><span class="p">,</span> <span class="s">&#39;ize&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;chr&#39;</span><span class="p">,</span> <span class="s">&#39;kr&#39;</span><span class="p">),</span>
+        <span class="c"># These should only be at end of word!</span>
+        <span class="p">(</span><span class="s">&#39;er&#39;</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;lee&#39;</span><span class="p">,</span> <span class="s">&#39;ly&#39;</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">new_arr</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">tokens</span> <span class="ow">in</span> <span class="n">token_groups</span><span class="p">:</span>
+            <span class="n">new_arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">word</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="o">*</span><span class="n">tokens</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">normalization</span><span class="o">.</span><span class="n">uniquify</span><span class="p">(</span><span class="n">new_arr</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_pig_latinize</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">postfix</span><span class="o">=</span><span class="s">&#39;ay&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Generate standard pig latin style, with optional postfix argument.&quot;&quot;&quot;</span>
+    <span class="c"># Common postfixes: [&#39;ay&#39;, &#39;yay&#39;, &#39;way&#39;]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">type</span><span class="p">(</span><span class="n">postfix</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&#39;Must use a string for postfix.&#39;</span><span class="p">)</span>
+
+    <span class="n">piggified</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="n">vowel_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&#39;(a|e|i|o|u)&#39;</span><span class="p">)</span>
+    <span class="n">first_letter</span> <span class="o">=</span> <span class="n">word</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c"># clean up non letters</span>
+    <span class="n">word</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">r&#39;[^a-zA-Z]&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">vowel_re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">first_letter</span><span class="p">):</span>
+        <span class="n">piggified</span> <span class="o">=</span> <span class="n">word</span> <span class="o">+</span> <span class="s">&#39;way&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">piggified</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">word</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)],</span> <span class="n">first_letter</span><span class="p">,</span> <span class="n">postfix</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">piggified</span>
+
+
+<div class="viewcode-block" id="pig_latinize"><a class="viewcode-back" href="../../namebot.techniques.html#namebot.techniques.pig_latinize">[docs]</a><span class="k">def</span> <span class="nf">pig_latinize</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">postfix</span><span class="o">=</span><span class="s">&#39;ay&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Pig latinize a set of words.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (list): A list of words.</span>
+<span class="sd">        postfix (str, optional): A postfix to use. Default is `ay`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        words (list): The updated list.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">_pig_latinize</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">postfix</span><span class="o">=</span><span class="n">postfix</span><span class="p">)</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="acronym_lastname"><a class="viewcode-back" href="../../namebot.techniques.html#namebot.techniques.acronym_lastname">[docs]</a><span class="k">def</span> <span class="nf">acronym_lastname</span><span class="p">(</span><span class="n">description</span><span class="p">,</span> <span class="n">lastname</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create an acronym plus the last name.</span>
+
+<span class="sd">    Inspiration: ALFA Romeo.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">desc</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">word</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="k">for</span> <span class="n">word</span>
+                   <span class="ow">in</span> <span class="n">normalization</span><span class="o">.</span><span class="n">remove_stop_words</span><span class="p">(</span><span class="n">description</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">))])</span>
+    <span class="k">return</span> <span class="s">&#39;{} {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">desc</span><span class="p">,</span> <span class="n">lastname</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_descriptors"><a class="viewcode-back" href="../../namebot.techniques.html#namebot.techniques.get_descriptors">[docs]</a><span class="k">def</span> <span class="nf">get_descriptors</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Group words by their NLTK part-of-speech descriptors.</span>
+
+<span class="sd">    Use NLTK to first grab tokens by looping through words,</span>
+<span class="sd">    then tag part-of-speech (in isolation)</span>
+<span class="sd">    and provide a dictionary with a list of each type</span>
+<span class="sd">    for later retrieval and usage.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">descriptors</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">tokens</span> <span class="o">=</span> <span class="n">nltk</span><span class="o">.</span><span class="n">word_tokenize</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">words</span><span class="p">))</span>
+    <span class="n">parts</span> <span class="o">=</span> <span class="n">nltk</span><span class="o">.</span><span class="n">pos_tag</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span>
+    <span class="c"># Then, push the word into the matching type</span>
+    <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">parts</span><span class="p">:</span>
+        <span class="n">descriptors</span><span class="p">[</span><span class="n">part</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">part</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">descriptors</span></div>
+
+
+<span class="k">def</span> <span class="nf">_add_pos_subtypes</span><span class="p">(</span><span class="n">nouns</span><span class="p">,</span> <span class="n">verbs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Combine alternating verbs and nouns into a new list.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        nouns (list) - List of nouns, noun phrases, etc...</span>
+<span class="sd">        verbs (list) - List of verbs, verb phrases, etc...</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        words (list) - The newly combined list</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">words</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">noun</span> <span class="ow">in</span> <span class="n">nouns</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">verb</span> <span class="ow">in</span> <span class="n">verbs</span><span class="p">:</span>
+                <span class="n">words</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;{} {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">noun</span><span class="p">,</span> <span class="n">verb</span><span class="p">))</span>
+                <span class="n">words</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;{} {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">verb</span><span class="p">,</span> <span class="n">noun</span><span class="p">))</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">return</span> <span class="n">words</span>
+
+
+<span class="k">def</span> <span class="nf">_create_pos_subtypes</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check part-of-speech tags for a noun-phrase, adding combinations if so.</span>
+
+<span class="sd">    If it exists, add combinations with noun-phrase + verb-phrase,</span>
+<span class="sd">    noun-phrase + verb, and noun-phrase + adverb,</span>
+<span class="sd">    for each pos type that exists.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (list) - List of verbs, verb phrases, etc...</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        new_words (list) - The newly combined list</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">new_words</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">types</span> <span class="o">=</span> <span class="n">words</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+    <span class="k">if</span> <span class="s">&#39;NNP&#39;</span> <span class="ow">in</span> <span class="n">types</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s">&#39;VBP&#39;</span> <span class="ow">in</span> <span class="n">types</span><span class="p">:</span>
+            <span class="n">new_words</span> <span class="o">+=</span> <span class="n">_add_pos_subtypes</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="s">&#39;NNP&#39;</span><span class="p">],</span> <span class="n">words</span><span class="p">[</span><span class="s">&#39;VBP&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="s">&#39;VB&#39;</span> <span class="ow">in</span> <span class="n">types</span><span class="p">:</span>
+            <span class="n">new_words</span> <span class="o">+=</span> <span class="n">_add_pos_subtypes</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="s">&#39;NNP&#39;</span><span class="p">],</span> <span class="n">words</span><span class="p">[</span><span class="s">&#39;VB&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="s">&#39;RB&#39;</span> <span class="ow">in</span> <span class="n">types</span><span class="p">:</span>
+            <span class="n">new_words</span> <span class="o">+=</span> <span class="n">_add_pos_subtypes</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="s">&#39;NNP&#39;</span><span class="p">],</span> <span class="n">words</span><span class="p">[</span><span class="s">&#39;RB&#39;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">new_words</span>
+
+
+<div class="viewcode-block" id="make_descriptors"><a class="viewcode-back" href="../../namebot.techniques.html#namebot.techniques.make_descriptors">[docs]</a><span class="k">def</span> <span class="nf">make_descriptors</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Make descriptor names.</span>
+
+<span class="sd">    Based from a verb + noun, adjective + noun combination.</span>
+<span class="sd">    Examples:</span>
+<span class="sd">        -Pop Cap,</span>
+<span class="sd">        -Big Fish,</span>
+<span class="sd">        -Red Fin,</span>
+<span class="sd">        -Cold Water (grill), etc...</span>
+<span class="sd">    Combines VBP/VB/RB, with NN/NNS</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">_create_pos_subtypes</span><span class="p">(</span><span class="n">words</span><span class="p">)))</span></div>
+
+
+<div class="viewcode-block" id="all_prefix_first_vowel"><a class="viewcode-back" href="../../namebot.techniques.html#namebot.techniques.all_prefix_first_vowel">[docs]</a><span class="k">def</span> <span class="nf">all_prefix_first_vowel</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">letters</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">ascii_uppercase</span><span class="p">)):</span>
+    <span class="sd">&quot;&quot;&quot;Find the first vowel in a word and prefixes with consonants.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        word (str) - the word to update</span>
+<span class="sd">        letters (list) - the letters to use for prefixing.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        words (list) - All prefixed words</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">re_vowels</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&#39;[aeiouy]&#39;</span><span class="p">)</span>
+    <span class="n">matches</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">re_vowels</span><span class="p">,</span> <span class="n">word</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">matches</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">word</span><span class="p">]</span>
+    <span class="n">words</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">vowels</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;A&#39;</span><span class="p">,</span> <span class="s">&#39;E&#39;</span><span class="p">,</span> <span class="s">&#39;I&#39;</span><span class="p">,</span> <span class="s">&#39;O&#39;</span><span class="p">,</span> <span class="s">&#39;U&#39;</span><span class="p">]</span>
+    <span class="n">first_match</span> <span class="o">=</span> <span class="n">matches</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">letter</span> <span class="ow">in</span> <span class="n">letters</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">letter</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">vowels</span><span class="p">:</span>
+            <span class="c"># If beginning letter is a vowel, don&#39;t offset the index</span>
+            <span class="k">if</span> <span class="n">first_match</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">words</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;{}{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">letter</span><span class="p">,</span> <span class="n">word</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">words</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;{}{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">letter</span><span class="p">,</span> <span class="n">word</span><span class="p">[</span><span class="n">first_match</span><span class="p">:]))</span>
+    <span class="k">return</span> <span class="n">words</span></div>
+
+
+<div class="viewcode-block" id="recycle"><a class="viewcode-back" href="../../namebot.techniques.html#namebot.techniques.recycle">[docs]</a><span class="k">def</span> <span class="nf">recycle</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">times</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Run a set of words applied to a function repeatedly.</span>
+
+<span class="sd">    It will re-run with the last output as the new input.</span>
+<span class="sd">    `words` must be a list, and `func` must return a list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">times</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">recycle</span><span class="p">(</span><span class="n">func</span><span class="p">(</span><span class="n">words</span><span class="p">),</span> <span class="n">func</span><span class="p">,</span> <span class="n">times</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">words</span></div>
+
+
+<div class="viewcode-block" id="backronym"><a class="viewcode-back" href="../../namebot.techniques.html#namebot.techniques.backronym">[docs]</a><span class="k">def</span> <span class="nf">backronym</span><span class="p">(</span><span class="n">acronym</span><span class="p">,</span> <span class="n">theme</span><span class="p">,</span> <span class="n">max_attempts</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Attempt to generate a backronym based on a given acronym and theme.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        acronym (str): The starting acronym.</span>
+<span class="sd">        theme (str): The seed word to base other words off of.</span>
+<span class="sd">        max_attempts (int, optional): The number of attempts before failing.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: The result dictionary. If a backronym was successfully generated,</span>
+<span class="sd">            the `success` key will be True, otherwise False.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ret</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;acronym&#39;</span><span class="p">:</span> <span class="s">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">acronym</span><span class="p">))</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span>
+        <span class="s">&#39;backronym&#39;</span><span class="p">:</span> <span class="s">&#39;&#39;</span><span class="p">,</span>
+        <span class="s">&#39;words&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s">&#39;success_ratio&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="s">&#39;success&#39;</span><span class="p">:</span> <span class="bp">False</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">acronym</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">theme</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ret</span>
+    <span class="n">all_words</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">words</span> <span class="o">=</span> <span class="n">nlp</span><span class="o">.</span><span class="n">_get_synset_words</span><span class="p">(</span><span class="n">theme</span><span class="p">)</span>
+    <span class="n">_backronym</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">acronym</span> <span class="o">=</span> <span class="n">acronym</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="c"># Add words if they contain the same first letter</span>
+    <span class="c"># as any in the given acronym.</span>
+    <span class="n">cur_step</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">_backronym</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">acronym</span><span class="p">)</span> <span class="ow">or</span> <span class="n">cur_step</span> <span class="o">&lt;</span> <span class="n">max_attempts</span><span class="p">:</span>
+        <span class="n">all_words</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">word</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">acronym</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s">&#39;_&#39;</span> <span class="ow">in</span> <span class="n">word</span><span class="p">:</span>
+                    <span class="c"># Don&#39;t add multi-word strings, but don&#39;t leave it blank.</span>
+                    <span class="n">_backronym</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">word</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">_backronym</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+        <span class="n">sdict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c"># Sort the word in order of the acronyms</span>
+        <span class="c"># letters by re-arranging indices.</span>
+        <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">_backronym</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="n">acronym</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">word</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+                <span class="n">sdict</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">word</span>
+            <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+                <span class="k">continue</span>
+        <span class="n">cur_step</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="c"># Refresh words for next attempt.</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="n">nlp</span><span class="o">.</span><span class="n">_get_synset_words</span><span class="p">(</span><span class="n">theme</span><span class="p">)</span>
+        <span class="c"># Try again if no words existed.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">words</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="c"># Get new theme, similar to originating theme.</span>
+        <span class="n">theme</span> <span class="o">=</span> <span class="n">words</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">vals</span> <span class="o">=</span> <span class="n">sdict</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+    <span class="n">ret</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+        <span class="s">&#39;backronym&#39;</span><span class="p">:</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span>
+        <span class="s">&#39;words&#39;</span><span class="p">:</span> <span class="n">vals</span><span class="p">,</span>
+        <span class="s">&#39;success_ratio&#39;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">vals</span><span class="p">))</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">acronym</span><span class="p">)),</span>
+        <span class="s">&#39;success&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">acronym</span><span class="p">)</span>
+    <span class="p">})</span>
+    <span class="k">return</span> <span class="n">ret</span></div>
+
+
+<div class="viewcode-block" id="super_scrub"><a class="viewcode-back" href="../../namebot.techniques.html#namebot.techniques.super_scrub">[docs]</a><span class="k">def</span> <span class="nf">super_scrub</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Run words through a comprehensive list of filtering functions.</span>
+
+<span class="sd">    Expects a dictionary with key &quot;words&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">technique</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;words&#39;</span><span class="p">]:</span>
+        <span class="n">data</span><span class="p">[</span><span class="s">&#39;words&#39;</span><span class="p">][</span><span class="n">technique</span><span class="p">]</span> <span class="o">=</span> <span class="n">normalization</span><span class="o">.</span><span class="n">uniquify</span><span class="p">(</span>
+            <span class="n">normalization</span><span class="o">.</span><span class="n">remove_odd_sounding_words</span><span class="p">(</span>
+                <span class="n">normalization</span><span class="o">.</span><span class="n">clean_sort</span><span class="p">(</span>
+                    <span class="n">data</span><span class="p">[</span><span class="s">&#39;words&#39;</span><span class="p">][</span><span class="n">technique</span><span class="p">])))</span>
+    <span class="k">return</span> <span class="n">data</span></div>
+
+
+<div class="viewcode-block" id="generate_all_techniques"><a class="viewcode-back" href="../../namebot.techniques.html#namebot.techniques.generate_all_techniques">[docs]</a><span class="k">def</span> <span class="nf">generate_all_techniques</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Generate all techniques across the library in one place.&quot;&quot;&quot;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;words&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;alliterations&#39;</span><span class="p">:</span> <span class="n">make_name_alliteration</span><span class="p">(</span><span class="n">words</span><span class="p">),</span>
+            <span class="s">&#39;alliterations&#39;</span><span class="p">:</span> <span class="n">make_name_alliteration</span><span class="p">(</span><span class="n">words</span><span class="p">),</span>
+            <span class="s">&#39;portmanteau&#39;</span><span class="p">:</span> <span class="n">make_portmanteau_default_vowel</span><span class="p">(</span><span class="n">words</span><span class="p">),</span>
+            <span class="s">&#39;vowels&#39;</span><span class="p">:</span> <span class="n">make_vowelify</span><span class="p">(</span><span class="n">words</span><span class="p">),</span>
+            <span class="s">&#39;suffix&#39;</span><span class="p">:</span> <span class="n">suffixify</span><span class="p">(</span><span class="n">words</span><span class="p">),</span>
+            <span class="s">&#39;prefix&#39;</span><span class="p">:</span> <span class="n">prefixify</span><span class="p">(</span><span class="n">words</span><span class="p">),</span>
+            <span class="s">&#39;duplifix&#39;</span><span class="p">:</span> <span class="n">duplifixify</span><span class="p">(</span><span class="n">words</span><span class="p">),</span>
+            <span class="s">&#39;disfix&#39;</span><span class="p">:</span> <span class="n">disfixify</span><span class="p">(</span><span class="n">words</span><span class="p">),</span>
+            <span class="s">&#39;infix&#39;</span><span class="p">:</span> <span class="n">infixify</span><span class="p">(</span><span class="n">words</span><span class="p">),</span>
+            <span class="s">&#39;simulfix&#39;</span><span class="p">:</span> <span class="n">simulfixify</span><span class="p">(</span><span class="n">words</span><span class="p">),</span>
+            <span class="s">&#39;founder_product_name&#39;</span><span class="p">:</span> <span class="n">make_founder_product_name</span><span class="p">(</span>
+                <span class="s">&#39;Lindsey&#39;</span><span class="p">,</span> <span class="s">&#39;Chris&#39;</span><span class="p">,</span> <span class="s">&#39;Widgets&#39;</span><span class="p">),</span>
+            <span class="s">&#39;punctuator&#39;</span><span class="p">:</span> <span class="n">make_punctuator_vowels</span><span class="p">(</span><span class="n">words</span><span class="p">),</span>
+            <span class="s">&#39;name_abbreviation&#39;</span><span class="p">:</span> <span class="n">make_name_abbreviation</span><span class="p">(</span><span class="n">words</span><span class="p">),</span>
+            <span class="s">&#39;make_portmanteau_split&#39;</span><span class="p">:</span> <span class="n">make_portmanteau_split</span><span class="p">(</span><span class="n">words</span><span class="p">),</span>
+            <span class="s">&#39;forkerism&#39;</span><span class="p">:</span> <span class="n">forkerism</span><span class="p">(</span><span class="n">words</span><span class="p">),</span>
+            <span class="s">&#39;kniferism&#39;</span><span class="p">:</span> <span class="n">kniferism</span><span class="p">(</span><span class="n">words</span><span class="p">),</span>
+            <span class="s">&#39;spoonerism&#39;</span><span class="p">:</span> <span class="n">spoonerism</span><span class="p">(</span><span class="n">words</span><span class="p">),</span>
+            <span class="s">&#39;palindrome&#39;</span><span class="p">:</span> <span class="n">palindromes</span><span class="p">(</span><span class="n">words</span><span class="p">),</span>
+            <span class="s">&#39;reduplication_ablaut&#39;</span><span class="p">:</span> <span class="n">reduplication_ablaut</span><span class="p">(</span><span class="n">words</span><span class="p">),</span>
+            <span class="s">&#39;misspelling&#39;</span><span class="p">:</span> <span class="n">make_misspelling</span><span class="p">(</span><span class="n">words</span><span class="p">),</span>
+            <span class="s">&#39;descriptors&#39;</span><span class="p">:</span> <span class="n">make_descriptors</span><span class="p">(</span>
+                <span class="n">get_descriptors</span><span class="p">(</span><span class="n">words</span><span class="p">))</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">super_scrub</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Chris Tabor.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
