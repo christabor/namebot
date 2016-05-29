@@ -11,11 +11,8 @@ soundex = fuzzy.Soundex(4)
 def score_dmetaphone(words):
     """Score words using the double metaphone algorithm.
 
-    Args:
-        words (list) - the list of words.
-
-    Returns:
-        scores (list) - the scored words
+    :param words (list): the list of words.
+    :rtype scores (list): the scored words
     """
     scores = []
     for word in words:
@@ -27,11 +24,8 @@ def score_dmetaphone(words):
 def score_soundex(words):
     """Score words using the soundex algorithm.
 
-    Args:
-        words (list) - the list of words.
-
-    Returns:
-        scores (list) - the scored words
+    :param words (list): the list of words.
+    :rtype scores (list): the scored words
     """
     return ['{}: {}'.format(w.lower(), soundex(w)) for w in words]
 
@@ -39,11 +33,8 @@ def score_soundex(words):
 def score_nysiis(words):
     """Score words using the nysiis algorithm.
 
-    Args:
-        words (list) - the list of words.
-
-    Returns:
-        scores (list) - the scored words
+    :param words (list): the list of words.
+    :rtype scores (list): the scored words
     """
     return ['{}: {}'.format(w.lower(), fuzzy.nysiis(w)) for w in words]
 
@@ -55,11 +46,8 @@ def score_length(word):
     There is no hard science, but popular opinion suggests
     that a word somewhere between 8-15 letters is optimal.
 
-    Args:
-        word (str): The word to score.
-
-    Returns:
-        score (int): The resulting score.
+    :param word (str): The word to score.
+    :rtype score (int): The resulting score.
     """
     if not word or len(word) == 0:
         return 0
@@ -84,13 +72,10 @@ def score_length(word):
 def bounded(num, start, end):
     """Determine if a number is within the bounds of `start` and `end`.
 
-    Args:
-        num (int): An integer.
-        start (int): A start minimum.
-        end (int): An end maximum.
-
-    Returns:
-        is_bounded (bool): Whether number is bounded by start and end.
+    :param num (int): An integer.
+    :param start (int): A start minimum.
+    :param end (int): An end maximum.
+    :rtype is_bounded (bool): Whether number is bounded by start and end.
     """
     return num >= start and num <= end
 
@@ -102,17 +87,12 @@ def score_pronounceability(word):
     For example, 0.5 / 0.5 = 1.0, so one is perfect, and lower is worse.
 
     The 1-5 scale translation:
-    ---------------------------------------------------------------
+
     0.0   0.1   0.2   0.3   0.4   0.5   0.6   0.7   0.8   0.9   1.0
-    ---------------------------------------------------------------
     0      1     2     3     4     5     4     3     2     1      5
-    ---------------------------------------------------------------
 
-    Args:
-        word (string) - the name
-
-    Returns:
-        score (int) - the final pronounceability score
+    :param word (string): The name
+    :rtype (int): The final pronounceability score
     """
     if not word or len(word) == 0:
         return 0
@@ -150,11 +130,8 @@ def score_simplicity(word):
     Simple is defined as the number of separate words.
     In this case, higher is better, indicating a better score.
 
-    Args:
-        word (string) - the name
-
-    Returns:
-        score (int) - the final simplicity score
+    :param word (string): the name
+    :rtype score (int): the final simplicity score
 
     >>> score_simplicity('the cat in the hat')
     >>> 1
@@ -182,11 +159,8 @@ def score_name_overall(word):
     This method gives an overall intuitive score.
     The closer to 100%, the better.
 
-    Args:
-        word (string) - the name
-
-    Returns:
-        score (float) - the final name score
+    :param word (string): the name
+    :rtype score (float): the final name score
     """
     length = score_length(word)
     pronounceability = score_pronounceability(word)
@@ -202,11 +176,8 @@ def score_name_overall(word):
 def score_names_overall(words):
     """Score all names.
 
-    Args:
-        words (list) - the list of words.
-
-    Returns:
-        words (list) - a list of tuples, with the score and word.
+    :param words (list): the list of words.
+    :rtype words (list): a list of tuples, with the score and word.
     """
     return [(score_name_overall(w), w) for w in words]
 
@@ -214,11 +185,8 @@ def score_names_overall(words):
 def generate_all_scoring(words):
     """Return all scoring methods for a set of words.
 
-    Args:
-        words (list) - the list of words.
-
-    Returns:
-        words (dict) - the scores, keyed by scoring name.
+    :param words (list): the list of words.
+    :rtype words (dict): the scores, keyed by scoring name.
     """
     return {
         'dmetaphone': score_dmetaphone(words),
