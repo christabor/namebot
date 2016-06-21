@@ -56,7 +56,7 @@ make install
 make tests
 ```
 
-Tests are available in the `tests/` folder. They are not super comprehensive, but there is coverage. Test runner is provided by nose and can be run via `make`.
+Tests are available in the `tests/` folder. Test runner is provided by nose and can be run via `make`.
 
 ## Versioning
 
