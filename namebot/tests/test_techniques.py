@@ -5,6 +5,33 @@ import unittest
 from namebot import techniques
 
 
+class SliceEndsTestCase(unittest.TestCase):
+
+    def test_oneletter(self):
+        res = techniques.slice_ends('flabbergasted', count=1)
+        self.assertEqual(res, 'labbergaste')
+
+    def test_twoletter(self):
+        res = techniques.slice_ends('flabbergasted', count=2)
+        self.assertEqual(res, 'abbergast')
+
+    def test_threeletter(self):
+        res = techniques.slice_ends('flabbergasted', count=3)
+        self.assertEqual(res, 'bbergas')
+
+    def test_fourletter(self):
+        res = techniques.slice_ends('flabbergasted', count=4)
+        self.assertEqual(res, 'berga')
+
+    def test_empty(self):
+        res = techniques.slice_ends('flabbergasted', count=0)
+        self.assertEqual(res, 'flabbergasted')
+
+    def test_none(self):
+        res = techniques.slice_ends('flabbergasted', count=None)
+        self.assertEqual(res, 'flabbergasted')
+
+
 class DomainifyTestCase(unittest.TestCase):
 
     def test_threeletter(self):

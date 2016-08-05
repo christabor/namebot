@@ -23,15 +23,29 @@ _vowels = namebot_settings.VOWELS
 _regexes = namebot_settings.regexes
 
 
+def slice_ends(word, count=1):
+    """Slice letters off each side, in a symmetric fashion.
+
+    The idea is to find interesting substring word combinations.
+
+    :param word (string): the word to modify.
+    :param count (int, optional): The number of letters to chop off each end.
+    :rtype string: The modified string.
+
+    >>> slice_ends('potatoes', count=2)
+    >>> 'tato'
+    """
+    if any([not count, count is None]):
+        return word
+    return word[count:len(word) - count]
+
+
 def domainify(words, tld='com'):
     """Convert words into a domain format for testing domains.
 
-    Args:
-        words (list): List of words
-        tld (str, optional): The TLD (top-level domain) to use.
-
-    Returns:
-        list: The modified list of words.
+    :param words (list): List of words
+    :param tld (str, optional): The TLD (top-level domain) to use.
+    :rtype list: The modified list of words.
 
     >>> domanify(['radio'], tld='.io')
     >>> ['rad.io']
@@ -49,11 +63,8 @@ def domainify(words, tld='com'):
 def spoonerism(words):
     """Convert a list of words formatted with the spoonerism technique.
 
-    Args:
-        words (list) - The list of words to operate on
-
-    Returns:
-        words (list) - The updated list of words
+    :param words (list) - The list of words to operate on
+    :rtype words (list) - The updated list of words
 
     >>> spoonerism(['foo', 'bar'])
     >>> ['boo', 'far']
@@ -77,11 +88,8 @@ def spoonerism(words):
 def kniferism(words):
     """Convert a list of words formatted with the kniferism technique.
 
-    Args:
-        words (list) - The list of words to operate on
-
-    Returns:
-        words (list) - The updated list of words
+    :param words (list) - The list of words to operate on
+    :rtype words (list) - The updated list of words
 
     >>> kniferism(['foo', 'bar'])
     >>> ['fao', 'bor']
@@ -109,11 +117,8 @@ def kniferism(words):
 def forkerism(words):
     """Convert a list of words formatted with the forkerism technique.
 
-    Args:
-        words (list) - The list of words to operate on
-
-    Returns:
-        words (list) - The updated list of words
+    :param words (list) - The list of words to operate on
+    :rtype words (list) - The updated list of words
 
     >>> forkerism(['foo', 'bar'])
     >>> ['for', 'bao']
@@ -142,8 +147,17 @@ def forkerism(words):
 def reduplication_ablaut(words, count=1, random=True, vowel='e'):
     """A technique to combine words and altering the vowels.
 
-    e.g ch[i]t-ch[a]t, d[i]lly, d[a]lly.
-    See http://phrases.org.uk/meanings/reduplication.html.
+    See http://phrases.org.uk/meanings/reduplication.html for origination.
+
+    :param words (list): The list of words to operate on.
+    :param count (int, optional): The number of regex substitutions to make.
+    :param random (bool, optional): Whether or not to randomize vowel choices.
+    :param vowel (string, optional): Which vowel to substitue.
+                                     If not vowel is available the word
+                                     will not change.
+
+    >>> reduplication_ablaut(['cat', 'dog'], vowel='a')
+    >>> ['dog', 'dag']
     """
     if len(words) < 2:
         raise ValueError('Need more than one word to combine')
@@ -160,11 +174,8 @@ def reduplication_ablaut(words, count=1, random=True, vowel='e'):
 def prefixify(words):
     """Apply a prefix technique to a set of words.
 
-    Args:
-        words (list) - The list of words to operate on.
-
-    Returns:
-        new_arr (list): the updated *fixed words
+    :param words (list) - The list of words to operate on.
+    :rtype new_arr (list): the updated *fixed words
     """
     new_arr = []
     for word in words:
@@ -189,12 +200,8 @@ def prefixify(words):
 def suffixify(words):
     """Apply a suffix technique to a set of words.
 
-    Args:
-        words (list) - The list of words to operate on.
-            (e.g -> chard + ard = chardard -> chard)
-
-    Returns:
-        new_arr (list): the updated *fixed words
+    :param words (list) - The list of words to operate on.
+    :rtype new_arr (list): the updated *fixed words
     """
     new_arr = []
     for word in words:
@@ -219,11 +226,8 @@ def suffixify(words):
 def duplifixify(words):
     """Apply a duplifix technique to a set of words (e.g: teeny weeny, etc...).
 
-    Args:
-        words (list) - The list of words to operate on.
-
-    Returns:
-        new_arr (list): the updated *fixed words
+    :param words (list) - The list of words to operate on.
+    :rtype new_arr (list): the updated *fixed words
     """
     new_arr = []
     for word in words:
@@ -723,11 +727,8 @@ def _create_pos_subtypes(words):
     noun-phrase + verb, and noun-phrase + adverb,
     for each pos type that exists.
 
-    Args:
-        words (list) - List of verbs, verb phrases, etc...
-
-    Returns:
-        new_words (list) - The newly combined list
+    :param words (list) - List of verbs, verb phrases, etc...
+    :rtype new_words (list) - The newly combined list
     """
     new_words = []
     types = words.keys()
@@ -758,13 +759,9 @@ def make_descriptors(words):
 def all_prefix_first_vowel(word, letters=list(ascii_uppercase)):
     """Find the first vowel in a word and prefixes with consonants.
 
-    Args:
-        word (str) - the word to update
-        letters (list) - the letters to use for prefixing.
-
-    Returns:
-        words (list) - All prefixed words
-
+    :param word (str) - the word to update
+    :param letters (list) - the letters to use for prefixing.
+    :rtype words (list) - All prefixed words
     """
     re_vowels = re.compile(r'[aeiouy]')
     matches = re.search(re_vowels, word)
@@ -788,6 +785,12 @@ def recycle(words, func, times=2):
 
     It will re-run with the last output as the new input.
     `words` must be a list, and `func` must return a list.
+
+    :param words (list): The list of words.
+    :param func (function): A function to recycle.
+                            This function must take a single argument,
+                            a list of strings.
+    :param times (int, optional): The number of times to call the function.
     """
     if times > 0:
         return recycle(func(words), func, times - 1)
@@ -797,14 +800,11 @@ def recycle(words, func, times=2):
 def backronym(acronym, theme, max_attempts=10):
     """Attempt to generate a backronym based on a given acronym and theme.
 
-    Args:
-        acronym (str): The starting acronym.
-        theme (str): The seed word to base other words off of.
-        max_attempts (int, optional): The number of attempts before failing.
-
-    Returns:
-        dict: The result dictionary. If a backronym was successfully generated,
-            the `success` key will be True, otherwise False.
+    :param acronym (str): The starting acronym.
+    :param theme (str): The seed word to base other words off of.
+    :param max_attempts (int, optional): The number of attempts before failing.
+    :rtype dict: The result dictionary. If a backronym was successfully
+                 generated, the `success` key will be True, otherwise False.
     """
     ret = {
         'acronym': '.'.join(list(acronym)).upper(),
