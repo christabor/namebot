@@ -12,8 +12,10 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys
 import os
+import sys
+from datetime import datetime
+
 import sphinx_rtd_theme
 
 # If extensions (or modules to document with autodoc) are in another directory,
@@ -52,7 +54,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'namebot'
-copyright = u'2016, Chris Tabor'
+copyright = u'{}, Chris Tabor'.format(datetime.now().year)
 author = u'Chris Tabor'
 
 # The version info for the project you're documenting, acts as replacement for
