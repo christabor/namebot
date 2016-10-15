@@ -876,7 +876,6 @@ def generate_all_techniques(words):
     data = {
         'words': {
             'alliterations': make_name_alliteration(words),
-            'alliterations': make_name_alliteration(words),
             'portmanteau': make_portmanteau_default_vowel(words),
             'vowels': make_vowelify(words),
             'suffix': suffixify(words),
