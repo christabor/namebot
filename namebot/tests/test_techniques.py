@@ -35,44 +35,45 @@ class SliceEndsTestCase(unittest.TestCase):
 class DomainifyTestCase(unittest.TestCase):
 
     def test_threeletter(self):
-        self.assertEqual(techniques.domainify(['intercom']), ['inter.com'])
+        self.assertEqual(
+            list(techniques.domainify(['intercom'])), ['inter.com'])
 
     def test_twoletter(self):
         self.assertEqual(
-            techniques.domainify(['actively'], tld='.ly'), ['active.ly'])
+            list(techniques.domainify(['actively'], tld='.ly')), ['active.ly'])
 
     def test_fourletter(self):
         self.assertEqual(
-            techniques.domainify(['scamp'], tld='.camp'), ['s.camp'])
+            list(techniques.domainify(['scamp'], tld='.camp')), ['s.camp'])
 
     def test_empty(self):
         self.assertEqual(
-            techniques.domainify(['intercom'], tld=''), ['intercom'])
+            list(techniques.domainify(['intercom'], tld='')), ['intercom'])
 
 
 class PalindromeTestCase(unittest.TestCase):
 
     def test_simple(self):
-        self.assertEqual(techniques.palindrome('Fool'), 'FoollooF')
+        self.assertEqual(list(techniques.palindrome('Fool')), 'FoollooF')
 
     def test_complicated(self):
-        self.assertEqual(techniques.palindrome(
-            'Aardvarks'), 'AardvarksskravdraA')
+        self.assertEqual(list(techniques.palindrome(
+            'Aardvarks')), 'AardvarksskravdraA')
 
     def test_spaced(self):
-        self.assertEqual(techniques.palindrome(
-            'Red Dragon'), 'Red DragonnogarD deR')
+        self.assertEqual(list(techniques.palindrome(
+            'Red Dragon')), 'Red DragonnogarD deR')
 
     def test_simple_array(self):
-        self.assertEqual(techniques.palindromes(
-            ['wtf', 'omg']), ['wtfftw', 'omggmo'])
+        self.assertEqual(list(techniques.palindromes(
+            ['wtf', 'omg'])), ['wtfftw', 'omggmo'])
 
     def test_simple_array_spaced(self):
         self.assertEqual(techniques.palindromes(
             ['wtf omg', 'omg wtf']), ['wtf omggmo ftw', 'omg wtfftw gmo'])
 
     def test_single_letter(self):
-        self.assertEqual(techniques.palindrome('f'), 'ff')
+        self.assertEqual(list(techniques.palindrome('f')), 'ff')
 
 
 class SpoonerismTestCase(unittest.TestCase):

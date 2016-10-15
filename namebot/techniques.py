@@ -50,14 +50,12 @@ def domainify(words, tld='com'):
     >>> domanify(['radio'], tld='.io')
     >>> ['rad.io']
     """
-    _words = []
     if tld.startswith('.'):
         tld = tld.replace('.', '')
     for word in words:
         if word.endswith(tld) and tld != '':
             word = word.replace(tld, '.{}'.format(tld))
-        _words.append(word)
-    return _words
+        yield word
 
 
 def spoonerism(words):
@@ -70,19 +68,17 @@ def spoonerism(words):
     >>> ['boo', 'far']
     """
     "First: [f]oo [b]ar => boo far"
-    new_words = []
     if len(words) < 2:
         raise ValueError('Need more than one word to combine')
     for k, word in enumerate(words):
         try:
-            new_words.append('{}{} {}{}'.format(
+            yield '{}{} {}{}'.format(
                 words[k + 1][0],  # 2nd word, 1st letter
                 word[1:],  # 1st word, 2nd letter to end
                 word[0],  # 1st word, 1st letter
-                words[k + 1][1:]))  # 2nd word, 2nd letter to end
+                words[k + 1][1:])  # 2nd word, 2nd letter to end
         except IndexError:
             continue
-    return new_words
 
 
 def kniferism(words):
@@ -97,21 +93,19 @@ def kniferism(words):
     "Mid: f[o]o b[a]r => fao bor"
     if len(words) < 2:
         raise ValueError('Need more than one word to combine')
-    new_words = []
     for k, word in enumerate(words):
         try:
             middle_second = int(len(words[k + 1]) / 2)
             middle_first = int(len(word) / 2)
-            new_words.append('{}{}{} {}{}{}'.format(
+            yield '{}{}{} {}{}{}'.format(
                 word[:middle_first],
                 words[k + 1][middle_second],
                 word[middle_first + 1:],
                 words[k + 1][:middle_second],
                 word[middle_first],
-                words[k + 1][middle_second + 1:]))
+                words[k + 1][middle_second + 1:])
         except IndexError:
             continue
-    return new_words
 
 
 def forkerism(words):
@@ -126,7 +120,6 @@ def forkerism(words):
     "Last: fo[o] ba[r] => for bao"
     if len(words) < 2:
         raise ValueError('Need more than one word to combine')
-    new_words = []
     for k, word in enumerate(words):
         try:
             s_word = words[k + 1]
@@ -134,14 +127,13 @@ def forkerism(words):
             f_word_len = len(word)
             f_w_last_letter = word[f_word_len - 1]
             s_w_last_letter = words[k + 1][s_word_len - 1]
-            new_words.append('{}{} {}{}'.format(
+            yield '{}{} {}{}'.format(
                 word[:f_word_len - 1],  # 1st word, 1st letter to last - 1
                 s_w_last_letter,  # 2nd word, last letter
                 s_word[:s_word_len - 1],  # 2nd word, 1st letter to last - 1
-                f_w_last_letter))  # 1st word, last letter
+                f_w_last_letter)  # 1st word, last letter
         except IndexError:
             continue
-    return new_words
 
 
 def reduplication_ablaut(words, count=1, random=True, vowel='e'):
@@ -161,14 +153,12 @@ def reduplication_ablaut(words, count=1, random=True, vowel='e'):
     """
     if len(words) < 2:
         raise ValueError('Need more than one word to combine')
-    new_words = []
     substitution = choice(_vowels) if random else vowel
     for word in words:
         second = re.sub(r'a|e|i|o|u', substitution, word, count=count)
         # Only append if the first and second are different.
         if word != second:
-            new_words.append('{} {}'.format(word, second))
-    return new_words
+            yield '{} {}'.format(word, second)
 
 
 def prefixify(words):
@@ -177,13 +167,11 @@ def prefixify(words):
     :param words (list) - The list of words to operate on.
     :rtype new_arr (list): the updated *fixed words
     """
-    new_arr = []
     for word in words:
         if not word:
             continue
         for prefix in _prefixes:
-            first_prefix_no_vowel = re.search(
-                _regexes['no_vowels'], word[0])
+            first_prefix_no_vowel = re.search(_regexes['no_vowels'], word[0])
             second_prefix_no_vowel = re.search(
                 _regexes['no_vowels'], prefix[0])
             if first_prefix_no_vowel or second_prefix_no_vowel:
@@ -193,8 +181,7 @@ def prefixify(words):
                 vowel_beginning = re.search(r'a|e|i|o|u', prefix[-1:])
                 vowel_end = re.search(r'^a|e|i|o|u', word[:1])
                 if vowel_beginning or vowel_end:
-                    new_arr.append('{}{}'.format(prefix, word))
-    return new_arr
+                    yield '{}{}'.format(prefix, word)
 
 
 def suffixify(words):
@@ -203,7 +190,6 @@ def suffixify(words):
     :param words (list) - The list of words to operate on.
     :rtype new_arr (list): the updated *fixed words
     """
-    new_arr = []
     for word in words:
         if not word:
             continue
@@ -214,13 +200,12 @@ def suffixify(words):
                 if suffix is 'ify':
                     if word[-1] is 'e':
                         if word[-2] is not 'i':
-                            new_arr.append('{}{}'.format(word[:-2], suffix))
+                            yield '{}{}'.format(word[:-2], suffix)
                         else:
-                            new_arr.append('{}{}'.format(word[:-1], suffix))
-                    new_arr.append(word + suffix)
+                            yield '{}{}'.format(word[:-1], suffix)
+                    yield word + suffix
                 else:
-                    new_arr.append(word + suffix)
-    return new_arr
+                    yield word + suffix
 
 
 def duplifixify(words):
@@ -709,15 +694,13 @@ def _add_pos_subtypes(nouns, verbs):
     Returns:
         words (list) - The newly combined list
     """
-    words = []
     try:
         for noun in nouns:
             for verb in verbs:
-                words.append('{} {}'.format(noun, verb))
-                words.append('{} {}'.format(verb, noun))
+                yield '{} {}'.format(noun, verb)
+                yield '{} {}'.format(verb, noun)
     except KeyError:
         pass
-    return words
 
 
 def _create_pos_subtypes(words):
@@ -730,16 +713,14 @@ def _create_pos_subtypes(words):
     :param words (list) - List of verbs, verb phrases, etc...
     :rtype new_words (list) - The newly combined list
     """
-    new_words = []
     types = words.keys()
     if 'NNP' in types:
         if 'VBP' in types:
-            new_words += _add_pos_subtypes(words['NNP'], words['VBP'])
+            yield _add_pos_subtypes(words['NNP'], words['VBP'])
         if 'VB' in types:
-            new_words += _add_pos_subtypes(words['NNP'], words['VB'])
+            yield _add_pos_subtypes(words['NNP'], words['VB'])
         if 'RB' in types:
-            new_words += _add_pos_subtypes(words['NNP'], words['RB'])
-    return new_words
+            yield _add_pos_subtypes(words['NNP'], words['RB'])
 
 
 def make_descriptors(words):
@@ -766,18 +747,16 @@ def all_prefix_first_vowel(word, letters=list(ascii_uppercase)):
     re_vowels = re.compile(r'[aeiouy]')
     matches = re.search(re_vowels, word)
     if matches is None:
-        return [word]
-    words = []
+        yield [word]
     vowels = ['A', 'E', 'I', 'O', 'U']
     first_match = matches.start(0)
     for letter in letters:
         if letter not in vowels:
             # If beginning letter is a vowel, don't offset the index
             if first_match == 0:
-                words.append('{}{}'.format(letter, word))
+                yield '{}{}'.format(letter, word)
             else:
-                words.append('{}{}'.format(letter, word[first_match:]))
-    return words
+                yield '{}{}'.format(letter, word[first_match:])
 
 
 def recycle(words, func, times=2):
@@ -793,8 +772,8 @@ def recycle(words, func, times=2):
     :param times (int, optional): The number of times to call the function.
     """
     if times > 0:
-        return recycle(func(words), func, times - 1)
-    return words
+        yield recycle(func(words), func, times - 1)
+    yield words
 
 
 def backronym(acronym, theme, max_attempts=10):
