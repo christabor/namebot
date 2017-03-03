@@ -10,6 +10,28 @@ A company/product/whatever name generating tool written in Python.
 
 This project is ongoing, but feel free to contribute! It's a full-fledged suite of tools that can help you get started generating real business names for your project or company!
 
+## Getting started
+
+Install the package:
+
+`pip install namebot` or clone this repo and then run `python setup.py install`
+
+Wite your code!
+
+```python
+# Example usage - this one is slower because it does ALL techniques.
+from pprint import pprint as ppr
+
+from namebot import nlp
+from namebot import techniques
+
+base_words = ['cat', 'dog']
+more_words = nlp.get_synsets(base_words)
+all_examples = techniques.generate_all_techniques(base_words)
+
+ppr(all_examples)
+```
+
 ## Modules:
 
 [See the docs](http://christabor.github.io/namebot/)
